@@ -14,9 +14,50 @@
         </div>
         <#if isRegisterForm>
             <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Avatar:</label>
+                <div class="col-sm-6">
+                    <input type="file" name="avatar" accept="image/*" class="form-control-file" />
+                </div>
+            </div>
+            <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Email:</label>
                 <div class="col-sm-6">
                     <input type="email" name="email" class="form-control" placeholder="some@some.com" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Gender:</label>
+                <div class="col-sm-6">
+                    <select name="gender" class="form-control">
+                        <option value="MALE">Мужской</option>
+                        <option value="FEMALE">Женский</option>
+                        <option value="OTHER">Другой</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Last Name:</label>
+                <div class="col-sm-6">
+                    <input type="text" name="lastname" class="form-control" placeholder="Last name" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Worker Role:</label>
+                <div class="col-sm-6">
+                    <select name="workerRole" class="form-control">
+                        <option value="RETAIL_CUSTOMER">Розничный покупатель</option>
+                        <option value="SELLER">Продавец</option>
+                        <option value="INSTALLER">Монтажник</option>
+                        <option value="GRO_SPECIALIST">Специалист ГРО</option>
+                        <option value="ACS_SPECIALIST">Специалист АСЦ</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">City:</label>
+                <div class="col-sm-6">
+                    <input type="text" name="city" class="form-control" placeholder="City" />
                 </div>
             </div>
         </#if>
