@@ -28,8 +28,8 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepo.findByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepo.findByEmail(email);
     }
 
     public boolean addUser(User user, Gender gender, String lastName, WorkerRole workerRole, String city) {

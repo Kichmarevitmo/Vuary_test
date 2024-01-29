@@ -1,11 +1,14 @@
 <#macro login path isRegisterForm>
     <form action="${path}" method="post">
+        <!-- -->
+
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Имя :</label>
+            <label class="col-sm-2 col-form-label">Почта:</label>
             <div class="col-sm-6">
-                <input type="text" name="username" class="form-control" placeholder="Имя" />
+                <input type="text" name="username" class="form-control" placeholder="example@example.com" />
             </div>
         </div>
+        <!-- -->
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Пароль:</label>
             <div class="col-sm-6">
@@ -19,12 +22,14 @@
                     <input type="file" name="avatar" accept="image/*" class="form-control-file" />
                 </div>
             </div>
+            <!-- -->
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Почта:</label>
+                <label class="col-sm-2 col-form-label">Имя :</label>
                 <div class="col-sm-6">
-                    <input type="email" name="email" class="form-control" placeholder="example@example.com" />
+                    <input type="text" name="username" class="form-control" placeholder="Имя" />
                 </div>
             </div>
+            <!-- -->
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Пол:</label>
                 <div class="col-sm-6">
