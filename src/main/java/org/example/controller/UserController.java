@@ -1,7 +1,9 @@
 package org.example.controller;
 
+import org.example.domain.Gender;
 import org.example.domain.Role;
 import org.example.domain.User;
+import org.example.domain.WorkerRole;
 import org.example.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,6 +46,12 @@ public class UserController {
             @RequestParam("userId") User user
     ) {
         user.setUsername(username);
+        user.setEmail(form.get("email"));
+        user.setGender(Gender.valueOf(form.get("gender")));
+        user.setCity(form.get("city"));
+        user.setLastName(form.get("lastName"));
+        user.getWorkerRoles().clear();
+        user.getWorkerRoles().add(WorkerRole.valueOf(form.get("workerRoles")));
 
         Set<String> roles = Arrays.stream(Role.values())
                 .map(Role::name)
