@@ -54,6 +54,10 @@
                 </div>
             </div>
 
+            <#if _csrf??>
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+            </#if>
+
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">City:</label>
                 <div class="col-sm-6">
