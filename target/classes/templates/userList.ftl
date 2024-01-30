@@ -1,24 +1,507 @@
 <#import "parts/common.ftl" as c>
 
 <@c.page>
-    List of users
+    Список пользователей:
 
-    <table>
+    <table style="border-collapse: collapse; width: 100%;">
         <thead>
-        <tr>
-            <th>Name</th>
-            <th>Role</th>
-            <th></th>
+        <tr style="border-bottom: 1px solid #ddd;">
+            <th style="padding: 10px;">Идентификатор</th>
+            <th style="padding: 10px;">Имя</th>
+            <th style="padding: 10px;">Почта</th>
+            <th style="padding: 10px;">Роль</th>
+            <th style="padding: 10px;">Пол</th>
+            <th style="padding: 10px;">Город</th>
+            <th style="padding: 10px;">Фамилия</th>
+            <th style="padding: 10px;">Статус работы</th>
+            <th style="padding: 10px;"></th>
         </tr>
         </thead>
         <tbody>
         <#list users as user>
-            <tr>
-                <td>${user.username}</td>
-                <td><#list user.roles as role>${role}<#sep>, </#list></td>
-                <td><a href="/user/${user.id}">edit</a></td>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">${user.id! "null"}</td>
+                <td style="padding: 10px;">${user.username! "null"}</td>
+                <td style="padding: 10px;">${user.getEmail()! "null"}</td>
+                <td style="padding: 10px;"><#list user.roles as role>${role}<#sep>, </#list></td>
+                <td style="padding: 10px;">${user.getGender()! "null"}</td>
+                <td style="padding: 10px;">${user.getCity()! "null"}</td>
+                <td style="padding: 10px;">${user.getLastName()! "null"}</td>
+                <td style="padding: 10px;"><#list user.workerRoles as workerRoles>${workerRoles}<#sep>, </#list></td>
+                <td style="padding: 10px;"><a href="/user/${user.id}">Редактировать</a></td>
+                <td style="padding: 10px;"><a href="/user/delete/${user.id}" style="color: red;">Удалить</a></td>
             </tr>
         </#list>
         </tbody>
     </table>
+    <form action="/user/addProductTOIVO" method="post" accept-charset="UTF-8" enctype="multipart/form-data"
+          style="max-width: 600px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #fff; margin: 20px 0 0 20px;">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+        <label for="максМинТепловаяМощностьОтопление">Макс/Мин Тепловая Мощность (Отопление):</label>
+        <input type="text" id="максМинТепловаяМощностьОтопление" name="максМинТепловаяМощностьОтопление" required>
+
+        <label for="максМинТепловаяМощностьГВС">Макс/Мин Тепловая Мощность (ГВС):</label>
+        <input type="text" id="максМинТепловаяМощностьГВС" name="максМинТепловаяМощностьГВС" required>
+
+        <label for="кпд">КПД:</label>
+        <input type="text" id="кпд" name="кпд" required>
+
+        <label for="максРасходГаза">Максимальный расход газа:</label>
+        <input type="text" id="максРасходГаза" name="максРасходГаза" required>
+
+        <label for="давлениеВоздушнойПолости">Давление воздушной полости:</label>
+        <input type="text" id="давлениеВоздушнойПолости" name="давлениеВоздушнойПолости" required>
+
+        <label for="объемРасширительногоБака">Объем расширительного бака:</label>
+        <input type="text" id="объемРасширительногоБака" name="объемРасширительногоБака" required>
+
+        <label for="давлениеВСистемеОтопления">Давление в системе отопления:</label>
+        <input type="text" id="давлениеВСистемеОтопления" name="давлениеВСистемеОтопления" required>
+
+        <label for="диапазонТемпературы">Диапазон температуры:</label>
+        <input type="text" id="диапазонТемпературы" name="диапазонТемпературы" required>
+
+        <label for="производительностьНагревГВС25">Производительность нагрева ГВС (25 градусов):</label>
+        <input type="text" id="производительностьНагревГВС25" name="производительностьНагревГВС25" required>
+
+        <label for="производительностьНагревГВС30">Производительность нагрева ГВС (30 градусов):</label>
+        <input type="text" id="производительностьНагревГВС30" name="производительностьНагревГВС30" required>
+
+        <label for="минПусковойНапорВоды">Минимальный пусковой напор воды:</label>
+        <input type="text" id="минПусковойНапорВоды" name="минПусковойНапорВоды" required>
+
+        <label for="максМинДавлениеВКонтуреГВС">Макс/Мин давление в контуре ГВС:</label>
+        <input type="text" id="максМинДавлениеВКонтуреГВС" name="максМинДавлениеВКонтуреГВС" required>
+
+        <label for="присоединительныйРазмерГазовойМагистрали">Присоединительный размер газовой магистрали:</label>
+        <input type="text" id="присоединительныйРазмерГазовойМагистрали" name="присоединительныйРазмерГазовойМагистрали"
+               required>
+
+        <label for="патрубкиПодающейОбратнойЛинийОтопления">Патрубки подающей/обратной линий отопления:</label>
+        <input type="text" id="патрубкиПодающейОбратнойЛинийОтопления" name="патрубкиПодающейОбратнойЛинийОтопления"
+               required>
+
+        <label for="патрубкиПодключенияХолоднойВоды">Патрубки подключения холодной воды:</label>
+        <input type="text" id="патрубкиПодключенияХолоднойВоды" name="патрубкиПодключенияХолоднойВоды" required>
+
+        <label for="номинальноеНапряжениеЧастота">Номинальное напряжение/частота:</label>
+        <input type="text" id="номинальноеНапряжениеЧастота" name="номинальноеНапряжениеЧастота" required>
+
+        <label for="потребляемаяЭлМощность">Потребляемая электрическая мощность:</label>
+        <input type="text" id="потребляемаяЭлМощность" name="потребляемаяЭлМощность" required>
+
+        <label for="присоединительныйРазмерДымохода">Присоединительный размер дымохода:</label>
+        <input type="text" id="присоединительныйРазмерДымохода" name="присоединительныйРазмерДымохода" required>
+
+        <label for="классИУровеньЗащиты">Класс и уровень защиты:</label>
+        <input type="text" id="классИУровеньЗащиты" name="классИУровеньЗащиты" required>
+
+        <label for="типДымоудаления">Тип Дымоудаления:</label>
+        <input type="text" id="типДымоудаления" name="типДымоудаления" required>
+        <label for="типTOIVO">Тип TOIVO:</label>
+        <select id="типTOIVO" name="типTOIVO" required>
+            <option value="ONE_CIRCUIT_CLOSED_CHAMBER_NO_THREE_WAY_VALVE">Одноконтурные (с закрытой камерой) без
+                трёхходового клапана
+            </option>
+            <option value="ONE_CIRCUIT_CLOSED_CHAMBER_WITH_THREE_WAY_VALVE">Одноконтурные (с закрытой камерой) с
+                трёхходовым клапаном
+            </option>
+            <option value="TWO_CIRCUIT_CLOSED_CHAMBER_FOR_APARTMENT_HEATING">Двухконтурные (с закрытой камерой) для
+                поквартирного отопления
+            </option>
+        </select>
+
+        <label for="image">Фотографии:</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+        <style>
+            label {
+                display: block;
+                margin-top: 10px;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+
+            input {
+                width: 100%;
+                padding: 8px;
+                box-sizing: border-box;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            button {
+                background-color: #4CAF50;
+                color: #fff;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+        </style>
+        <button type="submit"
+                style="background-color: #4CAF50; color: #fff; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">
+            Добавить TOIVO
+        </button>
+    </form>
+
+
+
+
+    <!------------------------------------------------------------------------------------------------------------->
+
+
+
+    <form action="/user/addProductSUARI" method="post" accept-charset="UTF-8" enctype="multipart/form-data"
+          style="max-width: 600px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #fff; margin: 20px 0 0 20px;">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+        <label for="типКамерыСгорания">Тип камеры сгорания:</label>
+        <input type="text" id="типКамерыСгорания" name="типКамерыСгорания" required>
+
+        <label for="модуляцияПламени">Модуляция пламени:</label>
+        <input type="text" id="модуляцияПламени" name="модуляцияПламени" required>
+
+        <label for="номинальнаяТепловаяМощность">Номинальная тепловая мощность:</label>
+        <input type="text" id="номинальнаяТепловаяМощность" name="номинальнаяТепловаяМощность" required>
+
+        <label for="коэффициентПолезногоДействияНеМенее">Коэффициент полезного действия, не менее:</label>
+        <input type="text" id="коэффициентПолезногоДействияНеМенее" name="коэффициентПолезногоДействияНеМенее" required>
+
+        <label for="номинальноеДавлениеПриродногоГаза">Номинальное давление природного газа:</label>
+        <input type="text" id="номинальноеДавлениеПриродногоГаза" name="номинальноеДавлениеПриродногоГаза" required>
+
+        <label for="номинальноеДавлениеСжиженногоГаза">Номинальное давление сжиженного газа:</label>
+        <input type="text" id="номинальноеДавлениеСжиженногоГаза" name="номинальноеДавлениеСжиженногоГаза" required>
+
+        <label for="номинальныйРасходПриродногоГаза">Номинальный расход природного газа:</label>
+        <input type="text" id="номинальныйРасходПриродногоГаза" name="номинальныйРасходПриродногоГаза" required>
+
+        <label for="номинальныйРасходСжиженногоГаза">Номинальный расход сжиженного газа:</label>
+        <input type="text" id="номинальныйРасходСжиженногоГаза" name="номинальныйРасходСжиженногоГаза" required>
+
+        <label for="давлениеПодводимойВодыДляНормальнойРаботыАппарата">Давление подводимой воды для нормальной работы
+            аппарата:</label>
+        <input type="text" id="давлениеПодводимойВодыДляНормальнойРаботыАппарата"
+               name="давлениеПодводимойВодыДляНормальнойРаботыАппарата" required>
+
+        <label for="минимальныйРасходВодыНеобходимыйДляЗажиганияГорелки">Минимальный расход воды, необходимый для
+            зажигания горелки:</label>
+        <input type="text" id="минимальныйРасходВодыНеобходимыйДляЗажиганияГорелки"
+               name="минимальныйРасходВодыНеобходимыйДляЗажиганияГорелки" required>
+
+        <label for="расходВодыПриНагревеНа25">Расход воды при нагреве на ΔT = 25°C:</label>
+        <input type="text" id="расходВодыПриНагревеНа25" name="расходВодыПриНагревеНа25" required>
+
+        <label for="температураПродуктовСгоранияНеМенее">Температура продуктов сгорания, не менее:</label>
+        <input type="text" id="температураПродуктовСгоранияНеМенее" name="температураПродуктовСгоранияНеМенее" required>
+
+        <label for="зажигание">Зажигание:</label>
+        <input type="text" id="зажигание" name="зажигание"
+               required>
+
+        <label for="типИНапряжениеЭлементовПитания">Тип и напряжение элементов питания:</label>
+        <input type="text" id="типИНапряжениеЭлементовПитания" name="типИНапряжениеЭлементовПитания"
+               required>
+
+        <label for="напряжениеИЧастота">Напряжение и частота:</label>
+        <input type="text" id="напряжениеИЧастота" name="напряжениеИЧастота" required>
+
+        <label for="входХолоднойВоды">Вход холодной воды:</label>
+        <input type="text" id="входХолоднойВоды" name="входХолоднойВоды" required>
+
+        <label for="выходГорячейВоды">Выход горячей воды:</label>
+        <input type="text" id="выходГорячейВоды" name="выходГорячейВоды" required>
+
+        <label for="входГаза">Вход газа:</label>
+        <input type="text" id="входГаза" name="входГаза" required>
+
+        <label for="массаБрутто">Масса, брутто:</label>
+        <input type="text" id="массаБрутто" name="массаБрутто" required>
+
+        <label for="габаритныеРазмеры">Габаритные размеры (высота, ширина, глубина):</label>
+        <input type="text" id="габаритныеРазмеры" name="габаритныеРазмеры" required>
+
+        <label for="внутреннийДиаметрПатрубкаДымохода">Внутренний диаметр патрубка дымохода:</label>
+        <input type="text" id="внутреннийДиаметрПатрубкаДымохода" name="внутреннийДиаметрПатрубкаДымохода" required>
+
+        <label for="типSUARI">Тип SUARI:</label>
+        <select id="типSUARI" name="типSUARI" required>
+            <option value="CLASSIC_MODELS_MECHANICAL_CONTROL">Классические модели с механической регулировкой</option>
+            <option value="CLASSIC_MODELS_ELECTRONIC_FLAME_MODULATION">Классические модели с электронной модуляцией
+                пламени
+            </option>
+            <option value="SEMI_TURBO">Полутурбо</option>
+            <option value="TURBO">Турбо</option>
+        </select>
+
+        <label for="imageSUARI">Фотографии:</label>
+        <input type="file" id="imageSUARI" name="imageSUARI" accept="image/*" required>
+        <style>
+            label {
+                display: block;
+                margin-top: 10px;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+
+            input {
+                width: 100%;
+                padding: 8px;
+                box-sizing: border-box;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            button {
+                background-color: #4CAF50;
+                color: #fff;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+        </style>
+        <button type="submit"
+                style="background-color: #4CAF50; color: #fff; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">
+            Добавить SUARI
+        </button>
+    </form>
+
+
+
+
+    <!---------------------------------------------------------------------------------- -->
+
+    <form action="/user/addProductSALMI" method="post" accept-charset="UTF-8" enctype="multipart/form-data"
+          style="max-width: 600px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #fff; margin: 20px 0 0 20px;">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+        <label for="объем">Объем:</label>
+        <input type="text" id="объем" name="объем" required>
+
+        <label for="подключениеКСетиВодоснабжения">Подключение к сети водоснабжения:</label>
+        <input type="text" id="подключениеКСетиВодоснабжения" name="подключениеКСетиВодоснабжения" required>
+
+        <label for="мощность">Мощность:</label>
+        <input type="text" id="мощность" name="мощность" required>
+
+        <label for="напряжениеИЧастотаSALMI">Напряжение и частота:</label>
+        <input type="text" id="напряжениеИЧастотаSALMI" name="напряжениеИЧастотаSALMI" required>
+
+        <label for="силаТока">Сила тока:</label>
+        <input type="text" id="силаТока" name="силаТока" required>
+
+        <label for="рабочееДавлениеТеплоносителя">Рабочее давление теплоносителя:</label>
+        <input type="text" id="рабочееДавлениеТеплоносителя" name="рабочееДавлениеТеплоносителя" required>
+
+        <label for="максимальнаяТемпература">Максимальная температура:</label>
+        <input type="text" id="максимальнаяТемпература" name="максимальнаяТемпература" required>
+
+        <label for="термостат">Термостат:</label>
+        <input type="text" id="термостат" name="термостат" required>
+
+        <label for="аварийныйТермодатчик">Аварийный термодатчик:</label>
+        <input type="text" id="аварийныйТермодатчик"
+               name="аварийныйТермодатчик" required>
+
+        <label for="уровеньВлагозащиты">Уровень влагозащиты:</label>
+        <input type="text" id="уровеньВлагозащиты"
+               name="уровеньВлагозащиты" required>
+
+        <label for="нагревательныйЭлемент">Нагревательный элемент:</label>
+        <input type="text" id="нагревательныйЭлемент" name="нагревательныйЭлемент" required>
+
+        <label for="размерАнода">Размер анода:</label>
+        <input type="text" id="размерАнода" name="размерАнода" required>
+
+        <label for="входХолоднойВоды">Вход холодной воды:</label>
+        <input type="text" id="входХолоднойВоды" name="входХолоднойВоды"
+               required>
+
+        <label for="выходГорячейВоды">Выход горячей воды:</label>
+        <input type="text" id="выходГорячейВоды" name="выходГорячейВоды"
+               required>
+
+        <label for="габаритныеРазмеры">Габаритные размеры (высота, ширина, глубина):</label>
+        <input type="text" id="габаритныеРазмеры" name="габаритныеРазмеры" required>
+
+        <label for="типSALMI">Тип SALMI:</label>
+        <select id="типSALMI" name="типSALMI" required>
+            <option value="SMALL_CAPACITY">Малый литраж</option>
+            <option value="ROUND_ECONOMY">Круглые эконом
+            </option>
+            <option value="ROUND_COMFORT">Круглые комфорт</option>
+            <option value="FLAT_COMFORT">Плоские комфорт</option>
+            <option value="FLAT_PREMIUM">Плоские премиум</option>
+            <option value="LARGE_CAPACITY">Большой литраж</option>
+        </select>
+
+        <label for="imageSALMI">Фотографии:</label>
+        <input type="file" id="imageSALMI" name="imageSALMI" accept="image/*" required>
+        <style>
+            label {
+                display: block;
+                margin-top: 10px;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+
+            input {
+                width: 100%;
+                padding: 8px;
+                box-sizing: border-box;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            button {
+                background-color: #4CAF50;
+                color: #fff;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+        </style>
+        <button type="submit"
+                style="background-color: #4CAF50; color: #fff; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">
+            Добавить SALMI
+        </button>
+    </form>
+
+
+
+    <!---------------------------------------------------------------------------------- -->
+
+    <form action="/user/addProductAINOVA" method="post" accept-charset="UTF-8" enctype="multipart/form-data"
+          style="max-width: 600px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #fff; margin: 20px 0 0 20px;">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+        <label for="мощностьAINOVA">Мощность:</label>
+        <input type="text" id="мощностьAINOVA" name="мощностьAINOVA" required>
+
+        <label for="напряжениеИЧастота">Напряжение и частота:</label>
+        <input type="text" id="напряжениеИЧастота" name="напряжениеИЧастота" required>
+
+        <label for="количествоСтупенейМощности">Количество ступеней мощности:</label>
+        <input type="text" id="количествоСтупенейМощности" name="количествоСтупенейМощности" required>
+
+        <label for="номинальныйТокАвтоматическогоВыключателя">Номинальный ток автоматического выключателя:</label>
+        <input type="text" id="номинальныйТокАвтоматическогоВыключателя" name="номинальныйТокАвтоматическогоВыключателя" required>
+
+        <label for="сечениеТокопроводящейЖилы">Сечение токопроводящей жилы:</label>
+        <input type="text" id="сечениеТокопроводящейЖилы" name="сечениеТокопроводящейЖилы" required>
+
+        <label for="wiFi">Wi-Fi:</label>
+        <input type="text" id="wiFi" name="wiFi" required>
+
+        <label for="кпд">Коэффициент полезного действия, не менее:</label>
+        <input type="text" id="кпд" name="кпд" required>
+
+        <label for="способУправления">Способ управления:</label>
+        <input type="text" id="способУправления" name="способУправления" required>
+
+        <label for="использованиеВСистемахТёплыйПол">Использование в системах «Тёплый пол»:</label>
+        <input type="text" id="использованиеВСистемахТёплыйПол"
+               name="использованиеВСистемахТёплыйПол" required>
+
+        <label for="функционалГВС">Функционал ГВС:</label>
+        <input type="text" id="функционалГВС"
+               name="функционалГВС" required>
+
+        <label for="встроенныйВоздухоотводчик">Встроенный воздухоотводчик:</label>
+        <input type="text" id="встроенныйВоздухоотводчик" name="встроенныйВоздухоотводчик" required>
+
+        <label for="встроенныйПредохранительныйКлапан">Встроенный предохранительный клапан:</label>
+        <input type="text" id="встроенныйПредохранительныйКлапан" name="встроенныйПредохранительныйКлапан" required>
+
+        <label for="встроенныйЦиркуляционныйНасос">Встроенный циркуляционный насос:</label>
+        <input type="text" id="встроенныйЦиркуляционныйНасос" name="встроенныйЦиркуляционныйНасос"
+               required>
+
+        <label for="расширительныйБак">Расширительный бак:</label>
+        <input type="text" id="расширительныйБак" name="расширительныйБак"
+               required>
+
+        <label for="настройкаРасписанияAINOVA">Настройка расписания:</label>
+        <input type="text" id="настройкаРасписанияAINOVA" name="настройкаРасписанияAINOVA" required>
+
+        <label for="погодозависимоеУправление">Погодозависимое управление:</label>
+        <input type="text" id="погодозависимоеУправление" name="погодозависимоеУправление" required>
+
+        <label for="возможностьПодключенияОборудования">Возможность подключения оборудования:</label>
+        <input type="text" id="возможностьПодключенияОборудования" name="возможностьПодключенияОборудования" required>
+
+        <label for="рабочееДавлениеТеплоносителя">Рабочее давление теплоносителя:</label>
+        <input type="text" id="рабочееДавлениеТеплоносителя" name="рабочееДавлениеТеплоносителя" required>
+
+        <label for="диапазонРегулированияТемпературыТеплоносителя">Диапазон регулирования температуры теплоносителя:</label>
+        <input type="text" id="диапазонРегулированияТемпературыТеплоносителя" name="диапазонРегулированияТемпературыТеплоносителя" required>
+
+        <label for="диапазонРегулированияТемпературыВоды">Диапазон регулирования температуры воды:</label>
+        <input type="text" id="диапазонРегулированияТемпературыВоды" name="диапазонРегулированияТемпературыВоды" required>
+
+        <label for="классВлагозащищенности">Класс влагозащищенности:</label>
+        <input type="text" id="классВлагозащищенности" name="классВлагозащищенности" required>
+
+        <label for="контурОтопленияПодающаяЛиния">Контур отопления подающая линия:</label>
+        <input type="text" id="контурОтопленияПодающаяЛиния" name="контурОтопленияПодающаяЛиния" required>
+
+        <label for="контурОтопленияОбратнаяЛиния">Контур отопления обратная линия:</label>
+        <input type="text" id="контурОтопленияОбратнаяЛиния" name="контурОтопленияОбратнаяЛиния" required>
+
+        <label for="массаАппаратаБрутто">Контур отопления Масса аппарата, брутто:</label>
+        <input type="text" id="массаАппаратаБрутто" name="массаАппаратаБрутто" required>
+
+        <label for="габаритныеРазмеры">Габаритные размеры (высота, ширина, глубина)</label>
+        <input type="text" id="габаритныеРазмеры" name="габаритныеРазмеры" required>
+
+        <label for="типAINOVA">Тип AINOVA:</label>
+        <select id="типAINOVA" name="типAINOVA" required>
+            <option value="STANDARD">Стандартные
+            </option>
+            <option value="MINI_BOILERS">Мини-котлы</option>
+        </select>
+
+        <label for="imageAINOVA">Фотографии:</label>
+        <input type="file" id="imageAINOVA" name="imageAINOVA" accept="image/*" required>
+        <style>
+            label {
+                display: block;
+                margin-top: 10px;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+
+            input {
+                width: 100%;
+                padding: 8px;
+                box-sizing: border-box;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            button {
+                background-color: #4CAF50;
+                color: #fff;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+        </style>
+        <button type="submit"
+                style="background-color: #4CAF50; color: #fff; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">
+            Добавить AINOVA
+        </button>
+    </form>
 </@c.page>

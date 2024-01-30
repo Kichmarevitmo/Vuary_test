@@ -27,7 +27,7 @@ public class Application {
     }
     @PostConstruct
     public void init() {
-        if (userRepository.findByRoles(Role.ADMIN).isEmpty()) {
+        if (userRepository.findByEmail("example@example.ru") == null) {
             User admin = new User();
             admin.setUsername("admin");
             admin.setEmail("example@example.ru");
