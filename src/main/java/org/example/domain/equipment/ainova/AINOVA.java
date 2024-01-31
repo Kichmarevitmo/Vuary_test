@@ -1,11 +1,11 @@
 package org.example.domain.equipment.ainova;
 
+import lombok.Data;
 import org.example.domain.equipment.image.Image;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
 @Entity
 public class AINOVA {
     @Id
@@ -146,5 +146,113 @@ public class AINOVA {
 
     public void setТипAINOVA(AINOVAtypes типAINOVA) {
         this.типAINOVA = типAINOVA;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public AINOVAtypes getТипAINOVA() {
+        return типAINOVA;
+    }
+
+    public String getМощность() {
+        return мощность;
+    }
+
+    public String getНапряжениеИЧастота() {
+        return напряжениеИЧастота;
+    }
+
+    public String getКоличествоСтупенейМощности() {
+        return количествоСтупенейМощности;
+    }
+
+    public String getНоминальныйТокАвтоматическогоВыключателя() {
+        return номинальныйТокАвтоматическогоВыключателя;
+    }
+
+    public String getСечениеТокопроводящейЖилы() {
+        return сечениеТокопроводящейЖилы;
+    }
+
+    public String getWiFi() {
+        return wiFi;
+    }
+
+    public String getКоэффициентПолезногоДействия() {
+        return коэффициентПолезногоДействия;
+    }
+
+    public String getСпособУправления() {
+        return способУправления;
+    }
+
+    public String getИспользованиеВСистемахТеплыйПол() {
+        return использованиеВСистемахТеплыйПол;
+    }
+
+    public String getФункционалГВС() {
+        return функционалГВС;
+    }
+
+    public String getВстроенныйВоздухоотводчик() {
+        return встроенныйВоздухоотводчик;
+    }
+
+    public String getВстроенныйПредохранительныйКлапан() {
+        return встроенныйПредохранительныйКлапан;
+    }
+
+    public String getВстроенныйЦиркуляционныйНасос() {
+        return встроенныйЦиркуляционныйНасос;
+    }
+
+    public String getРасширительныйБак() {
+        return расширительныйБак;
+    }
+
+    public String getНастройкаРасписания() {
+        return настройкаРасписания;
+    }
+
+    public String getПогодозависимоеУправление() {
+        return погодозависимоеУправление;
+    }
+
+    public String getВозможностьПодключенияОборудования() {
+        return возможностьПодключенияОборудования;
+    }
+
+    public String getРабочееДавлениеТеплоносителя() {
+        return рабочееДавлениеТеплоносителя;
+    }
+
+    public String getДиапазонРегулированияТемпературыТеплоносителя() {
+        return диапазонРегулированияТемпературыТеплоносителя;
+    }
+
+    public String getДиапазонРегулированияТемпературыВоды() {
+        return диапазонРегулированияТемпературыВоды;
+    }
+
+    public String getКлассВлагозащищенности() {
+        return классВлагозащищенности;
+    }
+
+    public String getКонтурОтопленияПодающаяЛиния() {
+        return контурОтопленияПодающаяЛиния;
+    }
+
+    public String getКонтурОтопленияОбратнаяЛиния() {
+        return контурОтопленияОбратнаяЛиния;
+    }
+
+    public String getМасса() {
+        return масса;
+    }
+
+    public String getГабаритныеРазмеры() {
+        return габаритныеРазмеры;
     }
 }

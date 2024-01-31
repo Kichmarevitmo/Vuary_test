@@ -1,11 +1,11 @@
 package org.example.domain.equipment.salmi;
 
+import lombok.Data;
 import org.example.domain.equipment.image.Image;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
 @Entity
 public class SALMI {
     @Id
@@ -96,5 +96,73 @@ public class SALMI {
 
     public void setГабаритныеРазмеры(String габаритныеРазмеры) {
         this.габаритныеРазмеры = габаритныеРазмеры;
+    }
+
+    public SALMItypes getТипSALMI() {
+        return типSALMI;
+    }
+
+    public String getОбъем() {
+        return объем;
+    }
+
+    public String getПодключениеКСетиВодоснабжения() {
+        return подключениеКСетиВодоснабжения;
+    }
+
+    public String getМощность() {
+        return мощность;
+    }
+
+    public String getНапряжениеИЧастота() {
+        return напряжениеИЧастота;
+    }
+
+    public String getСилаТока() {
+        return силаТока;
+    }
+
+    public String getРабочееДавлениеТеплоносителя() {
+        return рабочееДавлениеТеплоносителя;
+    }
+
+    public String getМаксимальнаяТемпература() {
+        return максимальнаяТемпература;
+    }
+
+    public String getТермостат() {
+        return термостат;
+    }
+
+    public String getАварийныйТермодатчик() {
+        return аварийныйТермодатчик;
+    }
+
+    public String getУровеньВлагозащиты() {
+        return уровеньВлагозащиты;
+    }
+
+    public String getНагревательныйЭлемент() {
+        return нагревательныйЭлемент;
+    }
+
+    public String getРазмерАнода() {
+        return размерАнода;
+    }
+
+    public String getВходХолоднойВоды() {
+        return входХолоднойВоды;
+    }
+
+    public String getВыходГорячейВоды() {
+        return выходГорячейВоды;
+    }
+
+    public String getГабаритныеРазмеры() {
+        return габаритныеРазмеры;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

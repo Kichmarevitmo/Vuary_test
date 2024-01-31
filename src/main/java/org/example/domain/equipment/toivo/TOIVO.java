@@ -1,11 +1,11 @@
 package org.example.domain.equipment.toivo;
 
+import lombok.Data;
 import org.example.domain.equipment.image.Image;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
 @Entity
 public class TOIVO {
     @Id
@@ -39,7 +39,6 @@ public class TOIVO {
     public TOIVO() {
         this.images = new ArrayList<>();
     }
-    // ... геттеры и сеттеры для photo ...
     public void addImage(Image image) {
         images.add(image);
     }
@@ -126,5 +125,93 @@ public class TOIVO {
 
     public void setТипTOIVO(TOIVOtypes типTOIVO) {
         this.типTOIVO = типTOIVO;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public TOIVOtypes getТипTOIVO() {
+        return типTOIVO;
+    }
+
+    public String getТипДымоудаления() {
+        return типДымоудаления;
+    }
+
+    public String getМаксМинТепловаяМощностьОтопление() {
+        return максМинТепловаяМощностьОтопление;
+    }
+
+    public String getМаксМинТепловаяМощностьГВС() {
+        return максМинТепловаяМощностьГВС;
+    }
+
+    public String getКпд() {
+        return кпд;
+    }
+
+    public String getМаксРасходГаза() {
+        return максРасходГаза;
+    }
+
+    public String getДавлениеВоздушнойПолости() {
+        return давлениеВоздушнойПолости;
+    }
+
+    public String getОбъемРасширительногоБака() {
+        return объемРасширительногоБака;
+    }
+
+    public String getДавлениеВСистемеОтопления() {
+        return давлениеВСистемеОтопления;
+    }
+
+    public String getДиапазонТемпературы() {
+        return диапазонТемпературы;
+    }
+
+    public String getПроизводительностьНагревГВС25() {
+        return производительностьНагревГВС25;
+    }
+
+    public String getПроизводительностьНагревГВС30() {
+        return производительностьНагревГВС30;
+    }
+
+    public String getМинПусковойНапорВоды() {
+        return минПусковойНапорВоды;
+    }
+
+    public String getМаксМинДавлениеВКонтуреГВС() {
+        return максМинДавлениеВКонтуреГВС;
+    }
+
+    public String getПрисоединительныйРазмерГазовойМагистрали() {
+        return присоединительныйРазмерГазовойМагистрали;
+    }
+
+    public String getПатрубкиПодающейОбратнойЛинийОтопления() {
+        return патрубкиПодающейОбратнойЛинийОтопления;
+    }
+
+    public String getПатрубкиПодключенияХолоднойВоды() {
+        return патрубкиПодключенияХолоднойВоды;
+    }
+
+    public String getНоминальноеНапряжениеЧастота() {
+        return номинальноеНапряжениеЧастота;
+    }
+
+    public String getПотребляемаяЭлМощность() {
+        return потребляемаяЭлМощность;
+    }
+
+    public String getПрисоединительныйРазмерДымохода() {
+        return присоединительныйРазмерДымохода;
+    }
+
+    public String getКлассИУровеньЗащиты() {
+        return классИУровеньЗащиты;
     }
 }

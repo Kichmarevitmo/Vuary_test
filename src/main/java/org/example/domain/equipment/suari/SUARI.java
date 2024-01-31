@@ -1,12 +1,12 @@
 package org.example.domain.equipment.suari;
 
+import lombok.Data;
 import org.example.domain.equipment.ainova.AINOVAtypes;
 import org.example.domain.equipment.image.Image;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
 @Entity
 public class SUARI {
     @Id
@@ -128,5 +128,93 @@ public class SUARI {
 
     public void setВнутреннийДиаметрПатрубкаДымохода(String внутреннийДиаметрПатрубкаДымохода) {
         this.внутреннийДиаметрПатрубкаДымохода = внутреннийДиаметрПатрубкаДымохода;
+    }
+
+    public SUARItypes getТипSUARI() {
+        return типSUARI;
+    }
+
+    public String getТипКамерыСгорания() {
+        return типКамерыСгорания;
+    }
+
+    public String getМодуляцияПламени() {
+        return модуляцияПламени;
+    }
+
+    public String getНоминальнаяТепловаяМощность() {
+        return номинальнаяТепловаяМощность;
+    }
+
+    public String getКоэффициентПолезногоДействия() {
+        return коэффициентПолезногоДействия;
+    }
+
+    public String getНоминальноеДавлениеПриродногоГаза() {
+        return номинальноеДавлениеПриродногоГаза;
+    }
+
+    public String getНоминальноеДавлениеСжиженногоГаза() {
+        return номинальноеДавлениеСжиженногоГаза;
+    }
+
+    public String getНоминальныйРасходПриродногоГаза() {
+        return номинальныйРасходПриродногоГаза;
+    }
+
+    public String getНоминальныйРасходСжиженногоГаза() {
+        return номинальныйРасходСжиженногоГаза;
+    }
+
+    public String getДавлениеПодводимойВоды() {
+        return давлениеПодводимойВоды;
+    }
+
+    public String getМинимальныйРасходВодыДляЗажигания() {
+        return минимальныйРасходВодыДляЗажигания;
+    }
+
+    public String getРасходВодыПриНагревеНаДельтаT25() {
+        return расходВодыПриНагревеНаДельтаT25;
+    }
+
+    public String getТемператураПродуктовСгорания() {
+        return температураПродуктовСгорания;
+    }
+
+    public String getЗажиганиеАвтоматическое() {
+        return зажиганиеАвтоматическое;
+    }
+
+    public String getТипИНапряжениеЭлементовПитания() {
+        return типИНапряжениеЭлементовПитания;
+    }
+
+    public String getНапряжениеИЧастота() {
+        return напряжениеИЧастота;
+    }
+
+    public String getВходХолоднойВоды() {
+        return входХолоднойВоды;
+    }
+
+    public String getВыходГорячейВоды() {
+        return выходГорячейВоды;
+    }
+
+    public String getВходГаза() {
+        return входГаза;
+    }
+
+    public String getМасса() {
+        return масса;
+    }
+
+    public String getГабаритныеРазмеры() {
+        return габаритныеРазмеры;
+    }
+
+    public String getВнутреннийДиаметрПатрубкаДымохода() {
+        return внутреннийДиаметрПатрубкаДымохода;
     }
 }
