@@ -5,7 +5,7 @@
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Почта:</label>
             <div class="col-sm-6">
-                <input type="text" name="username" class="form-control" placeholder="example@example.com" />
+                <input type="email" name="email" class="form-control" placeholder="example@example.com" />
             </div>
         </div>
         <!-- -->

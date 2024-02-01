@@ -27,8 +27,9 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(User user, @RequestParam Gender gender, String lastname, WorkerRole workerRole, String city, Map<String, Object> model) {
+    public String addUser(User user, @RequestParam Gender gender, String lastname, WorkerRole workerRole, String city, Map<String, Object> model, String email) {
         user.setGender(gender);
+        user.setEmail(email);
         user.setWorkerRoles(Collections.singleton(workerRole));
         if (!userService.addUser(user, gender, lastname, workerRole, city)) {
             model.put("message", "User exists!");

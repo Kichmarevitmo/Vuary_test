@@ -7,6 +7,8 @@ import org.example.domain.WorkerRole;
 import org.example.domain.equipment.ainova.AINOVA;
 import org.example.domain.equipment.ainova.AINOVARepo;
 import org.example.domain.equipment.ainova.AINOVAtypes;
+import org.example.domain.equipment.image.Image;
+import org.example.domain.equipment.image.ImageRepository;
 import org.example.domain.equipment.image.ImageService;
 import org.example.domain.equipment.salmi.SALMI;
 import org.example.domain.equipment.salmi.SALMIRepo;
@@ -26,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -45,6 +48,8 @@ public class UserController {
     private UserRepo userRepo;
     @Autowired
     private AINOVARepo ainovaRepo;
+    @Autowired
+    private ImageRepository imageRepository;
 
     @PostMapping("/addProductTOIVO")
     public String addProductTOIVO(@RequestParam("типTOIVO") String типTOIVO,
@@ -273,10 +278,28 @@ public class UserController {
     @GetMapping
     public String userList(Model model) {
         model.addAttribute("users", userRepo.findAll());
-
+        model.addAttribute("allAinova", ainovaRepo.findAll());
+        model.addAttribute("allSalmi", salmiRepo.findAll());
+        model.addAttribute("allSuari", suariRepo.findAll());
+        model.addAttribute("allToivo", toivoRepo.findAll());
         return "userList";
     }
-
+    @GetMapping("/allSalmi")
+    public List<SALMI> getAllProductsSALMI() {
+        return salmiRepo.findAll();
+    }
+    @GetMapping("/allSuari")
+    public List<SUARI> getAllProductsSUARI() {
+        return suariRepo.findAll();
+    }
+    @GetMapping("/allToivo")
+    public List<TOIVO> getAllProductsTOIVO() {
+        return toivoRepo.findAll();
+    }
+    @GetMapping("/allImage")
+    public List<Image> getAllProductsImage() {
+        return imageRepository.findAll();
+    }
     @GetMapping("{user}")
     public String userEditForm(@PathVariable User user, Model model) {
         model.addAttribute("user", user);

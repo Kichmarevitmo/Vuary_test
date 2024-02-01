@@ -28,8 +28,17 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepo.findByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepo.findByEmail(username);
+        if(user.getActivationCode() != null ) {
+            throw new NullPointerException("Вы не прошли стадию подтверждения кода активации");
+        }
+
+        if (user == null) {
+            throw new UsernameNotFoundException("Пользователь не найден");
+        }
+
+        return user;
     }
 
     public boolean addUser(User user, Gender gender, String lastName, WorkerRole workerRole, String city) {
