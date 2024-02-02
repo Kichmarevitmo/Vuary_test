@@ -16,6 +16,12 @@ public class ImageService {
     private final ImageRepository imageRepository;
 
     public Image uploadImage(MultipartFile imageFile) throws IOException {
+
+        // Проверка на существование изображения с таким же именем
+        Optional<Image> existingImage = imageRepository.findByName(imageFile.getName());
+        if (existingImage.isPresent()) {
+            throw new NullPointerException("Изображение с именем " + imageFile.getName() + " уже существует.");
+        }
         var imageToSave = Image.builder()
                 .name(imageFile.getOriginalFilename())
                 .type(imageFile.getContentType())

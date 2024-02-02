@@ -38,6 +38,12 @@ public class SUARI {
     private String масса;
     private String габаритныеРазмеры;
     private String внутреннийДиаметрПатрубкаДымохода;
+    public Image getFirstImage() {
+        if (!images.isEmpty()) {
+            return images.get(0);
+        }
+        return null; // or throw an exception if you prefer
+    }
     public void addImage(Image image) {
         images.add(image);
     }

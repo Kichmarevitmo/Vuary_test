@@ -21,6 +21,9 @@ import org.example.domain.equipment.toivo.TOIVORepo;
 import org.example.domain.equipment.toivo.TOIVOtypes;
 import org.example.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -275,6 +278,15 @@ public class UserController {
         ainovaRepo.save(ainova);
         return "redirect:/user";
     }
+    @GetMapping("/image/{imageName}")
+    @ResponseBody
+    public ResponseEntity<byte[]> getImage(@PathVariable String imageName) {
+        byte[] imageBytes = imageService.downloadImage(imageName);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)  // Change to appropriate content type
+                .body(imageBytes);
+    }
     @GetMapping
     public String userList(Model model) {
         model.addAttribute("users", userRepo.findAll());
@@ -285,20 +297,29 @@ public class UserController {
         return "userList";
     }
     @GetMapping("/allSalmi")
-    public List<SALMI> getAllProductsSALMI() {
-        return salmiRepo.findAll();
+    @ResponseBody
+    public ResponseEntity<List<SALMI>> getAllProductsSALMI() {
+        List<SALMI> salmiList = salmiRepo.findAll();
+        return new ResponseEntity<>(salmiList, HttpStatus.OK);
     }
+
     @GetMapping("/allSuari")
-    public List<SUARI> getAllProductsSUARI() {
-        return suariRepo.findAll();
+    @ResponseBody
+    public ResponseEntity<List<SUARI>> getAllProductsSUARI() {
+        List<SUARI> suariList = suariRepo.findAll();
+        return new ResponseEntity<>(suariList, HttpStatus.OK);
     }
     @GetMapping("/allToivo")
-    public List<TOIVO> getAllProductsTOIVO() {
-        return toivoRepo.findAll();
+    @ResponseBody
+    public ResponseEntity<List<TOIVO>> getAllProductsTOIVO() {
+        List<TOIVO> toivoList = toivoRepo.findAll();
+        return new ResponseEntity<>(toivoList, HttpStatus.OK);
     }
     @GetMapping("/allImage")
-    public List<Image> getAllProductsImage() {
-        return imageRepository.findAll();
+    @ResponseBody
+    public ResponseEntity<List<Image>> getAllProductsImage() {
+        List<Image> imageList = imageRepository.findAll();
+        return new ResponseEntity<>(imageList, HttpStatus.OK);
     }
     @GetMapping("{user}")
     public String userEditForm(@PathVariable User user, Model model) {

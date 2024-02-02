@@ -72,8 +72,18 @@
         </#if>
         <input type="hidden" name="_csrf" value="${_csrf.token}" />
         <#if !isRegisterForm><a href="/registration">Зарегистрироваться</a></#if>
-        <button class="btn btn-primary" type="submit"><#if isRegisterForm>Создать<#else>Войти</#if></button>
+
+        <button class="btn btn-primary" type="submit"><#if isRegisterForm>Отправить смс на почту<#else>Войти</#if></button>
     </form>
+
+    <#if isRegisterForm>
+        <h4>Подтверждение аккаунта</h4>
+    <form action="/activate/{code}" method="get">
+        <label for="activationCode">Введите код активации:</label>
+        <input type="text" id="activationCode" name="code" required>
+        <button type="submit">Отправить</button>
+    </form>
+    </#if>
 </#macro>
 
 <#macro logout>

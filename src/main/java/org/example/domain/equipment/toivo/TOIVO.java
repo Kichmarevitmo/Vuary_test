@@ -42,6 +42,12 @@ public class TOIVO {
     public void addImage(Image image) {
         images.add(image);
     }
+    public Image getFirstImage() {
+        if (!images.isEmpty()) {
+            return images.get(0);
+        }
+        return null; // or throw an exception if you prefer
+    }
 
     public void setТипДымоудаления(String типДымоудаления) {
         this.типДымоудаления = типДымоудаления;

@@ -30,6 +30,12 @@ public class SALMI {
     private String входХолоднойВоды;
     private String выходГорячейВоды;
     private String габаритныеРазмеры;
+    public Image getFirstImage() {
+        if (!images.isEmpty()) {
+            return images.get(0);
+        }
+        return null; // or throw an exception if you prefer
+    }
     public void addImage(Image image) {
         images.add(image);
     }

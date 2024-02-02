@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Collections;
+import java.util.Objects;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -26,16 +28,26 @@ public class UserService implements UserDetailsService {
         this.mailSender = mailSender;
         this.passwordEncoder = passwordEncoder;
     }
+    private String generateActivationCode() {
+        int length = 4;
+        String digits = "0123456789";
+        Random random = new Random();
 
+        StringBuilder code = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            code.append(digits.charAt(random.nextInt(digits.length())));
+        }
+
+        return code.toString();
+    }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepo.findByEmail(username);
-        if(user.getActivationCode() != null ) {
-            throw new NullPointerException("Вы не прошли стадию подтверждения кода активации");
-        }
-
         if (user == null) {
             throw new UsernameNotFoundException("Пользователь не найден");
+        }
+        if(user.getActivationCode() != null ) {
+            throw new NullPointerException("Вы не прошли стадию подтверждения кода активации");
         }
 
         return user;
@@ -50,7 +62,8 @@ public class UserService implements UserDetailsService {
 
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
-        user.setActivationCode(UUID.randomUUID().toString());
+        String activationCode = generateActivationCode();
+        user.setActivationCode(activationCode);
         user.setGender(gender);
         user.setLastName(lastName);
         user.setWorkerRoles(Collections.singleton(workerRole));
@@ -63,7 +76,7 @@ public class UserService implements UserDetailsService {
         if (!StringUtils.isEmpty(user.getEmail())) {
             String message = String.format(
                     "Hello, %s! \n" +
-                            "Welcome to Vuary. Please, visit next link: http://localhost:8080/activate/%s",
+                            "Добро пожаловать в Vuary. Ваш сгенерированный код: %s",
                     user.getUsername(),
                     user.getActivationCode()
             );
@@ -74,17 +87,24 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public boolean activateUser(String code) {
-        User user = userRepo.findByActivationCode(code);
 
+    public boolean activateUser(String code) {
+        System.out.println("Полученный код активации: " + code);
+        User user = userRepo.findByActivationCode(code);
         if (user == null) {
+            System.out.println("Пользователь с таким кодом активации не найден " );
             return false;
         }
-
-        user.setActivationCode(null);
-
-        userRepo.save(user);
-
-        return true;
+        System.out.println("Хранимый код активации: " + user.getActivationCode());
+        if (Objects.equals(code, user.getActivationCode())) {
+            user.setActivationCode(null);
+            user.setActive(true);
+            userRepo.save(user);
+            System.out.println("Аккаунт" + user.getEmail() + "успешно активирован");
+            return true;  // Аккаунт успешно активирован
+        } else {
+            System.out.println("Введенный пользователем" + user.getEmail() + "не совпадает");
+            return false;  // Введенный код не совпадает с кодом из базы данных
+        }
     }
 }

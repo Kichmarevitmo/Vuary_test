@@ -32,24 +32,27 @@ public class RegistrationController {
         user.setEmail(email);
         user.setWorkerRoles(Collections.singleton(workerRole));
         if (!userService.addUser(user, gender, lastname, workerRole, city)) {
-            model.put("message", "User exists!");
+            model.put("message", "Аккаунт с такой почтой уже существует!");
             return "registration";
         } else {
             user.setLastName(lastname);
             user.setCity(city);
         }
+        model.put("activationCode",user.getActivationCode());
 
-        return "redirect:/login";
+        return "redirect:/registration";
     }
 
     @GetMapping("/activate/{code}")
-    public String activate(Model model, @PathVariable String code) {
+    public String activate(Model model, @RequestParam("code") String code) {
         boolean isActivated = userService.activateUser(code);
-
+        model.addAttribute("activationCode", code);
         if (isActivated) {
-            model.addAttribute("message", "User successfully activated");
+            model.addAttribute("messageType", "success");
+            model.addAttribute("message", "Аккаунт успешно подтвержден");
         } else {
-            model.addAttribute("message", "Activation code is not found!");
+            model.addAttribute("messageType", "danger");
+            model.addAttribute("message", "Код активации не найден");
         }
 
         return "login";

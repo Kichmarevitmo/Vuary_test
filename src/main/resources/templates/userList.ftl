@@ -547,6 +547,9 @@
     <#if allSalmi?exists>
         <#list allSalmi as salmi>
             <div style="max-width: 600px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #fff; margin: 20px 0 0 20px;">
+                <#if salmi.getFirstImage()?exists && salmi.getFirstImage().name?has_content>
+                    <img src="/user/image/${salmi.getFirstImage().name}" alt="Изображение котла" style="max-width: 100%; margin-top: 10px;">
+                </#if>
                 <p>Объем: ${salmi.объем}</p>
                 <p>Подключение к сети водоснабжения: ${salmi.подключениеКСетиВодоснабжения}</p>
                 <p>Мощность: ${salmi.напряжениеИЧастота}</p>
@@ -573,6 +576,9 @@
     <#if allSuari?exists>
         <#list allSuari as suari>
             <div style="max-width: 600px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #fff; margin: 20px 0 0 20px;">
+                <#if suari.getFirstImage()?exists && suari.getFirstImage().name?has_content>
+                    <img src="/user/image/${suari.getFirstImage().name}" alt="Изображение котла" style="max-width: 100%; margin-top: 10px;">
+                </#if>
                 <p>Тип камеры сгорания: ${suari.типКамерыСгорания}</p>
                 <p>Модуляция пламени: ${suari.модуляцияПламени}</p>
                 <p>Номинальная тепловая мощность: ${suari.номинальнаяТепловаяМощность}</p>
@@ -605,6 +611,9 @@
     <#if allToivo?exists>
         <#list allToivo as toivo>
             <div style="max-width: 600px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #fff; margin: 20px 0 0 20px;">
+                <#if toivo.getFirstImage()?exists && toivo.getFirstImage().name?has_content>
+                    <img src="/user/image/${toivo.getFirstImage().name}" alt="Изображение котла" style="max-width: 100%; margin-top: 10px;">
+                </#if>
                 <p>Тип дымоудаления: ${toivo.типДымоудаления}</p>
                 <p>Макс./мин. тепловая мощность в режиме отопление: ${toivo.максМинТепловаяМощностьОтопление}</p>
                 <p>Макс./мин. тепловая мощность в режиме ГВС: ${toivo.максМинТепловаяМощностьГВС}</p>
