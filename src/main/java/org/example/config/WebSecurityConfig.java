@@ -30,9 +30,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .ignoringAntMatchers("/api/pdf/upload")
+                .ignoringAntMatchers("/api/pdf/**","/api/pdf/*")
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/registration", "/static/**", "/activate/*","/product/addProduct","/products/**","/user/allToivo/**","/activate/**").permitAll()
+                .antMatchers("/", "/registration", "/static/**", "/activate/*",
+                        "/product/addProduct","/products/**","/user/allToivo/**",
+                        "/activate/**","/api/pdf/**","/api/pdf/*","/api/pdf/upload").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

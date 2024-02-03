@@ -90,6 +90,9 @@
         <button type="submit">Отправить</button>
     </form>
     </#if>
+    <form action="/api/pdf/files/1" method="get">
+        <button type="submit">Download File</button>
+    </form>
 </#macro>
 
 <#macro logout>
