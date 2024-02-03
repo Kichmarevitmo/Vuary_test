@@ -19,6 +19,7 @@ import org.example.domain.equipment.suari.SUARItypes;
 import org.example.domain.equipment.toivo.TOIVO;
 import org.example.domain.equipment.toivo.TOIVORepo;
 import org.example.domain.equipment.toivo.TOIVOtypes;
+import org.example.exception.AINOVAException;
 import org.example.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -248,6 +249,8 @@ public class UserController {
             e.printStackTrace();
             // Обработка ошибки (например, возврат сообщения об ошибке)
             return "error";
+        } catch (AINOVAException e) {
+            throw new RuntimeException(e);
         }
         ainova.setТипAINOVA(AINOVAtypes.valueOf(типAINOVA));
         ainova.setМощность(мощностьAINOVA);

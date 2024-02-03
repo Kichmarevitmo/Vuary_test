@@ -1,8 +1,8 @@
 package org.example.domain.equipment.suari;
 
-import lombok.Data;
-import org.example.domain.equipment.ainova.AINOVAtypes;
 import org.example.domain.equipment.image.Image;
+import org.example.exception.SALMIException;
+import org.example.exception.SUARIException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -42,9 +42,13 @@ public class SUARI {
         if (!images.isEmpty()) {
             return images.get(0);
         }
-        return null; // or throw an exception if you prefer
+        throw new SUARIException("Изображение не найдено");
     }
     public void addImage(Image image) {
+        if (image == null)
+        {
+            throw new SUARIException("Изображение для SALMI пустое");
+        }
         images.add(image);
     }
 

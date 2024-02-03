@@ -2,6 +2,7 @@ package org.example.domain.equipment.ainova;
 
 import lombok.Data;
 import org.example.domain.equipment.image.Image;
+import org.example.exception.AINOVAException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -46,7 +47,10 @@ public class AINOVA {
         }
         return null; // or throw an exception if you prefer
     }
-    public void addImage(Image image) {
+    public void addImage(Image image) throws AINOVAException {
+        if (image == null) {
+            throw new AINOVAException("Изображение не может быть пустым");
+        }
         images.add(image);
     }
 

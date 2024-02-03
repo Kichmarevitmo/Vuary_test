@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.domain.Role;
 import org.example.domain.User;
+import org.example.domain.equipment.image.ImageService;
 import org.example.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;

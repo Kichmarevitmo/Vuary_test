@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.domain.User;
 import org.example.domain.equipment.ainova.AINOVA;
 import org.example.domain.equipment.salmi.SALMI;
 import org.example.domain.equipment.suari.SUARI;
@@ -39,7 +40,9 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "ainova_id") // имя колонки в таблице Image, хранящей внешний ключ на TOIVO
     private AINOVA ainova;
-
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "user") // имя колонки в таблице Image, хранящей внешний ключ на TOIVO
+    private User user;
     @Lob
     @Type(type = "org.hibernate.type.ImageType")
     private byte[] imageData;

@@ -2,6 +2,7 @@ package org.example.domain.equipment.salmi;
 
 import lombok.Data;
 import org.example.domain.equipment.image.Image;
+import org.example.exception.SALMIException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -34,9 +35,13 @@ public class SALMI {
         if (!images.isEmpty()) {
             return images.get(0);
         }
-        return null; // or throw an exception if you prefer
+        throw new SALMIException("Изображение не найдено");
     }
     public void addImage(Image image) {
+        if (image == null)
+        {
+            throw new SALMIException("Изображение для SALMI пустое");
+        }
         images.add(image);
     }
 

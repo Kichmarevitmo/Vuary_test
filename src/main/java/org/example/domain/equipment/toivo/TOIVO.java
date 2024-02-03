@@ -2,6 +2,8 @@ package org.example.domain.equipment.toivo;
 
 import lombok.Data;
 import org.example.domain.equipment.image.Image;
+import org.example.exception.SUARIException;
+import org.example.exception.TOIVOException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -40,13 +42,17 @@ public class TOIVO {
         this.images = new ArrayList<>();
     }
     public void addImage(Image image) {
+        if (image == null)
+        {
+            throw new TOIVOException("Изображение для TOIVO пустое");
+        }
         images.add(image);
     }
     public Image getFirstImage() {
         if (!images.isEmpty()) {
             return images.get(0);
         }
-        return null; // or throw an exception if you prefer
+        throw new TOIVOException("Изображение не найдено");
     }
 
     public void setТипДымоудаления(String типДымоудаления) {

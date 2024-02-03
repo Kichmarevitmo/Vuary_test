@@ -1,18 +1,18 @@
 package org.example.domain;
 
+import org.example.domain.equipment.image.Image;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "usr")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String lastname;
@@ -22,7 +22,6 @@ public class User implements UserDetails {
     private boolean active;
     private String email;
     private String activationCode;
-    private String avatarUrl;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -34,7 +33,12 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<WorkerRole> workerRoles;
 
-
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user") // Это имя колонки в таблице Image, которая будет хранить внешний ключ на TOIVO
+    private List<Image> images= new ArrayList<>();
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dateOfBirth;
     public User(Long id, String username, String lastname, String password, Gender gender, String city, boolean active, String email, String activationCode, String avatarUrl, Set<Role> roles, Set<WorkerRole> workerRoles) {
         this.id = id;
         this.username = username;
@@ -45,7 +49,6 @@ public class User implements UserDetails {
         this.active = active;
         this.email = email;
         this.activationCode = activationCode;
-        this.avatarUrl = avatarUrl;
         this.roles = roles;
         this.workerRoles = workerRoles;
     }
@@ -53,7 +56,16 @@ public class User implements UserDetails {
     public User() {
 
     }
-
+    public Image getFirstImage() {
+        if (!images.isEmpty()) {
+            return images.get(0);
+        }
+        return null;
+    }
+    public void addImage(Image image) {
+        image.setUser(this);
+        images.add(image);
+    }
     public boolean isAdmin() {
         return roles.contains(Role.ADMIN);
     }
@@ -169,14 +181,6 @@ public class User implements UserDetails {
         this.activationCode = activationCode;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -187,5 +191,13 @@ public class User implements UserDetails {
     @Override
     public int hashCode() {
         return Objects.hash(id, username, password, email);
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }

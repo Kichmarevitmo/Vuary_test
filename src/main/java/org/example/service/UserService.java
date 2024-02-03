@@ -4,6 +4,7 @@ import org.example.domain.Gender;
 import org.example.domain.Role;
 import org.example.domain.User;
 import org.example.domain.WorkerRole;
+import org.example.exception.UserServiceException;
 import org.example.repos.UserRepo;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -47,7 +48,7 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("Пользователь не найден");
         }
         if(user.getActivationCode() != null ) {
-            throw new NullPointerException("Вы не прошли стадию подтверждения кода активации");
+            throw new UserServiceException("Вы не прошли стадию подтверждения кода активации");
         }
 
         return user;
@@ -75,13 +76,13 @@ public class UserService implements UserDetailsService {
 
         if (!StringUtils.isEmpty(user.getEmail())) {
             String message = String.format(
-                    "Hello, %s! \n" +
+                    "Привет, %s! \n" +
                             "Добро пожаловать в Vuary. Ваш сгенерированный код: %s",
                     user.getUsername(),
                     user.getActivationCode()
             );
 
-            mailSender.send(user.getEmail(), "Activation code", message);
+            mailSender.send(user.getEmail(), "Код активации Vuary", message);
         }
 
         return true;
@@ -89,22 +90,17 @@ public class UserService implements UserDetailsService {
 
 
     public boolean activateUser(String code) {
-        System.out.println("Полученный код активации: " + code);
         User user = userRepo.findByActivationCode(code);
         if (user == null) {
-            System.out.println("Пользователь с таким кодом активации не найден " );
-            return false;
+            throw new UserServiceException("Пользователь с таким кодом активации не найден " );
         }
-        System.out.println("Хранимый код активации: " + user.getActivationCode());
         if (Objects.equals(code, user.getActivationCode())) {
             user.setActivationCode(null);
             user.setActive(true);
             userRepo.save(user);
-            System.out.println("Аккаунт" + user.getEmail() + "успешно активирован");
-            return true;  // Аккаунт успешно активирован
+            return true;
         } else {
-            System.out.println("Введенный пользователем" + user.getEmail() + "не совпадает");
-            return false;  // Введенный код не совпадает с кодом из базы данных
+            throw new UserServiceException("Введенный код не совпадает с истинным" );
         }
     }
 }

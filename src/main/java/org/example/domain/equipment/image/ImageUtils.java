@@ -1,4 +1,6 @@
 package org.example.domain.equipment.image;
+import org.example.exception.ImageUtilsException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.zip.DataFormatException;
@@ -8,7 +10,8 @@ public class ImageUtils {
 
     public static final int BITE_SIZE = 10 * 1024 * 1024;
 
-    public static byte[] compressImage(byte[] data) throws IOException {
+    public static byte[] compressImage(byte[] data) {
+        try {
         Deflater deflater = new Deflater();
         deflater.setLevel(Deflater.BEST_COMPRESSION);
         deflater.setInput(data);
@@ -24,9 +27,13 @@ public class ImageUtils {
         outputStream.close();
 
         return outputStream.toByteArray();
+        } catch (IOException e) {
+            throw new ImageUtilsException("Ошибка при сжатии изображения", e);
+        }
     }
 
     public static byte[] decompressImage(byte[] data) throws DataFormatException, IOException {
+        try {
         Inflater inflater = new Inflater();
         inflater.setInput(data);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
@@ -40,5 +47,8 @@ public class ImageUtils {
         outputStream.close();
 
         return outputStream.toByteArray();
+        } catch (DataFormatException | IOException e) {
+            throw new ImageUtilsException("Ошибка при разжатии изображения", e);
+        }
     }
 }

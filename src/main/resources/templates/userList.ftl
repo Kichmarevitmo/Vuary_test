@@ -7,6 +7,7 @@
         <thead>
         <tr style="border-bottom: 1px solid #ddd;">
             <th style="padding: 10px;">Идентификатор</th>
+            <th style="padding: 10px;">Фото профиля</th>
             <th style="padding: 10px;">Имя</th>
             <th style="padding: 10px;">Почта</th>
             <th style="padding: 10px;">Роль</th>
@@ -14,6 +15,7 @@
             <th style="padding: 10px;">Город</th>
             <th style="padding: 10px;">Фамилия</th>
             <th style="padding: 10px;">Статус работы</th>
+            <th style="padding: 10px;">Дата рождения</th>
             <th style="padding: 10px;"></th>
         </tr>
         </thead>
@@ -21,6 +23,11 @@
         <#list users as user>
             <tr style="border-bottom: 1px solid #ddd;">
                 <td style="padding: 10px;">${user.id! "null"}</td>
+                <td style="padding: 10px;">
+                    <#if user.getFirstImage()?exists && user.getFirstImage().name?has_content>
+                        <img src="/user/image/${user.getFirstImage().name}" alt="Изображение котла" style="max-width: 100%; margin-top: 10px;">
+                    </#if>
+                </td>
                 <td style="padding: 10px;">${user.username! "null"}</td>
                 <td style="padding: 10px;">${user.getEmail()! "null"}</td>
                 <td style="padding: 10px;"><#list user.roles as role>${role}<#sep>, </#list></td>
@@ -28,6 +35,13 @@
                 <td style="padding: 10px;">${user.getCity()! "null"}</td>
                 <td style="padding: 10px;">${user.getLastName()! "null"}</td>
                 <td style="padding: 10px;"><#list user.workerRoles as workerRoles>${workerRoles}<#sep>, </#list></td>
+                <td style="padding: 10px;">
+                    <#if user.getDateOfBirth()?has_content>
+                        ${user.getDateOfBirth()?string("dd.MM.yyyy")}
+                    <#else>
+                        Нет данных
+                    </#if>
+                </td>
                 <td style="padding: 10px;"><a href="/user/${user.id}">Редактировать</a></td>
                 <td style="padding: 10px;"><a href="/user/delete/${user.id}" style="color: red;">Удалить</a></td>
             </tr>
