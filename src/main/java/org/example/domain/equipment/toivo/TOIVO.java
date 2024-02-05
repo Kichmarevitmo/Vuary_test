@@ -14,12 +14,12 @@ public class TOIVO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String типTOIVO;
     @JsonManagedReference
-    private TOIVOtypes типTOIVO;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "toivo_id") // Это имя колонки в таблице Image, которая будет хранить внешний ключ на TOIVO
     private List<Image> images;
-    // Характеристики котла
+    private String модельTOIVO;
     private String типДымоудаления;
     private String максМинТепловаяМощностьОтопление;
     private String максМинТепловаяМощностьГВС;
@@ -137,17 +137,10 @@ public class TOIVO {
         this.классИУровеньЗащиты = классИУровеньЗащиты;
     }
 
-    public void setТипTOIVO(TOIVOtypes типTOIVO) {
-        this.типTOIVO = типTOIVO;
-    }
-
     public Long getId() {
         return id;
     }
 
-    public TOIVOtypes getТипTOIVO() {
-        return типTOIVO;
-    }
 
     public String getТипДымоудаления() {
         return типДымоудаления;
@@ -227,5 +220,21 @@ public class TOIVO {
 
     public String getКлассИУровеньЗащиты() {
         return классИУровеньЗащиты;
+    }
+
+    public String getТипTOIVO() {
+        return типTOIVO;
+    }
+
+    public void setТипTOIVO(String типTOIVO) {
+        this.типTOIVO = типTOIVO;
+    }
+
+    public String getМодельTOIVO() {
+        return модельTOIVO;
+    }
+
+    public void setМодельTOIVO(String модельTOIVO) {
+        this.модельTOIVO = модельTOIVO;
     }
 }

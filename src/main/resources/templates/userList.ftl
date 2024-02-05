@@ -53,6 +53,9 @@
           style="max-width: 600px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #fff; margin: 20px 0 0 20px;">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
+        <label for="модельTOIVO">Название модели:</label>
+        <input type="text" id="модельTOIVO" name="модельTOIVO" required>
+
         <label for="максМинТепловаяМощностьОтопление">Макс/Мин Тепловая Мощность (Отопление):</label>
         <input type="text" id="максМинТепловаяМощностьОтопление" name="максМинТепловаяМощностьОтопление" required>
 
@@ -172,6 +175,9 @@
     <form action="/user/addProductSUARI" method="post" accept-charset="UTF-8" enctype="multipart/form-data"
           style="max-width: 600px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #fff; margin: 20px 0 0 20px;">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+        <label for="модельSUARI">Название модели:</label>
+        <input type="text" id="модельSUARI" name="модельSUARI" required>
 
         <label for="типКамерыСгорания">Тип камеры сгорания:</label>
         <input type="text" id="типКамерыСгорания" name="типКамерыСгорания" required>
@@ -296,6 +302,9 @@
           style="max-width: 600px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #fff; margin: 20px 0 0 20px;">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
+        <label for="модельSALMI">Название модели:</label>
+        <input type="text" id="модельSALMI" name="модельSALMI" required>
+
         <label for="объем">Объем:</label>
         <input type="text" id="объем" name="объем" required>
 
@@ -398,6 +407,9 @@
     <form action="/user/addProductAINOVA" method="post" accept-charset="UTF-8" enctype="multipart/form-data"
           style="max-width: 600px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #fff; margin: 20px 0 0 20px;">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+        <label for="модельAINOVA">Название модели:</label>
+        <input type="text" id="модельAINOVA" name="модельAINOVA" required>
 
         <label for="мощностьAINOVA">Мощность:</label>
         <input type="text" id="мощностьAINOVA" name="мощностьAINOVA" required>
@@ -525,6 +537,7 @@
     <#if allAinova?exists>
         <#list allAinova as ainova>
             <div style="max-width: 600px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #fff; margin: 20px 0 0 20px;">
+                <p>Модель: ${ainova.модельAINOVA}</p>
                 <p>Мощность: ${ainova.мощность}</p>
                 <p>Напряжение и частота: ${ainova.напряжениеИЧастота}</p>
                 <p>Количество ступеней мощности: ${ainova.напряжениеИЧастота}</p>
@@ -564,6 +577,7 @@
                 <#if salmi.getFirstImage()?exists && salmi.getFirstImage().name?has_content>
                     <img src="/user/image/${salmi.getFirstImage().name}" alt="Изображение котла" style="max-width: 100%; margin-top: 10px;">
                 </#if>
+                <p>Модель: ${salmi.модельSALMI}</p>
                 <p>Объем: ${salmi.объем}</p>
                 <p>Подключение к сети водоснабжения: ${salmi.подключениеКСетиВодоснабжения}</p>
                 <p>Мощность: ${salmi.напряжениеИЧастота}</p>
@@ -593,6 +607,7 @@
                 <#if suari.getFirstImage()?exists && suari.getFirstImage().name?has_content>
                     <img src="/user/image/${suari.getFirstImage().name}" alt="Изображение котла" style="max-width: 100%; margin-top: 10px;">
                 </#if>
+                <p>Модель: ${suari.модельSUARI}</p>
                 <p>Тип камеры сгорания: ${suari.типКамерыСгорания}</p>
                 <p>Модуляция пламени: ${suari.модуляцияПламени}</p>
                 <p>Номинальная тепловая мощность: ${suari.номинальнаяТепловаяМощность}</p>
@@ -628,6 +643,7 @@
                 <#if toivo.getFirstImage()?exists && toivo.getFirstImage().name?has_content>
                     <img src="/user/image/${toivo.getFirstImage().name}" alt="Изображение котла" style="max-width: 100%; margin-top: 10px;">
                 </#if>
+                <p>Модель: ${toivo.модельTOIVO}</p>
                 <p>Тип дымоудаления: ${toivo.типДымоудаления}</p>
                 <p>Макс./мин. тепловая мощность в режиме отопление: ${toivo.максМинТепловаяМощностьОтопление}</p>
                 <p>Макс./мин. тепловая мощность в режиме ГВС: ${toivo.максМинТепловаяМощностьГВС}</p>

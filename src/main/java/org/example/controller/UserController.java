@@ -56,7 +56,7 @@ public class UserController {
     private ImageRepository imageRepository;
 
     @PostMapping("/addProductTOIVO")
-    public String addProductTOIVO(@RequestParam("типTOIVO") String типTOIVO,
+    public String addProductTOIVO(@RequestParam("модельTOIVO") String модельTOIVO,@RequestParam("типTOIVO") String типTOIVO,
                                   @RequestParam("максМинТепловаяМощностьОтопление") String максМинТепловаяМощностьОтопление,
                                   @RequestParam("максМинТепловаяМощностьГВС") String максМинТепловаяМощностьГВС,
                                   @RequestParam("кпд") String кпд,
@@ -86,7 +86,8 @@ public class UserController {
             // Обработка ошибки (например, возврат сообщения об ошибке)
             return "error";
         }
-        toivo.setТипTOIVO(TOIVOtypes.valueOf(типTOIVO));
+        toivo.setМодельTOIVO(модельTOIVO);
+        toivo.setТипTOIVO(TOIVOtypes.valueOf(типTOIVO).getDescription());
         toivo.setТипДымоудаления(типДымоудаления);
         toivo.setКлассИУровеньЗащиты(классИУровеньЗащиты);
         toivo.setПрисоединительныйРазмерДымохода(присоединительныйРазмерДымохода);
@@ -112,7 +113,7 @@ public class UserController {
     }
 
     @PostMapping("/addProductSUARI")
-    public String addProductSUARI(@RequestParam("типSUARI") String типSUARI,
+    public String addProductSUARI(@RequestParam("модельSUARI") String модельSUARI,@RequestParam("типSUARI") String типSUARI,
                                   @RequestParam("типКамерыСгорания") String типКамерыСгорания,
                                   @RequestParam("модуляцияПламени") String модуляцияПламени,
                                   @RequestParam("номинальнаяТепловаяМощность") String номинальнаяТепловаяМощность,
@@ -143,7 +144,8 @@ public class UserController {
             // Обработка ошибки (например, возврат сообщения об ошибке)
             return "error";
         }
-        suari.setТипSUARI(SUARItypes.valueOf(типSUARI));
+        suari.setМодельSUARI(модельSUARI);
+        suari.setТипSUARI(SUARItypes.valueOf(типSUARI).GetDescription());
         suari.setТипКамерыСгорания(типКамерыСгорания);
         suari.setМодуляцияПламени(модуляцияПламени);
         suari.setНоминальнаяТепловаяМощность(номинальнаяТепловаяМощность);
@@ -169,7 +171,7 @@ public class UserController {
         return "redirect:/user";
     }
     @PostMapping("/addProductSALMI")
-    public String addProductSALMI(@RequestParam("типSALMI") String типSALMI,
+    public String addProductSALMI(@RequestParam("модельSALMI") String модельSALMI,@RequestParam("типSALMI") String типSALMI,
                                   @RequestParam("объем") String объем,
                                   @RequestParam("подключениеКСетиВодоснабжения") String подключениеКСетиВодоснабжения,
                                   @RequestParam("мощность") String мощность,
@@ -194,7 +196,8 @@ public class UserController {
             // Обработка ошибки (например, возврат сообщения об ошибке)
             return "error";
         }
-        salmi.setТипSALMI(SALMItypes.valueOf(типSALMI));
+        salmi.setМодельSALMI(модельSALMI);
+        salmi.setТипSALMI(SALMItypes.valueOf(типSALMI).GetDescription());
         salmi.setОбъем(объем);
         salmi.setПодключениеКСетиВодоснабжения(подключениеКСетиВодоснабжения);
         salmi.setМощность(мощность);
@@ -214,7 +217,7 @@ public class UserController {
         return "redirect:/user";
     }
     @PostMapping("/addProductAINOVA")
-    public String addProductAINOVA(@RequestParam("типAINOVA") String типAINOVA,
+    public String addProductAINOVA(@RequestParam("модельAINOVA") String модельAINOVA,@RequestParam("типAINOVA") String типAINOVA,
                                    @RequestParam("мощностьAINOVA") String мощностьAINOVA,
                                    @RequestParam("напряжениеИЧастота") String напряжениеИЧастота,
                                    @RequestParam("количествоСтупенейМощности") String количествоСтупенейМощности,
@@ -252,7 +255,8 @@ public class UserController {
         } catch (AINOVAException e) {
             throw new RuntimeException(e);
         }
-        ainova.setТипAINOVA(AINOVAtypes.valueOf(типAINOVA));
+        ainova.setМодельAINOVA(модельAINOVA);
+        ainova.setТипAINOVA(AINOVAtypes.valueOf(типAINOVA).GetDescription());
         ainova.setМощность(мощностьAINOVA);
         ainova.setНапряжениеИЧастота(напряжениеИЧастота);
         ainova.setКоличествоСтупенейМощности(количествоСтупенейМощности);

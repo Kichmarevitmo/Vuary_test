@@ -17,7 +17,8 @@ public class SUARI {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "suari_id") // Это имя колонки в таблице Image, которая будет хранить внешний ключ на TOIVO
     private List<Image> images = new ArrayList<>();
-    private SUARItypes типSUARI;
+    private String модельSUARI;
+    private String типSUARI;
     // Характеристики котла
     private String типКамерыСгорания;
     private String модуляцияПламени;
@@ -58,9 +59,6 @@ public class SUARI {
         this.типКамерыСгорания = типКамерыСгорания;
     }
 
-    public void setТипSUARI(SUARItypes типSUARI) {
-        this.типSUARI = типSUARI;
-    }
 
     public void setМодуляцияПламени(String модуляцияПламени) {
         this.модуляцияПламени = модуляцияПламени;
@@ -140,10 +138,6 @@ public class SUARI {
 
     public void setВнутреннийДиаметрПатрубкаДымохода(String внутреннийДиаметрПатрубкаДымохода) {
         this.внутреннийДиаметрПатрубкаДымохода = внутреннийДиаметрПатрубкаДымохода;
-    }
-
-    public SUARItypes getТипSUARI() {
-        return типSUARI;
     }
 
     public String getТипКамерыСгорания() {
@@ -228,5 +222,21 @@ public class SUARI {
 
     public String getВнутреннийДиаметрПатрубкаДымохода() {
         return внутреннийДиаметрПатрубкаДымохода;
+    }
+
+    public String getТипSUARI() {
+        return типSUARI;
+    }
+
+    public void setТипSUARI(String типSUARI) {
+        this.типSUARI = типSUARI;
+    }
+
+    public String getМодельSUARI() {
+        return модельSUARI;
+    }
+
+    public void setМодельSUARI(String модельSUARI) {
+        this.модельSUARI = модельSUARI;
     }
 }

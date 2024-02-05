@@ -17,7 +17,8 @@ public class SALMI {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "salmi_id") // Это имя колонки в таблице Image, которая будет хранить внешний ключ на TOIVO
     private List<Image> images = new ArrayList<>();
-    private SALMItypes типSALMI;
+    private String модельSALMI;
+    private String типSALMI;
     private String объем;
     private String подключениеКСетиВодоснабжения;
     private String мощность;
@@ -47,9 +48,6 @@ public class SALMI {
         images.add(image);
     }
 
-    public void setТипSALMI(SALMItypes типSALMI) {
-        this.типSALMI = типSALMI;
-    }
 
     public void setОбъем(String объем) {
         this.объем = объем;
@@ -111,9 +109,6 @@ public class SALMI {
         this.габаритныеРазмеры = габаритныеРазмеры;
     }
 
-    public SALMItypes getТипSALMI() {
-        return типSALMI;
-    }
 
     public String getОбъем() {
         return объем;
@@ -177,5 +172,21 @@ public class SALMI {
 
     public Long getId() {
         return id;
+    }
+
+    public String getТипSALMI() {
+        return типSALMI;
+    }
+
+    public void setТипSALMI(String типSALMI) {
+        this.типSALMI = типSALMI;
+    }
+
+    public String getМодельSALMI() {
+        return модельSALMI;
+    }
+
+    public void setМодельSALMI(String модельSALMI) {
+        this.модельSALMI = модельSALMI;
     }
 }

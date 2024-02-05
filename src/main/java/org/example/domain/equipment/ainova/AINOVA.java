@@ -17,7 +17,8 @@ public class AINOVA {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "ainova_id")
     private List<Image> images = new ArrayList<>();
-    private AINOVAtypes типAINOVA;
+    private String модельAINOVA;
+    private String типAINOVA;
     private String мощность;
     private String напряжениеИЧастота;
     private String количествоСтупенейМощности;
@@ -156,16 +157,8 @@ public class AINOVA {
         this.габаритныеРазмеры = габаритныеРазмеры;
     }
 
-    public void setТипAINOVA(AINOVAtypes типAINOVA) {
-        this.типAINOVA = типAINOVA;
-    }
-
     public Long getId() {
         return id;
-    }
-
-    public AINOVAtypes getТипAINOVA() {
-        return типAINOVA;
     }
 
     public String getМощность() {
@@ -266,5 +259,21 @@ public class AINOVA {
 
     public String getГабаритныеРазмеры() {
         return габаритныеРазмеры;
+    }
+
+    public String getТипAINOVA() {
+        return типAINOVA;
+    }
+
+    public void setТипAINOVA(String типAINOVA) {
+        this.типAINOVA = типAINOVA;
+    }
+
+    public String getМодельAINOVA() {
+        return модельAINOVA;
+    }
+
+    public void setМодельAINOVA(String модельAINOVA) {
+        this.модельAINOVA = модельAINOVA;
     }
 }
