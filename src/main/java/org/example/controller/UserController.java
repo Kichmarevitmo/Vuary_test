@@ -299,11 +299,17 @@ public class UserController {
         model.addAttribute("allToivo", toivoRepo.findAll());
         return "userList";
     }
+    @GetMapping("/allAINOVA")
+    @ResponseBody
+    public List<AINOVA> getAllProductsAINOVA() {
+        List<AINOVA> ainovaList = ainovaRepo.findAll();
+        return ainovaList;
+    }
     @GetMapping("/allSalmi")
     @ResponseBody
-    public ResponseEntity<List<SALMI>> getAllProductsSALMI() {
+    public List<SALMI> getAllProductsSALMI() {
         List<SALMI> salmiList = salmiRepo.findAll();
-        return new ResponseEntity<>(salmiList, HttpStatus.OK);
+        return salmiList;
     }
 
     @GetMapping("/allSuari")

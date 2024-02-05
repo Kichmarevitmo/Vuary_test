@@ -1,5 +1,6 @@
 package org.example.domain.equipment.suari;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.example.domain.equipment.image.Image;
 import org.example.exception.SALMIException;
 import org.example.exception.SUARIException;
@@ -12,6 +13,7 @@ public class SUARI {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "suari_id") // Это имя колонки в таблице Image, которая будет хранить внешний ключ на TOIVO
     private List<Image> images = new ArrayList<>();

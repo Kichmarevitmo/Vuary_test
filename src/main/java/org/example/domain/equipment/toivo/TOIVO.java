@@ -1,5 +1,6 @@
 package org.example.domain.equipment.toivo;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.example.domain.equipment.image.Image;
 import org.example.exception.SUARIException;
@@ -13,6 +14,7 @@ public class TOIVO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @JsonManagedReference
     private TOIVOtypes типTOIVO;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "toivo_id") // Это имя колонки в таблице Image, которая будет хранить внешний ключ на TOIVO

@@ -34,11 +34,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .ignoringAntMatchers("/api/pdf/upload")
                 .ignoringAntMatchers("/api/pdf/**","/api/pdf/*")
+                //.ignoringAntMatchers("/user/allSalmi")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/", "/registration", "/static/**", "/activate/*",
                         "/product/addProduct","/products/**","/user/allToivo/**",
-                        "/activate/**","/api/pdf/**","/api/pdf/*","/api/pdf/upload").permitAll()
+                        "/activate/**","/api/pdf/**","/api/pdf/*","/api/pdf/upload","/user/**","/user/allSalmi").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

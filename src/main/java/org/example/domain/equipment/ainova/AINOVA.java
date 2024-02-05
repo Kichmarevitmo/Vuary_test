@@ -1,5 +1,6 @@
 package org.example.domain.equipment.ainova;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.example.domain.equipment.image.Image;
 import org.example.exception.AINOVAException;
@@ -12,6 +13,7 @@ public class AINOVA {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "ainova_id")
     private List<Image> images = new ArrayList<>();
