@@ -53,8 +53,7 @@ public class UserService implements UserDetailsService {
 
         return user;
     }
-
-    public boolean addUser(User user, Gender gender, String lastName, WorkerRole workerRole, String city) {
+    public boolean addUser(User user) {
         User userFromDb = userRepo.findByEmail(user.getEmail());
 
         if (userFromDb != null && userFromDb.getEmail().equals(user.getEmail())) {
@@ -65,10 +64,37 @@ public class UserService implements UserDetailsService {
         user.setRoles(Collections.singleton(Role.USER));
         String activationCode = generateActivationCode();
         user.setActivationCode(activationCode);
-        user.setGender(gender);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        userRepo.save(user);
+
+        if (!StringUtils.isEmpty(user.getEmail())) {
+            String message = String.format(
+                    "Привет, %s! \n" +
+                            "Добро пожаловать в Vuary. Ваш сгенерированный код: %s",
+                    user.getUsername(),
+                    user.getActivationCode()
+            );
+
+            mailSender.send(user.getEmail(), "Код активации Vuary", message);
+        }
+
+        return true;
+    }
+
+    public boolean addUser(User user, String lastName, WorkerRole workerRole) {
+        User userFromDb = userRepo.findByEmail(user.getEmail());
+
+        if (userFromDb != null && userFromDb.getEmail().equals(user.getEmail())) {
+            return false;
+        }
+
+        user.setActive(true);
+        user.setRoles(Collections.singleton(Role.USER));
+        String activationCode = generateActivationCode();
+        user.setActivationCode(activationCode);
         user.setLastName(lastName);
         user.setWorkerRoles(Collections.singleton(workerRole));
-        user.setCity(city);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 

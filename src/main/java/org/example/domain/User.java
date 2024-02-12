@@ -17,8 +17,6 @@ public class User implements UserDetails {
     private String username;
     private String lastname;
     private String password;
-    private Gender gender;
-    private String city;
     private boolean active;
     private String email;
     private String activationCode;
@@ -39,13 +37,11 @@ public class User implements UserDetails {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
-    public User(Long id, String username, String lastname, String password, Gender gender, String city, boolean active, String email, String activationCode, String avatarUrl, Set<Role> roles, Set<WorkerRole> workerRoles) {
+    public User(Long id, String username, String lastname, String password, boolean active, String email, String activationCode, String avatarUrl, Set<Role> roles, Set<WorkerRole> workerRoles) {
         this.id = id;
         this.username = username;
         this.lastname = lastname;
         this.password = password;
-        this.gender = gender;
-        this.city = city;
         this.active = active;
         this.email = email;
         this.activationCode = activationCode;
@@ -112,13 +108,6 @@ public class User implements UserDetails {
     public void setLastName(String lastname){
         this.lastname = lastname;
     }
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
 
     public Set<WorkerRole> getWorkerRoles() {
         return workerRoles;
@@ -126,14 +115,6 @@ public class User implements UserDetails {
 
     public void setWorkerRoles(Set<WorkerRole> workerRoles) {
         this.workerRoles = workerRoles;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     @Override

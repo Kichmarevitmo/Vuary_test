@@ -56,6 +56,7 @@ public class UserController {
     private ImageRepository imageRepository;
 
     @PostMapping("/addProductTOIVO")
+    @ResponseBody
     public String addProductTOIVO(@RequestParam("модельTOIVO") String модельTOIVO,@RequestParam("типTOIVO") String типTOIVO,
                                   @RequestParam("максМинТепловаяМощностьОтопление") String максМинТепловаяМощностьОтопление,
                                   @RequestParam("максМинТепловаяМощностьГВС") String максМинТепловаяМощностьГВС,
@@ -113,6 +114,7 @@ public class UserController {
     }
 
     @PostMapping("/addProductSUARI")
+    @ResponseBody
     public String addProductSUARI(@RequestParam("модельSUARI") String модельSUARI,@RequestParam("типSUARI") String типSUARI,
                                   @RequestParam("типКамерыСгорания") String типКамерыСгорания,
                                   @RequestParam("модуляцияПламени") String модуляцияПламени,
@@ -171,6 +173,7 @@ public class UserController {
         return "redirect:/user";
     }
     @PostMapping("/addProductSALMI")
+    @ResponseBody
     public String addProductSALMI(@RequestParam("модельSALMI") String модельSALMI,@RequestParam("типSALMI") String типSALMI,
                                   @RequestParam("объем") String объем,
                                   @RequestParam("подключениеКСетиВодоснабжения") String подключениеКСетиВодоснабжения,
@@ -217,6 +220,7 @@ public class UserController {
         return "redirect:/user";
     }
     @PostMapping("/addProductAINOVA")
+    @ResponseBody
     public String addProductAINOVA(@RequestParam("модельAINOVA") String модельAINOVA,@RequestParam("типAINOVA") String типAINOVA,
                                    @RequestParam("мощностьAINOVA") String мощностьAINOVA,
                                    @RequestParam("напряжениеИЧастота") String напряжениеИЧастота,
@@ -295,6 +299,7 @@ public class UserController {
                 .body(imageBytes);
     }
     @GetMapping
+    @ResponseBody
     public String userList(Model model) {
         model.addAttribute("users", userRepo.findAll());
         model.addAttribute("allAinova", ainovaRepo.findAll());
@@ -335,14 +340,25 @@ public class UserController {
         return new ResponseEntity<>(imageList, HttpStatus.OK);
     }
     @GetMapping("{user}")
+    @ResponseBody
     public String userEditForm(@PathVariable User user, Model model) {
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
 
         return "userEdit";
     }
-
+    @GetMapping("/getByEmail")
+    @ResponseBody
+    public ResponseEntity<User> getUserByEmail(@RequestParam String email) {
+        User user = userRepo.findByEmail(email);
+        if (user != null) {
+            return ResponseEntity.ok().body(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
     @PostMapping
+    @ResponseBody
     public String userSave(
             @RequestParam String username,
             @RequestParam Map<String, String> form,
@@ -350,8 +366,6 @@ public class UserController {
     ) {
         user.setUsername(username);
         user.setEmail(form.get("email"));
-        user.setGender(Gender.valueOf(form.get("gender")));
-        user.setCity(form.get("city"));
         user.setLastName(form.get("lastName"));
         user.getWorkerRoles().clear();
         user.getWorkerRoles().add(WorkerRole.valueOf(form.get("workerRoles")));
@@ -374,6 +388,7 @@ public class UserController {
     }
 
     @GetMapping("/delete/{user}")
+    @ResponseBody
     public String deleteUser(@PathVariable User user) {
         userRepo.delete(user);
         return "redirect:/user";

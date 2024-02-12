@@ -32,13 +32,13 @@ public class Application {
     @PostConstruct
     public void init() {
         if (userRepository.findByEmail("example@example.ru") == null) {
-            User admin = new User();
+            /*User admin = new User();
             admin.setUsername("admin");
             admin.setEmail("example@example.ru");
             admin.setPassword(passwordEncoder.encode("1234"));
             admin.setRoles(Collections.singleton(Role.ADMIN));
             admin.setActive(true);
-            userRepository.save(admin);
+            userRepository.save(admin);*/
         }
     }
 }
