@@ -25,16 +25,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -392,5 +394,19 @@ public class UserController {
     public String deleteUser(@PathVariable User user) {
         userRepo.delete(user);
         return "redirect:/user";
+    }
+    @GetMapping("/current-user")
+    @ResponseBody
+    public Map<String, String> getUser(@AuthenticationPrincipal User userDetails) {
+        Map<String, String> response = new HashMap<>();
+        response.put("email", userDetails.getEmail());
+        response.put("username", userDetails.getUsername());
+        response.put("lastname", userDetails.getLastName());
+        response.put("dateOfBirth", userDetails.getDateOfBirth().toString());
+        response.put("workerRole", userDetails.getWorkerRoles().toString());
+        if(userDetails.getFirstImage().getName() != null) {
+            response.put("imageName", userDetails.getFirstImage().getName());
+        }
+        return response;
     }
 }

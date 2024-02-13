@@ -113,6 +113,37 @@ public class UserService implements UserDetailsService {
 
         return true;
     }
+    public boolean addUser(User user, String lastName, WorkerRole workerRole) {
+        User userFromDb = userRepo.findByEmail(user.getEmail());
+
+        if (userFromDb != null && userFromDb.getEmail().equals(user.getEmail())) {
+            return false;
+        }
+
+        user.setActive(true);
+        user.setRoles(Collections.singleton(Role.USER));
+        String activationCode = generateActivationCode();
+        user.setActivationCode(activationCode);
+        user.setLastName(lastName);
+        user.setWorkerRoles(Collections.singleton(workerRole));
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        userRepo.save(user);
+
+        if (!StringUtils.isEmpty(user.getEmail())) {
+            String message = String.format(
+                    "Привет, %s! \n" +
+                            "Добро пожаловать в Vuary. Ваш сгенерированный код: %s",
+                    user.getUsername(),
+                    user.getActivationCode()
+            );
+
+            mailSender.send(user.getEmail(), "Код активации Vuary", message);
+        }
+
+        return true;
+    }
 
 
     public boolean activateUser(String code) {
