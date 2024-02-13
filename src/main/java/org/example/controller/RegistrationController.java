@@ -53,16 +53,14 @@ public class RegistrationController {
             // Обработка ошибки (например, возврат сообщения об ошибке)
             return "error";
         }
-        user.setGender(gender);
         user.setEmail(email);
         user.setWorkerRoles(Collections.singleton(workerRole));
         user.setDateOfBirth(dateOfBirth);
-        if (!userService.addUser(user, gender, lastname, workerRole, city)) {
+        if (!userService.addUser(user, lastname, workerRole)) {
             model.put("message", "Аккаунт с такой почтой уже существует!");
             return "registration";
         } else {
             user.setLastName(lastname);
-            user.setCity(city);
         }
         model.put("user", user);
         model.put("activationCode",user.getActivationCode());
