@@ -1,4 +1,4 @@
-package org.example.domain.equipment.salmi;
+/* package org.example.domain.equipment.salmi;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
@@ -190,3 +190,4 @@ public class SALMI {
         this.модельSALMI = модельSALMI;
     }
 }
+  */

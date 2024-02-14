@@ -1,8 +1,9 @@
 package org.example.domain;
 
-public enum Gender {
+/*public enum Gender {
     MALE,
     FEMALE,
     OTHER;
 }
+ */
 

@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Set;
 
-public interface AINOVARepo extends JpaRepository<AINOVA, Long> {
-}
+/*public interface AINOVARepo extends JpaRepository<AINOVA, Long> {
+}*/

@@ -32,11 +32,12 @@ public class User implements UserDetails {
     private Set<WorkerRole> workerRoles;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "user") // Это имя колонки в таблице Image, которая будет хранить внешний ключ на TOIVO
-    private List<Image> images= new ArrayList<>();
+    @JoinColumn(name = "user")
+    private List<Image> images = new ArrayList<>();
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
+
     public User(Long id, String username, String lastname, String password, boolean active, String email, String activationCode, String avatarUrl, Set<Role> roles, Set<WorkerRole> workerRoles) {
         this.id = id;
         this.username = username;
@@ -52,16 +53,19 @@ public class User implements UserDetails {
     public User() {
 
     }
+
     public Image getFirstImage() {
         if (!images.isEmpty()) {
             return images.get(0);
         }
         return null;
     }
+
     public void addImage(Image image) {
         image.setUser(this);
         images.add(image);
     }
+
     public boolean isAdmin() {
         return roles.contains(Role.ADMIN);
     }
@@ -77,8 +81,17 @@ public class User implements UserDetails {
     public String getUsername() {
         return username;
     }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getLastName() {
         return lastname;
+    }
+
+    public void setLastName(String lastname) {
+        this.lastname = lastname;
     }
 
     @Override
@@ -99,14 +112,6 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isActive();
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setLastName(String lastname){
-        this.lastname = lastname;
     }
 
     public Set<WorkerRole> getWorkerRoles() {

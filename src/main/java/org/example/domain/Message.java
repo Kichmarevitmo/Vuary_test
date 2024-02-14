@@ -1,5 +1,5 @@
 package org.example.domain;
-
+/*
 import javax.persistence.*;
 
 @Entity
@@ -70,3 +70,4 @@ public class Message {
         this.filename = filename;
     }
 }
+*/

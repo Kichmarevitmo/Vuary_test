@@ -1,4 +1,4 @@
-package org.example.domain.equipment.suari;
+/*package org.example.domain.equipment.suari;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.example.domain.equipment.image.Image;
@@ -240,3 +240,4 @@ public class SUARI {
         this.модельSUARI = модельSUARI;
     }
 }
+*/

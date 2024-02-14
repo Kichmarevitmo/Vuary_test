@@ -6,10 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.domain.User;
-import org.example.domain.equipment.ainova.AINOVA;
-import org.example.domain.equipment.salmi.SALMI;
-import org.example.domain.equipment.suari.SUARI;
-import org.example.domain.equipment.toivo.TOIVO;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -29,7 +25,15 @@ public class Image {
     private String name;
 
     private String type;
-    @JsonBackReference
+
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "user") // имя колонки в таблице Image, хранящей внешний ключ на TOIVO
+    private User user;
+    @Lob
+    @Type(type = "org.hibernate.type.ImageType")
+    private byte[] imageData;
+}
+/*@JsonBackReference
     @ManyToOne
     @JoinColumn(name = "toivo_id") // имя колонки в таблице Image, хранящей внешний ключ на TOIVO
     private TOIVO toivo;
@@ -44,11 +48,4 @@ public class Image {
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "ainova_id") // имя колонки в таблице Image, хранящей внешний ключ на TOIVO
-    private AINOVA ainova;
-    @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "user") // имя колонки в таблице Image, хранящей внешний ключ на TOIVO
-    private User user;
-    @Lob
-    @Type(type = "org.hibernate.type.ImageType")
-    private byte[] imageData;
-}
+    private AINOVA ainova;*/

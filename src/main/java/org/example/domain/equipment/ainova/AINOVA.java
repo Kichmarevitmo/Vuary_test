@@ -3,12 +3,11 @@ package org.example.domain.equipment.ainova;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.example.domain.equipment.image.Image;
-import org.example.exception.AINOVAException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-@Entity
+/*@Entity
 public class AINOVA {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -276,4 +275,4 @@ public class AINOVA {
     public void setМодельAINOVA(String модельAINOVA) {
         this.модельAINOVA = модельAINOVA;
     }
-}
+}*/

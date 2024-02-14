@@ -1,6 +1,6 @@
 package org.example.domain.equipment.ainova;
 
-public enum AINOVAtypes {
+/*public enum AINOVAtypes {
     STANDARD("Стандартные"),
     MINI_BOILERS("Мини-котлы");
 
@@ -14,3 +14,4 @@ public enum AINOVAtypes {
         return description;
     }
 }
+*/

@@ -1,6 +1,6 @@
 package org.example.domain.equipment.salmi;
 
-public enum SALMItypes {
+/*public enum SALMItypes {
     SMALL_CAPACITY("Малый литраж"),
     ROUND_ECONOMY("Круглые эконом"),
     ROUND_COMFORT("Круглые комфорт"),
@@ -19,3 +19,4 @@ public enum SALMItypes {
         return description;
     }
 }
+*/

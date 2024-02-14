@@ -19,9 +19,10 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserService userService;
+    private  UserService userService;
     @Autowired
-    private EncriptionConfig encriptionConfig;
+    private EncryptionConfig encryptionConfig;
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -33,23 +34,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .ignoringAntMatchers("/api/pdf/upload")
-                .ignoringAntMatchers("/api/pdf/**","/api/pdf/*","/v2/api-docs",
+                .ignoringAntMatchers("/api/pdf/**", "/api/pdf/*", "/v2/api-docs",
                         "/configuration/ui",
                         "/swagger-resources/**",
                         "/configuration/security",
                         "/swagger-ui.html",
-                        "/webjars/**")
-                //.ignoringAntMatchers("/user/allSalmi")
+                        "/webjars/**","/registration")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/", "/registration", "/static/**", "/activate/*",
-                        "/product/addProduct","/products/**","/user/allToivo/**",
-                        "/activate/**","/api/pdf/**","/api/pdf/*","/api/pdf/upload","/user/**","/user/allSalmi","/v2/api-docs",
+                        "/product/addProduct", "/products/**", "/user/allToivo/**",
+                        "/activate/**", "/api/pdf/**", "/api/pdf/*", "/api/pdf/upload", "/user/**", "/user/allSalmi",
+                        "/v2/api-docs",
                         "/configuration/ui",
                         "/swagger-resources/**",
                         "/configuration/security",
                         "/swagger-ui.html",
-                        "/webjars/**").permitAll()
+                        "/webjars/**","/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -66,6 +67,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService)
-                .passwordEncoder(encriptionConfig.getPasswordEncoder());
+                .passwordEncoder(encryptionConfig.getPasswordEncoder());
     }
 }

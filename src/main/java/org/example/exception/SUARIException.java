@@ -1,6 +1,6 @@
 package org.example.exception;
 
-public class SUARIException extends RuntimeException {
+/*public class SUARIException extends RuntimeException {
     public SUARIException() {
         super();
     }
@@ -16,4 +16,4 @@ public class SUARIException extends RuntimeException {
     public SUARIException(Throwable cause) {
         super(cause);
     }
-}
+}*/

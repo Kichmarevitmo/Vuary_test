@@ -1,5 +1,8 @@
-<#include "security.ftl">
-<#import "login.ftl" as l>
+<!-- <
+#include "security.ftl">
+<
+#
+import "login.ftl" as l>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">Kotitonttu</a>
@@ -15,14 +18,16 @@
             <li class="nav-item">
                 <a class="nav-link" href="/main">Messages</a>
             </li>
-            <!--#if isAdmin-->
+#if isAdmin
                 <li class="nav-item">
                     <a class="nav-link" href="/user">Список пользователей / котлы</a>
                 </li>
-            <!--/#if-->
+/#if
         </ul>
 
-        <div class="navbar-text mr-3">${name}</div>
-        <@l.logout />
+        <div class="navbar-text mr-3">$
+        {name}</div>
+        <
+        @l.logout />
     </div>
 </nav>

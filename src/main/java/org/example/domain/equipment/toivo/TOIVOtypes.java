@@ -1,4 +1,4 @@
-package org.example.domain.equipment.toivo;
+/*package org.example.domain.equipment.toivo;
 
 public enum TOIVOtypes {
     ONE_CIRCUIT_CLOSED_CHAMBER_NO_THREE_WAY_VALVE("Одноконтурные (с закрытой камерой) без трёхходового клапана"),
@@ -15,3 +15,4 @@ public enum TOIVOtypes {
         return description;
     }
 }
+*/

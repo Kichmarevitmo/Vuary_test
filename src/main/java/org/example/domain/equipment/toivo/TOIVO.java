@@ -1,4 +1,4 @@
-package org.example.domain.equipment.toivo;
+/*package org.example.domain.equipment.toivo;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
@@ -238,3 +238,4 @@ public class TOIVO {
         this.модельTOIVO = модельTOIVO;
     }
 }
+ */

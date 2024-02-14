@@ -1,4 +1,4 @@
-package org.example.domain.equipment.suari;
+/*package org.example.domain.equipment.suari;
 
 public enum SUARItypes {
     CLASSIC_MODELS_MECHANICAL_CONTROL("Классические модели с механической регулировкой"),
@@ -14,4 +14,4 @@ public enum SUARItypes {
     public String GetDescription() {
         return description;
     }
-}
+}*/

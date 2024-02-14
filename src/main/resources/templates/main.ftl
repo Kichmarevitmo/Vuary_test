@@ -1,6 +1,8 @@
-<#import "parts/common.ftl" as c>
+<!-- <
+#import "parts/common.ftl" as c>
 
-<@c.page>
+<
+@c.page>
     <div class="form-row">
         <div class="form-group col-md-6">
             <form method="get" action="/main" class="form-inline">
@@ -37,21 +39,32 @@
     </div>
 
     <div class="card-columns">
-        <#list messages as message>
+        <
+        #list messages as message>
             <div class="card my-3">
-                <#if message.filename??>
-                    <img src="/img/${message.filename}" class="card-img-top">
-                </#if>
+                <
+                #if message.filename??>
+                    <img src="/img/$
+                    {message.filename}" class="card-img-top">
+                <
+                /#if>
                 <div class="m-2">
-                    <span>${message.text}</span>
-                    <i>${message.tag}</i>
+                    <span>$
+                    {
+                    message.text}</span>
+                    <i>$
+                    {message.tag}</i>
                 </div>
                 <div class="card-footer text-muted">
-                    ${message.authorName}
+                    $
+                    {message.authorName}
                 </div>
             </div>
-        <#else>
+        <
+        #else>
             No message
-        </#list>
+        <
+        /#list>
     </div>
-</@c.page>
+<
+/@c.page>

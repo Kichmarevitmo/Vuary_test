@@ -1,65 +1,83 @@
 package org.example.controller;
 
-import org.example.domain.Gender;
-import org.example.domain.Role;
+
 import org.example.domain.User;
-import org.example.domain.WorkerRole;
-import org.example.domain.equipment.ainova.AINOVA;
-import org.example.domain.equipment.ainova.AINOVARepo;
-import org.example.domain.equipment.ainova.AINOVAtypes;
-import org.example.domain.equipment.image.Image;
-import org.example.domain.equipment.image.ImageRepository;
 import org.example.domain.equipment.image.ImageService;
-import org.example.domain.equipment.salmi.SALMI;
-import org.example.domain.equipment.salmi.SALMIRepo;
-import org.example.domain.equipment.salmi.SALMItypes;
-import org.example.domain.equipment.suari.SUARI;
-import org.example.domain.equipment.suari.SUARIRepo;
-import org.example.domain.equipment.suari.SUARItypes;
-import org.example.domain.equipment.toivo.TOIVO;
-import org.example.domain.equipment.toivo.TOIVORepo;
-import org.example.domain.equipment.toivo.TOIVOtypes;
-import org.example.exception.AINOVAException;
 import org.example.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private TOIVORepo toivoRepo;
-    @Autowired
-    private SUARIRepo suariRepo;
-    @Autowired
-    private SALMIRepo salmiRepo;
+
     @Autowired
     private ImageService imageService;
     @Autowired
     private UserRepo userRepo;
-    @Autowired
-    private AINOVARepo ainovaRepo;
-    @Autowired
-    private ImageRepository imageRepository;
 
-    @PostMapping("/addProductTOIVO")
+    @GetMapping("/image/{imageName}")
     @ResponseBody
-    public String addProductTOIVO(@RequestParam("модельTOIVO") String модельTOIVO,@RequestParam("типTOIVO") String типTOIVO,
+    public ResponseEntity<byte[]> getImage(@PathVariable String imageName) {
+        byte[] imageBytes = imageService.downloadImage(imageName);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(imageBytes);
+    }
+
+    @GetMapping("/getByEmail")
+    @ResponseBody
+    public ResponseEntity<User> getUserByEmail(@RequestParam String email) {
+        User user = userRepo.findByEmail(email);
+        if (user != null) {
+            return ResponseEntity.ok().body(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/delete/{user}")
+    @ResponseBody
+    public String deleteUser(@PathVariable User user) {
+        userRepo.delete(user);
+        return "redirect:/user";
+    }
+
+    @GetMapping("/current-user")
+    @ResponseBody
+    public Map<String, String> getUser(@AuthenticationPrincipal User userDetails) {
+        Map<String, String> response = new HashMap<>();
+        response.put("email", userDetails.getEmail());
+        response.put("username", userDetails.getUsername());
+        response.put("lastname", userDetails.getLastName());
+        response.put("dateOfBirth", userDetails.getDateOfBirth().toString());
+        response.put("workerRole", userDetails.getWorkerRoles().toString());
+        if (userDetails.getFirstImage().getName() != null) {
+            response.put("imageName", userDetails.getFirstImage().getName());
+        }
+        return response;
+    }
+}
+ /*@Autowired
+    private TOIVORepo toivoRepo;
+    @Autowired
+    private SUARIRepo suariRepo;
+    @Autowired
+    private SALMIRepo salmiRepo;*/
+
+    /*@Autowired
+    private AINOVARepo ainovaRepo;*/
+/*@PostMapping("/addProductTOIVO")
+    @ResponseBody
+    public String addProductTOIVO(@RequestParam("модельTOIVO") String модельTOIVO, @RequestParam("типTOIVO") String типTOIVO,
                                   @RequestParam("максМинТепловаяМощностьОтопление") String максМинТепловаяМощностьОтопление,
                                   @RequestParam("максМинТепловаяМощностьГВС") String максМинТепловаяМощностьГВС,
                                   @RequestParam("кпд") String кпд,
@@ -117,7 +135,7 @@ public class UserController {
 
     @PostMapping("/addProductSUARI")
     @ResponseBody
-    public String addProductSUARI(@RequestParam("модельSUARI") String модельSUARI,@RequestParam("типSUARI") String типSUARI,
+    public String addProductSUARI(@RequestParam("модельSUARI") String модельSUARI, @RequestParam("типSUARI") String типSUARI,
                                   @RequestParam("типКамерыСгорания") String типКамерыСгорания,
                                   @RequestParam("модуляцияПламени") String модуляцияПламени,
                                   @RequestParam("номинальнаяТепловаяМощность") String номинальнаяТепловаяМощность,
@@ -174,9 +192,10 @@ public class UserController {
         suariRepo.save(suari);
         return "redirect:/user";
     }
+
     @PostMapping("/addProductSALMI")
     @ResponseBody
-    public String addProductSALMI(@RequestParam("модельSALMI") String модельSALMI,@RequestParam("типSALMI") String типSALMI,
+    public String addProductSALMI(@RequestParam("модельSALMI") String модельSALMI, @RequestParam("типSALMI") String типSALMI,
                                   @RequestParam("объем") String объем,
                                   @RequestParam("подключениеКСетиВодоснабжения") String подключениеКСетиВодоснабжения,
                                   @RequestParam("мощность") String мощность,
@@ -221,9 +240,10 @@ public class UserController {
         salmiRepo.save(salmi);
         return "redirect:/user";
     }
+
     @PostMapping("/addProductAINOVA")
     @ResponseBody
-    public String addProductAINOVA(@RequestParam("модельAINOVA") String модельAINOVA,@RequestParam("типAINOVA") String типAINOVA,
+    public String addProductAINOVA(@RequestParam("модельAINOVA") String модельAINOVA, @RequestParam("типAINOVA") String типAINOVA,
                                    @RequestParam("мощностьAINOVA") String мощностьAINOVA,
                                    @RequestParam("напряжениеИЧастота") String напряжениеИЧастота,
                                    @RequestParam("количествоСтупенейМощности") String количествоСтупенейМощности,
@@ -291,31 +311,20 @@ public class UserController {
         ainovaRepo.save(ainova);
         return "redirect:/user";
     }
-    @GetMapping("/image/{imageName}")
-    @ResponseBody
-    public ResponseEntity<byte[]> getImage(@PathVariable String imageName) {
-        byte[] imageBytes = imageService.downloadImage(imageName);
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)  // Change to appropriate content type
-                .body(imageBytes);
-    }
-    @GetMapping
-    @ResponseBody
-    public String userList(Model model) {
-        model.addAttribute("users", userRepo.findAll());
-        model.addAttribute("allAinova", ainovaRepo.findAll());
+    */
+ /*model.addAttribute("allAinova", ainovaRepo.findAll());
         model.addAttribute("allSalmi", salmiRepo.findAll());
         model.addAttribute("allSuari", suariRepo.findAll());
-        model.addAttribute("allToivo", toivoRepo.findAll());
-        return "userList";
-    }
-    @GetMapping("/allAINOVA")
+        model.addAttribute("allToivo", toivoRepo.findAll());*/
+
+
+    /*@GetMapping("/allAINOVA")
     @ResponseBody
     public List<AINOVA> getAllProductsAINOVA() {
         List<AINOVA> ainovaList = ainovaRepo.findAll();
         return ainovaList;
     }
+
     @GetMapping("/allSalmi")
     @ResponseBody
     public List<SALMI> getAllProductsSALMI() {
@@ -329,18 +338,30 @@ public class UserController {
         List<SUARI> suariList = suariRepo.findAll();
         return new ResponseEntity<>(suariList, HttpStatus.OK);
     }
+
     @GetMapping("/allToivo")
     @ResponseBody
     public ResponseEntity<List<TOIVO>> getAllProductsTOIVO() {
         List<TOIVO> toivoList = toivoRepo.findAll();
         return new ResponseEntity<>(toivoList, HttpStatus.OK);
     }
+
     @GetMapping("/allImage")
     @ResponseBody
     public ResponseEntity<List<Image>> getAllProductsImage() {
         List<Image> imageList = imageRepository.findAll();
         return new ResponseEntity<>(imageList, HttpStatus.OK);
     }
+    */
+    /*@Autowired
+    private ImageRepository imageRepository;*/
+    /*@GetMapping
+    @ResponseBody
+    public String userList(Model model) {
+        model.addAttribute("users", userRepo.findAll());
+        return "userList";
+    }
+
     @GetMapping("{user}")
     @ResponseBody
     public String userEditForm(@PathVariable User user, Model model) {
@@ -348,18 +369,8 @@ public class UserController {
         model.addAttribute("roles", Role.values());
 
         return "userEdit";
-    }
-    @GetMapping("/getByEmail")
-    @ResponseBody
-    public ResponseEntity<User> getUserByEmail(@RequestParam String email) {
-        User user = userRepo.findByEmail(email);
-        if (user != null) {
-            return ResponseEntity.ok().body(user);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-    @PostMapping
+    }*/
+/*@PostMapping
     @ResponseBody
     public String userSave(
             @RequestParam String username,
@@ -387,26 +398,4 @@ public class UserController {
         userRepo.save(user);
 
         return "redirect:/user";
-    }
-
-    @GetMapping("/delete/{user}")
-    @ResponseBody
-    public String deleteUser(@PathVariable User user) {
-        userRepo.delete(user);
-        return "redirect:/user";
-    }
-    @GetMapping("/current-user")
-    @ResponseBody
-    public Map<String, String> getUser(@AuthenticationPrincipal User userDetails) {
-        Map<String, String> response = new HashMap<>();
-        response.put("email", userDetails.getEmail());
-        response.put("username", userDetails.getUsername());
-        response.put("lastname", userDetails.getLastName());
-        response.put("dateOfBirth", userDetails.getDateOfBirth().toString());
-        response.put("workerRole", userDetails.getWorkerRoles().toString());
-        if(userDetails.getFirstImage().getName() != null) {
-            response.put("imageName", userDetails.getFirstImage().getName());
-        }
-        return response;
-    }
-}
+    }*/
