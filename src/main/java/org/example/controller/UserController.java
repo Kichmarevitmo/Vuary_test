@@ -1,27 +1,76 @@
 package org.example.controller;
 
 
-import org.example.domain.User;
-import org.example.domain.equipment.image.ImageService;
-import org.example.repos.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import org.example.dto.LoginDto;
+import org.example.dto.UserDto;
+import org.example.security.JwtAuthResponse;
+import org.example.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+@RestController
+@RequestMapping("/api/v1")
+@AllArgsConstructor
+public class UserController {
+    private UserService userService;
+
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> register(@RequestBody @Valid UserDto userDto) throws ParseException {
+        return new ResponseEntity<>(userService.register(userDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<JwtAuthResponse> login(@RequestBody LoginDto loginDto) {
+        return ResponseEntity.ok(userService.login(loginDto));
+    }
+
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String bearerToken) {
+        userService.logout(bearerToken);
+        return ResponseEntity.ok("Logged out successfully");
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<String> getUser(@RequestHeader("Authorization") String token) {
+        Map<String, Object> answer = new HashMap<>();
+        return ResponseEntity.ok("UserName:" + userService.getUser(token).getUsername());
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin")
+    public ResponseEntity<String> admin() {
+        return ResponseEntity.ok("Admin Panel");
+    }
+    @GetMapping("/activate")
+    public ResponseEntity<String> activateUser(Model model, @RequestParam("code") String code) {
+        boolean isActivated = userService.activateUser(code);
+        model.addAttribute("activationCode", code);
+        if (isActivated) {
+            return ResponseEntity.ok("Аккаунт успешно подтвержден");
+        } else {
+            return ResponseEntity.ok("Код активации не найден");
+        }
+    }
+}
+/*@Controller
 @RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private ImageService imageService;
     @Autowired
-    private UserRepo userRepo;
+    private UserRepository userRepository;
 
     @GetMapping("/image/{imageName}")
     @ResponseBody
@@ -35,33 +84,33 @@ public class UserController {
 
     @GetMapping("/getByEmail")
     @ResponseBody
-    public ResponseEntity<User> getUserByEmail(@RequestParam String email) {
-        User user = userRepo.findByEmail(email);
-        if (user != null) {
-            return ResponseEntity.ok().body(user);
+    public ResponseEntity<UserEntity> getUserByEmail(@RequestParam String email) {
+        UserEntity userEntity = userRepository.findByEmail(email);
+        if (userEntity != null) {
+            return ResponseEntity.ok().body(userEntity);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @GetMapping("/delete/{user}")
+    @GetMapping("/delete/{userEntity}")
     @ResponseBody
-    public String deleteUser(@PathVariable User user) {
-        userRepo.delete(user);
+    public String deleteUser(@PathVariable UserEntity userEntity) {
+        userRepository.delete(userEntity);
         return "redirect:/user";
     }
 
     @GetMapping("/current-user")
     @ResponseBody
-    public Map<String, String> getUser(@AuthenticationPrincipal User userDetails) {
+    public Map<String, String> getUser(@AuthenticationPrincipal UserEntity userEntityDetails) {
         Map<String, String> response = new HashMap<>();
-        response.put("email", userDetails.getEmail());
-        response.put("username", userDetails.getUsername());
-        response.put("lastname", userDetails.getLastName());
-        response.put("dateOfBirth", userDetails.getDateOfBirth().toString());
-        response.put("workerRole", userDetails.getWorkerRoles().toString());
-        if (userDetails.getFirstImage().getName() != null) {
-            response.put("imageName", userDetails.getFirstImage().getName());
+        response.put("email", userEntityDetails.getEmail());
+        response.put("username", userEntityDetails.getUsername());
+        response.put("lastname", userEntityDetails.getLastName());
+        response.put("dateOfBirth", userEntityDetails.getDateOfBirth().toString());
+        response.put("workerRole", userEntityDetails.getWorkerRoles().toString());
+        if (userEntityDetails.getFirstImage().getName() != null) {
+            response.put("imageName", userEntityDetails.getFirstImage().getName());
         }
         return response;
     }

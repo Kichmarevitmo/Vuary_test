@@ -1,43 +1,48 @@
 package org.example.controller;
 
-import org.example.domain.Role;
-import org.example.domain.User;
-import org.example.domain.WorkerRole;
-import org.example.domain.equipment.image.ImageService;
-import org.example.exception.UserServiceException;
-import org.example.service.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.Email;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
-
-@Controller
+/*@Controller
 public class RegistrationController {
+    private JWTGenerator jwtGenerator;
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
     private final UserService userService;
+    private UserRepository userRepository;
     private final ImageService imageService;
+    private PasswordEncoder passwordEncoder;
+    private AuthenticationManager authenticationManager;
 
     public RegistrationController(UserService userService, ImageService imageService) {
         this.userService = userService;
         this.imageService = imageService;
     }
+    @PostMapping("/my-login")
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDto loginDto){
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginDto.getUsername(),
+                        loginDto.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jwtGenerator.generateToken(authentication);
+        return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
+    }
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
+        if (userRepository.existsByUsername(registerDto.getUsername())) {
+            return new ResponseEntity<>("Username is taken!", HttpStatus.BAD_REQUEST);
+        }
 
-    @GetMapping("/login")
+        User user = new User();
+        user.setUsername(registerDto.getUsername());
+        user.setPassword(passwordEncoder.encode((registerDto.getPassword())));
+
+        Role roles = new Role();
+        roles.setName("USER");
+        user.setRoles(Collections.singletonList(roles));
+
+        userRepository.save(user);
+
+        return new ResponseEntity<>("User registered success!", HttpStatus.OK);
+    }
+    /*GetMapping("/login")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> request) {
         Map<String, Object> response = new HashMap<>();
@@ -62,8 +67,42 @@ public class RegistrationController {
         response.put("answer", "login successful");
         return ResponseEntity.ok(response);
 
-    }
+    }*/
+    /*@GetMapping("/login")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> request) {
+        Map<String, Object> response = new HashMap<>();
+        Map<String,String> errors = new HashMap<>();
 
+        // В случае успешного входа
+        response.put("status", "success");
+        response.put("answer", "login successful");
+        response.put("notify", "valid data");
+        String login = request.get("login");
+        String password = request.get("password");
+        errors.put("login","");
+        errors.put("password","");
+        response.put("errors", errors);
+
+        // Проверка логина и пароля
+        if (!isValidEmail(login)) {
+            response.put("status", "error");
+            errors.put("login","incorrect login");
+        }
+        if (isValidPassword(login, password)) {
+            response.put("status", "error");
+            errors.put("password","incorrect password");
+        }
+
+        if(response.get("status").equals("error"))
+        {
+            response.put("notify", "invalid data");
+            response.put("answer", "login error");
+            response.put("errors", errors);
+        }
+        return ResponseEntity.ok(response);
+    }*/
+/*
     private boolean isValidPassword(String login, String password) {
         // Получить информацию о пользователе по логину из UserService
         User user = (User) userService.loadUserByUsername(login);
@@ -72,9 +111,6 @@ public class RegistrationController {
     }
 
     private boolean isValidEmail(String email) {
-        if (email == null || !EMAIL_PATTERN.matcher(email).matches()) {
-            return false;
-        }
         // Проверяем существует ли пользователь с этим email
         User user = (User) userService.loadUserByUsername(email);
         return user != null;
@@ -170,8 +206,8 @@ public class RegistrationController {
         // Создание и сохранение пользователя
         User user = new User();
         user.setEmail(email);
-        user.setRoles(Collections.singleton(Role.USER));
-        user.setUsername(firstName);
+        /*user.setRoles(Collections.singleton(user.getRoles().get()));*/
+       /* user.setUsername(firstName);
         user.setLastName(lastName);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         user.setDateOfBirth(format.parse(dateOfBirth));
@@ -179,7 +215,7 @@ public class RegistrationController {
         Set<WorkerRole> workerRoles = user.getWorkerRoles();
         WorkerRole firstWorkerRole = workerRoles.isEmpty() ? null : workerRoles.iterator().next();
         user.setPassword(password);
-        userService.addUser(user, lastName, firstWorkerRole);
+        //userService.addUser(user, lastName, firstWorkerRole);
         Map<String, Object> response = new HashMap<>();
         response.put("status", "success");
         response.put("notify", "registration successful");
@@ -230,7 +266,6 @@ public class RegistrationController {
     public String customLogout(HttpServletRequest request, HttpServletResponse response) {
         // Get the Spring Authentication object of the current request.
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         // In case you are not filtering the users of this request url.
         if (authentication != null){
             new SecurityContextLogoutHandler().logout(request, response, authentication); // <= This is the call you are looking for.
@@ -272,6 +307,7 @@ public class RegistrationController {
     }
 
 }
+*/
 /* @GetMapping("/activate/{code}")
     public String activate(Model model, @RequestParam("code") String code) {
         boolean isActivated = userService.activateUser(code);

@@ -1,32 +1,32 @@
 package org.example.service;
 
-import org.example.domain.Role;
-import org.example.domain.User;
-import org.example.domain.WorkerRole;
-import org.example.exception.UserServiceException;
-import org.example.repos.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.example.dto.LoginDto;
+import org.example.dto.UserDto;
+import org.example.model.User;
+import org.example.security.JwtAuthResponse;
 
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Random;
+import java.text.ParseException;
 
-@Service
+public interface UserService {
+    UserDto register(UserDto userDto) throws ParseException;
+    JwtAuthResponse login(LoginDto loginDto);
+
+
+    void logout(String token);
+    User getUser(String token);
+    public boolean activateUser(String code);
+}
+
+/*@Service
 public class UserService implements UserDetailsService {
-    private final UserRepo userRepo;
+    private final UserRepository userRepository;
     private final MailSender mailSender;
     @Autowired
     private  PasswordEncoder passwordEncoder;
 
 
-    public UserService(UserRepo userRepo, MailSender mailSender) {
-        this.userRepo = userRepo;
+    public UserService(UserRepository userRepository, MailSender mailSender) {
+        this.userRepository = userRepository;
         this.mailSender = mailSender;
     }
 
@@ -42,24 +42,24 @@ public class UserService implements UserDetailsService {
 
         return code.toString();
     }
-    public boolean isValidPassword(User user, String password) {
-        return passwordEncoder.matches(password, user.getPassword());
+    public boolean isValidPassword(UserEntity userEntity, String password) {
+        return passwordEncoder.matches(password, userEntity.getPassword());
     }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo.findByEmail(username);
-        if (user == null) {
+        UserEntity userEntity = userRepository.findByEmail(username);
+        if (userEntity == null) {
             throw new UsernameNotFoundException("Пользователь не найден");
         }
-        if (user.getActivationCode() != null) {
+        if (userEntity.getActivationCode() != null) {
             throw new UserServiceException("Вы не прошли стадию подтверждения кода активации");
         }
 
-        return user;
+        return userEntity;
     }
 
-    public boolean addUser(User user, String lastName, WorkerRole workerRole) {
-        User userFromDb = userRepo.findByEmail(user.getEmail());
+    /*public boolean addUser(User user, String lastName, WorkerRole workerRole) {
+        User userFromDb = userRepository.findByEmail(user.getEmail());
 
         if (userFromDb != null && userFromDb.getEmail().equals(user.getEmail())) {
             return false;
@@ -74,7 +74,7 @@ public class UserService implements UserDetailsService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        userRepo.save(user);
+        userRepository.save(user);
 
         if (!StringUtils.isEmpty(user.getEmail())) {
             String message = String.format(
@@ -89,23 +89,23 @@ public class UserService implements UserDetailsService {
 
         return true;
     }
+*/
 
-
-    public boolean activateUser(String code) {
-        User user = userRepo.findByActivationCode(code);
-        if (user == null) {
+    /*public boolean activateUser(String code) {
+        UserEntity userEntity = userRepository.findByActivationCode(code);
+        if (userEntity == null) {
             throw new UserServiceException("Пользователь с таким кодом активации не найден ");
         }
-        if (Objects.equals(code, user.getActivationCode())) {
-            user.setActivationCode(null);
-            user.setActive(true);
-            userRepo.save(user);
+        if (Objects.equals(code, userEntity.getActivationCode())) {
+            userEntity.setActivationCode(null);
+            userEntity.setActive(true);
+            userRepository.save(userEntity);
             return true;
         } else {
             throw new UserServiceException("Введенный код не совпадает с истинным");
         }
     }
-}
+}*/
 /*public boolean addUser(User user) {
         User userFromDb = userRepo.findByEmail(user.getEmail());
 
