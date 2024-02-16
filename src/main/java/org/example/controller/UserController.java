@@ -27,7 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api")
 @AllArgsConstructor
 public class UserController {
     private UserService userService;
@@ -220,18 +220,21 @@ public class UserController {
     public ResponseEntity<String> admin() {
         return ResponseEntity.ok("Admin Panel");
     }
-    @GetMapping("/activate")
-    public ResponseEntity<Object> activateUser(Model model, @RequestParam("code") String code) {
+    @PostMapping("/activate")
+    public ResponseEntity<Object> activateUser(@RequestBody Map<String, String> requestBody) {
         Map<String, Object> response = new HashMap<>();
         Map<String, String> errors = new HashMap<>();
         response.put("status", "success");
         response.put("notify", "activate success");
         response.put("answer", "activate success");
         errors.put("code", "");
-        //model.addAttribute("activationCode", code);
-        if (userRepository.findByActivationCode(code)==null) {
+
+        String code = requestBody.get("code");
+
+        if (userRepository.findByActivationCode(code) == null) {
             errors.put("code", "incorrect code");
         }
+
         int count = 0;
         for (Map.Entry<String, String> entry : errors.entrySet()) {
             String key = entry.getKey();
@@ -241,11 +244,13 @@ public class UserController {
                 count++;
             }
         }
-        if (count == 1){
+
+        if (count == 1) {
             boolean isActivated = userService.activateUser(code);
             response.put("errors", errors);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
+
         response.put("status", "error");
         response.put("notify", "invalid data");
         response.put("answer", "login error");
