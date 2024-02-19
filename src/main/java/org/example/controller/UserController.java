@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
+@CrossOrigin
 public class UserController {
     private UserService userService;
     private UserRepository userRepository;
