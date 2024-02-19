@@ -9,12 +9,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
-    /*@Override
+    @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedMethods("*");
         registry.addMapping("/**")
                 .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
-    }*/
+    }
     /*@Value("${upload.path}")
     private String uploadPath;
 
