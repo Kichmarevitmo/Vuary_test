@@ -68,6 +68,7 @@ public class UserController {
             errors.put("phoneNumber", "");
             errors.put("workerRole", "");
             errors.put("dateOfBirth", "");
+            errors.put("avatarUrl", "");
 
             if(userDto.getUsername() == null) {
                 errors.put("username", "incorrect username");
