@@ -118,7 +118,11 @@ public class UserController {
     public ResponseEntity<JwtAuthResponse> login(@RequestBody LoginDto loginDto) {
         return ResponseEntity.ok(userService.login(loginDto));
     }*/
-
+    @GetMapping("/hello")
+    public ResponseEntity<String> hello() {
+        String message = "{\"message\": \"hello, world\"}";
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody LoginDto loginDto) {
         Map<String, Object> response = new HashMap<>();
