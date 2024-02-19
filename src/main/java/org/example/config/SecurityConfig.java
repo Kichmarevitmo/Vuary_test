@@ -25,10 +25,10 @@ public class SecurityConfig {
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Bean
+    /*@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(cors -> cors.disable())
                 .authorizeHttpRequests(auth -> {
                     auth
                             .requestMatchers("/api/**")
@@ -41,14 +41,25 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-    }
+    }*/
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(httpSecurityCorsConfigurer ->
                 httpSecurityCorsConfigurer.configurationSource(request ->
                         new CorsConfiguration().applyPermitDefaultValues()
                 )
-        );
+        ).authorizeHttpRequests(auth -> {
+            auth
+                    .requestMatchers("/api/**")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated();
+        })
+                .httpBasic(Customizer.withDefaults())
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(this.jwtAuthenticationEntryPoint))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
