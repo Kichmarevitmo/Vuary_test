@@ -47,10 +47,12 @@ public class UserController {
     }
 
     /*
+
     @PostMapping("/register")
     public ResponseEntity<UserDto> register(@RequestBody @Valid UserDto userDto) throws ParseException {
         return new ResponseEntity<>(userService.register(userDto), HttpStatus.CREATED);
     }
+
     */
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody @Valid UserDto userDto) throws ParseException {
