@@ -46,7 +46,6 @@ public class User {
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
     //
-    private String avatarUrl;
 }
 
 

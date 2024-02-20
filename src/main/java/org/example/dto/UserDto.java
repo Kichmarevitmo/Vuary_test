@@ -39,6 +39,5 @@ public class UserDto {
 
     //@NotNull(message = "Дата рождения не может быть пустой")
     private String dateOfBirth;
-    private String avatarUrl;
     //
 }

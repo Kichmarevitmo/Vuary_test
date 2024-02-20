@@ -5,10 +5,8 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.example.dto.LoginDto;
 import org.example.dto.UserDto;
-import org.example.exception.ResourceNotFoundException;
 import org.example.model.User;
 import org.example.repos.UserRepository;
-import org.example.security.JwtAuthResponse;
 import org.example.service.UserService;
 import org.example.token.TokenRepository;
 import org.springframework.http.HttpStatus;
@@ -16,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -31,14 +28,13 @@ import java.util.regex.Pattern;
 @AllArgsConstructor
 @CrossOrigin
 public class UserController {
-    private UserService userService;
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private TokenRepository tokenRepository;
     public static final Pattern VALID_PASSWORD_REGEX =
             Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=\\S+$).{8,20}$");
     public static final Pattern VALID_PHONE_NUMBER_REGEX =
             Pattern.compile("^\\+?[78][-\\(]?\\d{3}\\)?-?\\d{3}-?\\d{2}-?\\d{2}$", Pattern.CASE_INSENSITIVE);
+    private UserService userService;
+    private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     private boolean isValidPassword(String password) {
         Matcher matcher = VALID_PASSWORD_REGEX.matcher(password);
@@ -49,6 +45,7 @@ public class UserController {
         Matcher matcher = VALID_PHONE_NUMBER_REGEX.matcher(phoneNumber);
         return matcher.matches();
     }
+
     /*
     @PostMapping("/register")
     public ResponseEntity<UserDto> register(@RequestBody @Valid UserDto userDto) throws ParseException {
@@ -57,62 +54,61 @@ public class UserController {
     */
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody @Valid UserDto userDto) throws ParseException {
-            Map<String, Object> response = new HashMap<>();
-            Map<String, String> errors = new HashMap<>();
-            response.put("status", "success");
-            response.put("notify", "registration success");
-            response.put("answer", "registration success");
-            errors.put("username", "");
-            errors.put("password", "");
-            errors.put("email", "");
-            errors.put("lastname", "");
-            errors.put("phoneNumber", "");
-            errors.put("workerRole", "");
-            errors.put("dateOfBirth", "");
-            errors.put("avatarUrl", "");
+        Map<String, Object> response = new HashMap<>();
+        Map<String, String> errors = new HashMap<>();
+        response.put("status", "success");
+        response.put("notify", "registration success");
+        response.put("answer", "registration success");
+        errors.put("username", "");
+        errors.put("password", "");
+        errors.put("email", "");
+        errors.put("lastname", "");
+        errors.put("phoneNumber", "");
+        errors.put("workerRole", "");
+        errors.put("dateOfBirth", "");
 
-            if(userDto.getUsername() == null) {
-                errors.put("username", "incorrect username");
-            }
-            if(userDto.getPassword() == null || !isValidPassword(userDto.getPassword())) {
-                errors.put("password", "incorrect password");
-            }
-            if(userDto.getEmail() == null) {
-                errors.put("email", "incorrect email");
-            }
-            if(userDto.getLastname() == null) {
-                errors.put("lastname", "incorrect lastname");
-            }
-            if(userDto.getPhoneNumber() == null || !isValidPhoneNumber(userDto.getPhoneNumber())) {
-                errors.put("phoneNumber", "incorrect phoneNumber");
-            }
-            if(userDto.getWorkerRole() == null) {
-                errors.put("workerRole", "incorrect workerRole");
-            }
-            if(userDto.getDateOfBirth() == null) {
-                errors.put("dateOfBirth", "incorrect dateOfBirth");
-            }
-            Integer count = 0;
-            for (Map.Entry<String, String> entry : errors.entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue();
+        if (userDto.getUsername() == null) {
+            errors.put("username", "incorrect username");
+        }
+        if (userDto.getPassword() == null || !isValidPassword(userDto.getPassword())) {
+            errors.put("password", "incorrect password");
+        }
+        if (userDto.getEmail() == null) {
+            errors.put("email", "incorrect email");
+        }
+        if (userDto.getLastname() == null) {
+            errors.put("lastname", "incorrect lastname");
+        }
+        if (userDto.getPhoneNumber() == null || !isValidPhoneNumber(userDto.getPhoneNumber())) {
+            errors.put("phoneNumber", "incorrect phoneNumber");
+        }
+        if (userDto.getWorkerRole() == null) {
+            errors.put("workerRole", "incorrect workerRole");
+        }
+        if (userDto.getDateOfBirth() == null) {
+            errors.put("dateOfBirth", "incorrect dateOfBirth");
+        }
+        Integer count = 0;
+        for (Map.Entry<String, String> entry : errors.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
 
-                // Проверяем, что ключ не пустой и значение пустое
-                if (!key.isEmpty() && value.isEmpty()) {
-                    count++;
-                }
+            // Проверяем, что ключ не пустой и значение пустое
+            if (!key.isEmpty() && value.isEmpty()) {
+                count++;
             }
-            if (count == 7){
-                response.put("errors", errors);
-                UserDto registeredUser = userService.register(userDto);
-                return new ResponseEntity<>(response, HttpStatus.CREATED);
-            }
+        }
+        if (count == 7) {
+            response.put("errors", errors);
+            userService.register(userDto);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        }
 
-                response.put("status", "error");
-                response.put("notify", "invalid data");
-                response.put("answer", "registration error");
-                response.put("errors", errors);
-                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        response.put("status", "error");
+        response.put("notify", "invalid data");
+        response.put("answer", "registration error");
+        response.put("errors", errors);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /*@PostMapping("/login")
@@ -124,6 +120,7 @@ public class UserController {
         String message = "{\"message\": \"hello, world\"}";
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
+
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody LoginDto loginDto) {
         Map<String, Object> response = new HashMap<>();
@@ -138,7 +135,7 @@ public class UserController {
         if (userOptional.isEmpty()) {
             errors.put("email", "incorrect email");
         } else {
-            User user =  userOptional.get();
+            User user = userOptional.get();
             if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
                 errors.put("password", "incorrect password");
             }
@@ -152,7 +149,7 @@ public class UserController {
                 count++;
             }
         }
-        if (count == 2){
+        if (count == 2) {
             response.put("errors", errors);
             var token = userService.login(loginDto);
             response.put("accessToken", token.getAccessToken());
@@ -164,8 +161,9 @@ public class UserController {
         response.put("answer", "login error");
         response.put("errors", errors);
 
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     /*@GetMapping("/logout")
     public ResponseEntity<Object> logout(@RequestHeader("Authorization") String bearerToken) {
         Map<String, Object> response = new HashMap<>();
@@ -198,26 +196,27 @@ public class UserController {
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> answer = new HashMap<>();
         response.put("status", "success");
-        answer.put("role",userService.getUser(token).getRoles().stream().findFirst().get().getName().toString());
-        answer.put("type_of_worker",userService.getUser(token).getWorkerRoles().stream().findFirst().get().toString());
-        answer.put("first_name",userService.getUser(token).getUsername());
-        answer.put("last_name",userService.getUser(token).getLastname());
-        response.put("answer",answer);
+        answer.put("role", userService.getUser(token).getRoles().stream().findFirst().get().getName().toString());
+        answer.put("type_of_worker", userService.getUser(token).getWorkerRoles().stream().findFirst().get().toString());
+        answer.put("first_name", userService.getUser(token).getUsername());
+        answer.put("last_name", userService.getUser(token).getLastname());
+        response.put("answer", answer);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     @GetMapping("/profile")
     public ResponseEntity<Object> getProfile(@RequestHeader("Authorization") String token) {
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> answer = new HashMap<>();
         response.put("status", "success");
         response.put("notify", "get profile");
-        answer.put("phone",userService.getUser(token).getPhoneNumber());
-        answer.put("date_of_birth",userService.getUser(token).getDateOfBirth().toString());
-        answer.put("type_of_worker",userService.getUser(token).getWorkerRoles().stream().findFirst().get().toString());
-        answer.put("first_name",userService.getUser(token).getUsername());
-        answer.put("last_name",userService.getUser(token).getLastname());
-        answer.put("email",userService.getUser(token).getEmail());
-        response.put("answer",answer);
+        answer.put("phone", userService.getUser(token).getPhoneNumber());
+        answer.put("date_of_birth", userService.getUser(token).getDateOfBirth().toString());
+        answer.put("type_of_worker", userService.getUser(token).getWorkerRoles().stream().findFirst().get().toString());
+        answer.put("first_name", userService.getUser(token).getUsername());
+        answer.put("last_name", userService.getUser(token).getLastname());
+        answer.put("email", userService.getUser(token).getEmail());
+        response.put("answer", answer);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -226,6 +225,7 @@ public class UserController {
     public ResponseEntity<String> admin() {
         return ResponseEntity.ok("Admin Panel");
     }
+
     @PostMapping("/activate")
     public ResponseEntity<Object> activateUser(@RequestBody Map<String, String> requestBody) {
         Map<String, Object> response = new HashMap<>();
@@ -261,7 +261,7 @@ public class UserController {
         response.put("notify", "invalid data");
         response.put("answer", "login error");
         response.put("errors", errors);
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     /*@GetMapping("/activate")
     public ResponseEntity<String> activateUser(Model model, @RequestParam("code") String code) {
