@@ -1,8 +1,8 @@
-package org.example.model;
+package org.example.trash;
 
 import jakarta.persistence.*;
 
-@Entity
+/*@Entity
 @Table(name = "files")
 public class FileDB {
     @Id
@@ -54,3 +54,4 @@ public class FileDB {
     }
 
 }
+*/

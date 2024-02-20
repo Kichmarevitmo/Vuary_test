@@ -8,6 +8,7 @@ import org.example.security.JwtAuthResponse;
 import java.text.ParseException;
 
 public interface UserService {
+    public void updateUser(User user);
     UserDto register(UserDto userDto) throws ParseException;
     JwtAuthResponse login(LoginDto loginDto);
 

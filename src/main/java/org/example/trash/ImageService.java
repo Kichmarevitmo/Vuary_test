@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.trash;
 
 import lombok.RequiredArgsConstructor;
 import org.example.exception.ImageServiceException;

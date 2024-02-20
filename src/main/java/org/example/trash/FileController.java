@@ -1,20 +1,5 @@
-package org.example.controller;
+package org.example.trash;
 
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.example.model.FileDB;
-import org.example.service.FileStorageService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /*@Controller
 @RequestMapping("/api/pdf")

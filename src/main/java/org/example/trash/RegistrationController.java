@@ -1,4 +1,4 @@
-package org.example.controller;
+package org.example.trash;
 
 /*@Controller
 public class RegistrationController {

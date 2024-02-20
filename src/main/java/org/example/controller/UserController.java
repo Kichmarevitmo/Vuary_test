@@ -3,12 +3,12 @@ package org.example.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.example.dto.EditProfileDto;
 import org.example.dto.LoginDto;
 import org.example.dto.UserDto;
 import org.example.model.User;
 import org.example.repos.UserRepository;
 import org.example.service.UserService;
-import org.example.token.TokenRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -46,21 +47,13 @@ public class UserController {
         return matcher.matches();
     }
 
-    /*
-
-    @PostMapping("/register")
-    public ResponseEntity<UserDto> register(@RequestBody @Valid UserDto userDto) throws ParseException {
-        return new ResponseEntity<>(userService.register(userDto), HttpStatus.CREATED);
-    }
-
-    */
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody @Valid UserDto userDto) throws ParseException {
         Map<String, Object> response = new HashMap<>();
         Map<String, String> errors = new HashMap<>();
-        response.put("status", "success");
-        response.put("notify", "registration success");
-        response.put("answer", "registration success");
+        response.put("status", "success"); //
+        response.put("notify", "Вы успешно зарегистрировались");
+        response.put("answer", "registration success"); //
         errors.put("username", "");
         errors.put("password", "");
         errors.put("email", "");
@@ -70,25 +63,25 @@ public class UserController {
         errors.put("dateOfBirth", "");
 
         if (userDto.getUsername() == null) {
-            errors.put("username", "incorrect username");
+            errors.put("username", "неправильное имя пользователя");
         }
         if (userDto.getPassword() == null || !isValidPassword(userDto.getPassword())) {
-            errors.put("password", "incorrect password");
+            errors.put("password", "неверный пароль");
         }
-        if (userDto.getEmail() == null) {
-            errors.put("email", "incorrect email");
+        if (userDto.getEmail() == null || userRepository.findByEmail(userDto.getEmail()).isPresent()) {
+            errors.put("email", "неверный почтовый ящик");
         }
         if (userDto.getLastname() == null) {
-            errors.put("lastname", "incorrect lastname");
+            errors.put("lastname", "неправильная фамилия");
         }
         if (userDto.getPhoneNumber() == null || !isValidPhoneNumber(userDto.getPhoneNumber())) {
-            errors.put("phoneNumber", "incorrect phoneNumber");
+            errors.put("phoneNumber", "неправильный номер телефона");
         }
         if (userDto.getWorkerRole() == null) {
-            errors.put("workerRole", "incorrect workerRole");
+            errors.put("workerRole", "неверная роль");
         }
         if (userDto.getDateOfBirth() == null) {
-            errors.put("dateOfBirth", "incorrect dateOfBirth");
+            errors.put("dateOfBirth", "неверная дата рождения");
         }
         Integer count = 0;
         for (Map.Entry<String, String> entry : errors.entrySet()) {
@@ -107,16 +100,63 @@ public class UserController {
         }
 
         response.put("status", "error");
-        response.put("notify", "invalid data");
+        response.put("notify", "неверные данные");
         response.put("answer", "registration error");
         response.put("errors", errors);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /*@PostMapping("/login")
-    public ResponseEntity<JwtAuthResponse> login(@RequestBody LoginDto loginDto) {
-        return ResponseEntity.ok(userService.login(loginDto));
-    }*/
+    @PostMapping("/editProfile")
+    public ResponseEntity<Object> editProfile(@RequestHeader("Authorization") String token, @RequestBody EditProfileDto editProfileDto) throws ParseException {
+        User user = userService.getUser(token);
+        Map<String, Object> response = new HashMap<>();
+        Map<String, String> errors = new HashMap<>();
+        response.put("status", "success");
+        response.put("notify", "изменения выполнены");
+        response.put("answer", "edit success");
+        errors.put("username", "");
+        errors.put("lastname", "");
+        errors.put("dateOfBirth", "");
+        if (editProfileDto.getUsername() == null) {
+            errors.put("username", "неправильное имя пользователя");
+        }
+        if (editProfileDto.getLastname() == null) {
+            errors.put("lastname", "неправильная фамилия");
+        }
+        if (editProfileDto.getDateOfBirth() == null) {
+            errors.put("dateOfBirth", "неверная дата рождения");
+        }
+        Integer count = 0;
+        for (Map.Entry<String, String> entry : errors.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+
+            // Проверяем, что ключ не пустой и значение пустое
+            if (!key.isEmpty() && value.isEmpty()) {
+                count++;
+            }
+        }
+        if (count == 3) {
+            response.put("errors", errors);
+            System.out.println(editProfileDto.getUsername());
+            System.out.println(editProfileDto.getLastname());
+            user.setUsername(editProfileDto.getUsername());
+            user.setLastname(editProfileDto.getLastname());
+            System.out.println(user.getUsername());
+            System.out.println(user.getLastname());
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            user.setDateOfBirth(format.parse(editProfileDto.getDateOfBirth()));
+            userService.updateUser(user);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        response.put("status", "error");
+        response.put("notify", "в изменениях отказано");
+        response.put("answer", "edit error");
+        response.put("errors", errors);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/hello")
     public ResponseEntity<String> hello() {
         String message = "{\"message\": \"hello, world\"}";
@@ -128,18 +168,17 @@ public class UserController {
         Map<String, Object> response = new HashMap<>();
         Map<String, String> errors = new HashMap<>();
         response.put("status", "success");
-        response.put("notify", "login success");
+        response.put("notify", "успешный вход в систему");
         response.put("answer", "login success");
         errors.put("email", "");
         errors.put("password", "");
         Optional<User> userOptional = userRepository.findByEmail(loginDto.getUsernameOrEmail());
-        System.out.println("User Optional: " + userOptional);
         if (userOptional.isEmpty()) {
-            errors.put("email", "incorrect email");
+            errors.put("email", "неверный почтовый ящик");
         } else {
             User user = userOptional.get();
             if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
-                errors.put("password", "incorrect password");
+                errors.put("password", "неверный пароль");
             }
         }
         int count = 0;
@@ -159,34 +198,19 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         response.put("status", "error");
-        response.put("notify", "invalid data");
+        response.put("notify", "неверные данные");
         response.put("answer", "login error");
         response.put("errors", errors);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /*@GetMapping("/logout")
-    public ResponseEntity<Object> logout(@RequestHeader("Authorization") String bearerToken) {
-        Map<String, Object> response = new HashMap<>();
-        Map<String, String> errors = new HashMap<>();
-        response.put("status", "success");
-        response.put("notify", "logout success");
-        response.put("answer", "logout success");
-        String jwtToken = bearerToken.substring(7);
-        if(tokenRepository.findByToken(jwtToken).orElse(null) == null) {
-
-        }
-        userService.logout(bearerToken);
-
-        return ResponseEntity.ok("Logged out successfully");
-    }*/
     @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/logout")
     public ResponseEntity<Object> logout(@RequestHeader("Authorization") String bearerToken) {
         Map<String, Object> response = new HashMap<>();
         response.put("status", "success");
-        response.put("notify", "logout success");
+        response.put("notify", "успешный выход из системы");
         response.put("answer", "logout success");
 
         userService.logout(bearerToken);
@@ -211,7 +235,7 @@ public class UserController {
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> answer = new HashMap<>();
         response.put("status", "success");
-        response.put("notify", "get profile");
+        response.put("notify", "профиль получен");
         answer.put("phone", userService.getUser(token).getPhoneNumber());
         answer.put("date_of_birth", userService.getUser(token).getDateOfBirth().toString());
         answer.put("type_of_worker", userService.getUser(token).getWorkerRoles().stream().findFirst().get().toString());
@@ -233,14 +257,14 @@ public class UserController {
         Map<String, Object> response = new HashMap<>();
         Map<String, String> errors = new HashMap<>();
         response.put("status", "success");
-        response.put("notify", "activate success");
+        response.put("notify", "активация успешна");
         response.put("answer", "activate success");
         errors.put("code", "");
 
         String code = requestBody.get("code");
 
         if (userRepository.findByActivationCode(code) == null) {
-            errors.put("code", "incorrect code");
+            errors.put("code", "неверный код");
         }
 
         int count = 0;
@@ -254,27 +278,18 @@ public class UserController {
         }
 
         if (count == 1) {
-            boolean isActivated = userService.activateUser(code);
+            userService.activateUser(code);
             response.put("errors", errors);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
         response.put("status", "error");
-        response.put("notify", "invalid data");
+        response.put("notify", "некорректные данные");
         response.put("answer", "login error");
         response.put("errors", errors);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    /*@GetMapping("/activate")
-    public ResponseEntity<String> activateUser(Model model, @RequestParam("code") String code) {
-        boolean isActivated = userService.activateUser(code);
-        model.addAttribute("activationCode", code);
-        if (isActivated) {
-            return ResponseEntity.ok("Аккаунт успешно подтвержден");
-        } else {
-            return ResponseEntity.ok("Код активации не найден");
-        }
-    }*/
+
 }
 /*@Controller
 @RequestMapping("/user")

@@ -1,6 +1,6 @@
-package org.example.model;
+package org.example.trash;
 
-public class ResponseMessage {
+/*public class ResponseMessage {
     private String message;
 
     public ResponseMessage(String message) {
@@ -15,4 +15,4 @@ public class ResponseMessage {
         this.message = message;
     }
 
-}
+}*/

@@ -1,9 +1,9 @@
-package org.example.service;
+/*package org.example.service;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-import org.example.model.FileDB;
-import org.example.repos.FileDBRepository;
+import org.example.token.FileDB;
+import org.example.trash.FileDBRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -28,4 +28,4 @@ public class FileStorageService {
     public Stream<FileDB> getAllFiles() {
         return fileDBRepository.findAll().stream();
     }
-}
+}*/

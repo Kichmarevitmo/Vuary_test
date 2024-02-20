@@ -118,7 +118,10 @@ public class UserServiceImpl implements UserService {
         var user = userRepository.findByEmail(username).orElse(null);
         return user;
     }
-
+    @Override
+    public void updateUser(User user) {
+        userRepository.save(user);
+    }
     @Override
     public void logout(String bearerToken) {
         String jwtToken = bearerToken.substring(7);

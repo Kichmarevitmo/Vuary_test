@@ -1,12 +1,11 @@
-package org.example.repos;
+package org.example.trash;
 
 
-import org.example.model.FileDB;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 
-@Repository
+/*@Repository
 public interface FileDBRepository extends JpaRepository<FileDB, Long> {
 
-}
+}*/

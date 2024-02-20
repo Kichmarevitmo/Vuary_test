@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.trash;
 import org.example.exception.ImageUtilsException;
 
 import java.io.ByteArrayOutputStream;
