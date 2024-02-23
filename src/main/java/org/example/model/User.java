@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.Images_Module.FileData;
 import org.example.token.Token;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -45,7 +46,9 @@ public class User {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
-
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "file_data_id")
+    private FileData fileData;
     //
 }
 

@@ -1,5 +1,5 @@
 package org.example.trash;
-import org.example.exception.ImageUtilsException;
+/*import org.example.exception.ImageUtilsException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -51,4 +51,4 @@ public class ImageUtils {
             throw new ImageUtilsException("Ошибка при разжатии изображения", e);
         }
     }
-}
+}*/

@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.Images_Module.FileData;
 import org.example.dto.LoginDto;
 import org.example.dto.UserDto;
 import org.example.model.User;
@@ -9,6 +10,7 @@ import java.text.ParseException;
 
 public interface UserService {
     public void updateUser(User user);
+    UserDto register(UserDto userDto, FileData fileData) throws ParseException;
     UserDto register(UserDto userDto) throws ParseException;
     JwtAuthResponse login(LoginDto loginDto);
 

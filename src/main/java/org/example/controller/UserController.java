@@ -1,26 +1,34 @@
 package org.example.controller;
 
 
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.example.Images_Module.FileData;
+import org.example.Images_Module.FileDataRepository;
+import org.example.Images_Module.StorageService;
 import org.example.dto.EditProfileDto;
+import org.example.dto.GetUsersDto;
 import org.example.dto.LoginDto;
 import org.example.dto.UserDto;
+import org.example.model.Role;
 import org.example.model.User;
+import org.example.model.WorkerRole;
 import org.example.repos.UserRepository;
 import org.example.service.UserService;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,6 +44,9 @@ public class UserController {
     private UserService userService;
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
+    private FileDataRepository fileDataRepository;
+    @Autowired
+    private StorageService storageService;
 
     private boolean isValidPassword(String password) {
         Matcher matcher = VALID_PASSWORD_REGEX.matcher(password);
@@ -47,8 +58,8 @@ public class UserController {
         return matcher.matches();
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<Object> register(@RequestBody @Valid UserDto userDto) throws ParseException {
+    @PostMapping(value = "/register", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Object> register(@RequestPart UserDto userDto, @RequestPart MultipartFile image) throws ParseException, IOException {
         Map<String, Object> response = new HashMap<>();
         Map<String, String> errors = new HashMap<>();
         response.put("status", "success"); //
@@ -61,27 +72,28 @@ public class UserController {
         errors.put("phoneNumber", "");
         errors.put("workerRole", "");
         errors.put("dateOfBirth", "");
+        errors.put("photo", "");
 
         if (userDto.getUsername() == null) {
-            errors.put("username", "неправильное имя пользователя");
+            errors.put("username", "Неправильное имя пользователя");
         }
         if (userDto.getPassword() == null || !isValidPassword(userDto.getPassword())) {
-            errors.put("password", "неверный пароль");
+            errors.put("password", "Неверный пароль");
         }
         if (userDto.getEmail() == null || userRepository.findByEmail(userDto.getEmail()).isPresent()) {
-            errors.put("email", "неверный почтовый ящик");
+            errors.put("email", "Неверный почтовый ящик");
         }
         if (userDto.getLastname() == null) {
-            errors.put("lastname", "неправильная фамилия");
+            errors.put("lastname", "Неправильная фамилия");
         }
         if (userDto.getPhoneNumber() == null || !isValidPhoneNumber(userDto.getPhoneNumber())) {
-            errors.put("phoneNumber", "неправильный номер телефона");
+            errors.put("phoneNumber", "Неправильный номер телефона");
         }
         if (userDto.getWorkerRole() == null) {
-            errors.put("workerRole", "неверная роль");
+            errors.put("workerRole", "Неверная роль");
         }
         if (userDto.getDateOfBirth() == null) {
-            errors.put("dateOfBirth", "неверная дата рождения");
+            errors.put("dateOfBirth", "Неверная дата рождения");
         }
         Integer count = 0;
         for (Map.Entry<String, String> entry : errors.entrySet()) {
@@ -93,38 +105,49 @@ public class UserController {
                 count++;
             }
         }
-        if (count == 7) {
+        if (count == 8) {
             response.put("errors", errors);
-            userService.register(userDto);
+            if (image == null) {
+                userService.register(userDto);
+            } else {
+                FileData uploadImage = storageService.uploadImageToFileSystemAvatarUser(image);
+                String email = userService.register(userDto, uploadImage).getEmail();
+                uploadImage.setUser(userRepository.findByEmail(email).orElse(null));
+                fileDataRepository.save(uploadImage);
+            }
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
 
         response.put("status", "error");
-        response.put("notify", "неверные данные");
+        response.put("notify", "Неверные данные");
         response.put("answer", "registration error");
         response.put("errors", errors);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/editProfile")
-    public ResponseEntity<Object> editProfile(@RequestHeader("Authorization") String token, @RequestBody EditProfileDto editProfileDto) throws ParseException {
+    public ResponseEntity<Object> editProfile(@RequestHeader("Authorization") String token, @RequestPart EditProfileDto editProfileDto, @RequestPart MultipartFile image) throws ParseException, IOException {
         User user = userService.getUser(token);
         Map<String, Object> response = new HashMap<>();
         Map<String, String> errors = new HashMap<>();
         response.put("status", "success");
-        response.put("notify", "изменения выполнены");
+        response.put("notify", "Изменения выполнены");
         response.put("answer", "edit success");
         errors.put("username", "");
         errors.put("lastname", "");
         errors.put("dateOfBirth", "");
+        errors.put("photo", "");
         if (editProfileDto.getUsername() == null) {
-            errors.put("username", "неправильное имя пользователя");
+            errors.put("username", "Неправильное имя пользователя");
         }
         if (editProfileDto.getLastname() == null) {
-            errors.put("lastname", "неправильная фамилия");
+            errors.put("lastname", "Неправильная фамилия");
         }
         if (editProfileDto.getDateOfBirth() == null) {
-            errors.put("dateOfBirth", "неверная дата рождения");
+            errors.put("dateOfBirth", "Неверная дата рождения");
+        }
+        if (image == null) {
+            errors.put("photo", "Неверная фотография");
         }
         Integer count = 0;
         for (Map.Entry<String, String> entry : errors.entrySet()) {
@@ -136,14 +159,16 @@ public class UserController {
                 count++;
             }
         }
-        if (count == 3) {
+        if (count == 4) {
             response.put("errors", errors);
-            System.out.println(editProfileDto.getUsername());
-            System.out.println(editProfileDto.getLastname());
+            //
+            FileData uploadImage = storageService.uploadImageToFileSystemAvatarUser(image);
+            //String email = userService.register(userDto,uploadImage).getEmail();
+            uploadImage.setUser(userRepository.findByEmail(user.getEmail()).orElse(null));
+            fileDataRepository.save(uploadImage);
+            user.setFileData(uploadImage);
             user.setUsername(editProfileDto.getUsername());
             user.setLastname(editProfileDto.getLastname());
-            System.out.println(user.getUsername());
-            System.out.println(user.getLastname());
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             user.setDateOfBirth(format.parse(editProfileDto.getDateOfBirth()));
             userService.updateUser(user);
@@ -151,34 +176,29 @@ public class UserController {
         }
 
         response.put("status", "error");
-        response.put("notify", "в изменениях отказано");
+        response.put("notify", "В изменениях отказано");
         response.put("answer", "edit error");
         response.put("errors", errors);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/hello")
-    public ResponseEntity<String> hello() {
-        String message = "{\"message\": \"hello, world\"}";
-        return new ResponseEntity<>(message, HttpStatus.OK);
-    }
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody LoginDto loginDto) {
         Map<String, Object> response = new HashMap<>();
         Map<String, String> errors = new HashMap<>();
         response.put("status", "success");
-        response.put("notify", "успешный вход в систему");
+        response.put("notify", "Успешный вход в систему");
         response.put("answer", "login success");
         errors.put("email", "");
         errors.put("password", "");
         Optional<User> userOptional = userRepository.findByEmail(loginDto.getUsernameOrEmail());
         if (userOptional.isEmpty()) {
-            errors.put("email", "неверный почтовый ящик");
+            errors.put("email", "Неверный почтовый ящик");
         } else {
             User user = userOptional.get();
             if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
-                errors.put("password", "неверный пароль");
+                errors.put("password", "Неверный пароль");
             }
         }
         int count = 0;
@@ -198,19 +218,70 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         response.put("status", "error");
-        response.put("notify", "неверные данные");
+        response.put("notify", "Неверные данные");
         response.put("answer", "login error");
         response.put("errors", errors);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/allUsers")
+    public ResponseEntity<Object> getAllUsers(@RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "10") int size) {
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> answer = new HashMap<>();
+        response.put("status", "success");
+        response.put("notify", "Пользователи получены");
+
+        List<User> users = userRepository.findAll();
+
+        List<GetUsersDto> userDtos = new ArrayList<>();
+
+        for (User user : users) {
+            WorkerRole workerRole = user.getWorkerRoles().stream().findFirst().orElse(null);
+            Role role = user.getRoles().stream().findFirst().orElse(null);
+            GetUsersDto userDto = new GetUsersDto(user.getUsername() != null ? user.getUsername() : null,
+                    user.getEmail() != null ? user.getEmail() : null,
+                    user.getLastname() != null ? user.getLastname() : null,
+                    user.getPhoneNumber() != null ? user.getPhoneNumber() : null,
+                    workerRole != null ? workerRole.name() : null,
+                    user.getDateOfBirth() != null ? user.getDateOfBirth().toString() : null,
+                    user.getFileData() != null && user.getFileData().getName() != null ? user.getFileData().getName() : null,
+                    user.getActivationCode() != null ? false : true,
+                    role != null ? role.getName() : null,
+                    user.getId() != null ? user.getId().toString() : null);
+            BeanUtils.copyProperties(user, userDto);
+            userDtos.add(userDto);
+        }
+
+        int startIndex = page * size;
+        int endIndex = Math.min(startIndex + size, userDtos.size());
+        List<GetUsersDto> paginatedUserDtos = userDtos.subList(startIndex, endIndex);
+
+        response.put("users", paginatedUserDtos);
+        response.put("offset", page+1);
+        response.put("pageNumber", page);
+        response.put("totalElements", userDtos.size());
+        response.put("totalPages", (int) Math.ceil((double) userDtos.size() / size));
+        response.put("pageSize", size);
+        response.put("last", (page + 1) * size >= userDtos.size());
+        response.put("first", page == 0);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/hello")
+    public ResponseEntity<String> hello() {
+        String message = "{\"message\": \"hello, world\"}";
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
+
     @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/logout")
     public ResponseEntity<Object> logout(@RequestHeader("Authorization") String bearerToken) {
         Map<String, Object> response = new HashMap<>();
         response.put("status", "success");
-        response.put("notify", "успешный выход из системы");
+        response.put("notify", "Успешный выход из системы");
         response.put("answer", "logout success");
 
         userService.logout(bearerToken);
@@ -226,6 +297,7 @@ public class UserController {
         answer.put("type_of_worker", userService.getUser(token).getWorkerRoles().stream().findFirst().get().toString());
         answer.put("first_name", userService.getUser(token).getUsername());
         answer.put("last_name", userService.getUser(token).getLastname());
+        answer.put("photo", userService.getUser(token).getFileData().getName());
         response.put("answer", answer);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -235,16 +307,18 @@ public class UserController {
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> answer = new HashMap<>();
         response.put("status", "success");
-        response.put("notify", "профиль получен");
+        response.put("notify", "Профиль получен");
         answer.put("phone", userService.getUser(token).getPhoneNumber());
         answer.put("date_of_birth", userService.getUser(token).getDateOfBirth().toString());
         answer.put("type_of_worker", userService.getUser(token).getWorkerRoles().stream().findFirst().get().toString());
         answer.put("first_name", userService.getUser(token).getUsername());
         answer.put("last_name", userService.getUser(token).getLastname());
         answer.put("email", userService.getUser(token).getEmail());
+        answer.put("photo", userService.getUser(token).getFileData().getName());
         response.put("answer", answer);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin")
@@ -257,14 +331,14 @@ public class UserController {
         Map<String, Object> response = new HashMap<>();
         Map<String, String> errors = new HashMap<>();
         response.put("status", "success");
-        response.put("notify", "активация успешна");
+        response.put("notify", "Активация успешна");
         response.put("answer", "activate success");
         errors.put("code", "");
 
         String code = requestBody.get("code");
 
         if (userRepository.findByActivationCode(code) == null) {
-            errors.put("code", "неверный код");
+            errors.put("code", "Неверный код");
         }
 
         int count = 0;
@@ -284,7 +358,7 @@ public class UserController {
         }
 
         response.put("status", "error");
-        response.put("notify", "некорректные данные");
+        response.put("notify", "Некорректные данные");
         response.put("answer", "login error");
         response.put("errors", errors);
         return new ResponseEntity<>(response, HttpStatus.OK);

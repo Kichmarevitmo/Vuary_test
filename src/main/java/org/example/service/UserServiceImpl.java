@@ -2,6 +2,8 @@ package org.example.service;
 
 
 import lombok.AllArgsConstructor;
+import org.example.Images_Module.FileData;
+import org.example.Images_Module.FileDataRepository;
 import org.example.dto.LoginDto;
 import org.example.dto.UserDto;
 import org.example.exception.ApiException;
@@ -44,6 +46,7 @@ public class UserServiceImpl implements UserService {
     private TokenRepository tokenRepository;
     private PasswordEncoder passwordEncoder;
     private ModelMapper modelMapper;
+    private FileDataRepository fileDataRepository;
     //
     private final MailSender mailSender;
     private String generateActivationCode() {
@@ -60,6 +63,46 @@ public class UserServiceImpl implements UserService {
     }
     //
     @Override
+    public UserDto register(UserDto userDto, FileData fileData) throws ParseException {
+        if (userRepository.existsByEmail(userDto.getEmail())) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "User already exists. Try different Email");
+        }
+        Set<Role> roles = new HashSet<>();
+        if (roleRepository.findByName(ERole.ROLE_USER.toString()).isEmpty()) {
+            Role role = new Role();
+            role.setName(ERole.ROLE_USER.toString());
+            roleRepository.save(role);
+        }
+        roles.add(roleRepository.findByName(ERole.ROLE_USER.toString()).orElseThrow(() -> new ResourceNotFoundException("Role not exists")));
+        User user = modelMapper.map(userDto, User.class);
+        user.setRoles(roles);
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        //
+        user.setFileData(fileData);
+        user.setLastname(userDto.getLastname());
+        user.setPhoneNumber(user.getPhoneNumber());
+        Set<WorkerRole> workerRoles = new HashSet<>();
+        workerRoles.add(WorkerRole.valueOf(userDto.getWorkerRole()));
+        user.setWorkerRoles(workerRoles);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        user.setDateOfBirth(format.parse(userDto.getDateOfBirth()));
+        String activationCode = generateActivationCode();
+        user.setActivationCode(activationCode);
+        if (!StringUtils.isEmpty(user.getEmail())) {
+            String message = String.format(
+                    "Здравствуйте, %s! \n" +
+                            "Добро пожаловать в Kotitonttu. Ваш код активации: %s",
+                    user.getUsername(),
+                    user.getActivationCode()
+            );
+
+            mailSender.send(user.getEmail(), "Код активации Kotitonttu", message);
+        }
+        //
+        User savedUser = userRepository.save(user);
+        return modelMapper.map(savedUser, UserDto.class);
+    }
+    @Override
     public UserDto register(UserDto userDto) throws ParseException {
         if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "User already exists. Try different Email");
@@ -75,6 +118,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         //
+        user.setFileData(fileDataRepository.findByName("defaultAvatar.png").orElse(null));
         user.setLastname(userDto.getLastname());
         user.setPhoneNumber(user.getPhoneNumber());
         Set<WorkerRole> workerRoles = new HashSet<>();
