@@ -18,7 +18,7 @@ public class StorageService {
     @Autowired
     private FileDataRepository fileDataRepository;
 
-    private final String FOLDER_PATH="/var/www/vuary/";
+    private final String FOLDER_PATH="/var/www/vuary/user_folder/";
 
     public FileData uploadImageToFileSystemAvatarUser(MultipartFile file) throws IOException {
         String fileName = UUID.randomUUID().toString();
