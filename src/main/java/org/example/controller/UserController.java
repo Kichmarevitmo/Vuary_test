@@ -363,6 +363,21 @@ public class UserController {
         response.put("errors", errors);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    @PostMapping("/fileSystemAvatarDefault")
+    public ResponseEntity<?> uploadImageToFIleSystemAvatarDefault() throws IOException {
+        String uploadImage = storageService.uploadImageToFileSystemDefaultAvatar().toString();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(uploadImage);
+    }
+
+    @GetMapping("/fileSystem/{fileName}")
+    public ResponseEntity<?> downloadImageFromFileSystem(@PathVariable String fileName) throws IOException {
+        byte[] imageData=storageService.downloadImageFromFileSystem(fileName);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(imageData);
+
+    }
 
 }
 /*@Controller

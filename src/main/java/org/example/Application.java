@@ -43,8 +43,8 @@ public class Application {
             if (userRepository.findByEmail("admin@example.com").isEmpty()){
                 User admin = new User();
                 admin.setUsername("admin");
-                admin.setPassword("admin");
-                admin.setEmail("admin@example.com");
+                admin.setPassword("hFaeQssuyNkoNEe9rtcM");
+                admin.setEmail("kotitonttu@example.com");
                 admin.setActive(true);
                 admin.setRoles(Set.of(adminRole));
                 // Добавьте другие необходимые поля пользователя
@@ -53,3 +53,5 @@ public class Application {
         };
     }
 }
+//TODO выяснить количество котлов, если котлов меньше или больше заданного количества
+//TODO убиваем все котлы и заполняем заново
