@@ -11,14 +11,16 @@ import java.util.List;
 @Getter
 @Setter
 public class Boiler {
+    //TODO: список фотографий
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL) // TODO: mapped by boiler на обратную связь с характеристикой
+    // Ophfunremovul = true удалялись характеристики которые больше не используются
     private List<Characteristic> characteristics;
 
-    @ManyToOne
+    @ManyToOne // join column для хранения внешнего ключа
     private Type type;
 
     @ManyToOne

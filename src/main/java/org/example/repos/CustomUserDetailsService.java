@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,13 +22,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not exists with this Username or Email"));
-        if(user.getActivationCode() != null) {
+                .orElseThrow(() -> new ResourceNotFoundException("User not exists with this Email"));
+        if (user.getActivationCode() != null) {
             throw new UserServiceException("You haven't completed the account verification stage");
         }
-        Set<GrantedAuthority> authorities = user.getRoles()
-                .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toSet());
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        if (user.getRole() != null) {
+            authorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
+        }
         return new org.springframework.security.core.userdetails.User(
                 email,
                 user.getPassword(),

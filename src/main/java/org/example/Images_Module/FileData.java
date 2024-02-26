@@ -23,7 +23,6 @@ public class FileData {
     private String name;
     private String type;
     private String filePath;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+
+
 }

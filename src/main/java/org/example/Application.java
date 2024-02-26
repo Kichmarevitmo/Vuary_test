@@ -40,13 +40,16 @@ public class Application {
             }
 
             // Создаем пользователя с ролью ROLE_ADMIN, если такой еще нет
-            if (userRepository.findByEmail("admin@example.com").isEmpty()){
+            if (userRepository.findByEmail("kotitonttu@example.com").isEmpty()){
                 User admin = new User();
                 admin.setUsername("admin");
                 admin.setPassword("hFaeQssuyNkoNEe9rtcM");
                 admin.setEmail("kotitonttu@example.com");
                 admin.setActive(true);
-                admin.setRoles(Set.of(adminRole));
+                Role role = new Role();
+                role.setName("ROLE_USER");
+                roleRepository.save(role);
+                admin.setRole(role);
                 // Добавьте другие необходимые поля пользователя
                 userRepository.save(admin);
             }

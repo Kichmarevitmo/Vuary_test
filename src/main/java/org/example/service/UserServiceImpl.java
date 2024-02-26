@@ -73,9 +73,9 @@ public class UserServiceImpl implements UserService {
             role.setName(ERole.ROLE_USER.toString());
             roleRepository.save(role);
         }
-        roles.add(roleRepository.findByName(ERole.ROLE_USER.toString()).orElseThrow(() -> new ResourceNotFoundException("Role not exists")));
+        Role userRole = roleRepository.findByName(ERole.ROLE_USER.toString()).orElseThrow(() -> new ResourceNotFoundException("Role not exists"));
         User user = modelMapper.map(userDto, User.class);
-        user.setRoles(roles);
+        user.setRole(userRole);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         //
         user.setFileData(fileData);
@@ -113,9 +113,9 @@ public class UserServiceImpl implements UserService {
             role.setName(ERole.ROLE_USER.toString());
             roleRepository.save(role);
         }
-        roles.add(roleRepository.findByName(ERole.ROLE_USER.toString()).orElseThrow(() -> new ResourceNotFoundException("Role not exists")));
+        Role userRole = roleRepository.findByName(ERole.ROLE_USER.toString()).orElseThrow(() -> new ResourceNotFoundException("Role not exists"));
         User user = modelMapper.map(userDto, User.class);
-        user.setRoles(roles);
+        user.setRole(userRole);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         //
         user.setFileData(fileDataRepository.findByName("defaultAvatar.png").orElse(null));

@@ -59,7 +59,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Object> register(@RequestPart UserDto userDto, @RequestPart MultipartFile image) throws ParseException, IOException {
+    public ResponseEntity<Object> register(@RequestPart UserDto userDto, @RequestPart(required = false) MultipartFile image) throws ParseException, IOException {
         Map<String, Object> response = new HashMap<>();
         Map<String, String> errors = new HashMap<>();
         response.put("status", "success"); //
@@ -112,7 +112,7 @@ public class UserController {
             } else {
                 FileData uploadImage = storageService.uploadImageToFileSystemAvatarUser(image);
                 String email = userService.register(userDto, uploadImage).getEmail();
-                uploadImage.setUser(userRepository.findByEmail(email).orElse(null));
+                //uploadImage.setUser(userRepository.findByEmail(email).orElse(null));
                 fileDataRepository.save(uploadImage);
             }
             return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -164,7 +164,7 @@ public class UserController {
             //
             FileData uploadImage = storageService.uploadImageToFileSystemAvatarUser(image);
             //String email = userService.register(userDto,uploadImage).getEmail();
-            uploadImage.setUser(userRepository.findByEmail(user.getEmail()).orElse(null));
+            //uploadImage.setUser(userRepository.findByEmail(user.getEmail()).orElse(null));
             fileDataRepository.save(uploadImage);
             user.setFileData(uploadImage);
             user.setUsername(editProfileDto.getUsername());
@@ -239,7 +239,7 @@ public class UserController {
 
         for (User user : users) {
             WorkerRole workerRole = user.getWorkerRoles().stream().findFirst().orElse(null);
-            Role role = user.getRoles().stream().findFirst().orElse(null);
+            Role role = user.getRole();
             GetUsersDto userDto = new GetUsersDto(user.getUsername() != null ? user.getUsername() : null,
                     user.getEmail() != null ? user.getEmail() : null,
                     user.getLastname() != null ? user.getLastname() : null,
@@ -293,7 +293,7 @@ public class UserController {
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> answer = new HashMap<>();
         response.put("status", "success");
-        answer.put("role", userService.getUser(token).getRoles().stream().findFirst().get().getName().toString());
+        answer.put("role", userService.getUser(token).getRole().getName().toString());
         answer.put("type_of_worker", userService.getUser(token).getWorkerRoles().stream().findFirst().get().toString());
         answer.put("first_name", userService.getUser(token).getUsername());
         answer.put("last_name", userService.getUser(token).getLastname());

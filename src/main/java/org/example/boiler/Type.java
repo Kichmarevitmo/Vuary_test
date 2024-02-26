@@ -14,7 +14,7 @@ public class Type {
 
     private String title;
 
-    @ManyToOne
+    @ManyToOne // TODO ONETOMANY CASCADEALL однок многокотнурные
     private Kind kind;
 
 }
