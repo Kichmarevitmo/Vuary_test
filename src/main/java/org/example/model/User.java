@@ -1,9 +1,6 @@
 package org.example.model;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.example.Images_Module.FileData;
 import org.example.token.Token;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,19 +19,23 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NonNull
     private String username;
+    @NonNull
     private String password;
+    @NonNull
     private String email;
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinColumn(name = "role_id")
-    private Role role;
-
+    @Enumerated(EnumType.STRING)
+    private ERole role;
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Token> tokens;
     //
     private boolean active;
+    @NonNull
     private String lastname;
+
     private String activationCode;
+    @NonNull
     private String phoneNumber;
     @ElementCollection(targetClass = WorkerRole.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_worker_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -42,10 +43,12 @@ public class User {
     private Set<WorkerRole> workerRoles;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
+    @NonNull
     private Date dateOfBirth;
     //
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "file_data_id", referencedColumnName = "id")
+    @NonNull
     private FileData fileData;
 }
 

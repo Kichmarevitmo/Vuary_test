@@ -1,18 +1,13 @@
 package org.example;
 
-import org.example.model.Role;
+import org.example.model.ERole;
 import org.example.model.User;
-import org.example.repos.RoleRepository;
 import org.example.repos.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Set;
 
 
 @SpringBootApplication
@@ -29,27 +24,15 @@ public class Application {
 
 
     @Bean
-    public CommandLineRunner createAdminUser(UserRepository userRepository, RoleRepository roleRepository) {
+    public CommandLineRunner createAdminUser(UserRepository userRepository) {
         return args -> {
-            // Создаем роль ROLE_ADMIN, если ее еще нет
-            Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElse(null);
-            if (adminRole == null) {
-                adminRole = new Role();
-                adminRole.setName("ROLE_ADMIN");
-                roleRepository.save(adminRole);
-            }
-
-            // Создаем пользователя с ролью ROLE_ADMIN, если такой еще нет
-            if (userRepository.findByEmail("kotitonttu@example.com").isEmpty()){
+            if (userRepository.findByEmail("kotitonttu@example.com").isEmpty()) {
                 User admin = new User();
                 admin.setUsername("admin");
                 admin.setPassword("hFaeQssuyNkoNEe9rtcM");
                 admin.setEmail("kotitonttu@example.com");
                 admin.setActive(true);
-                Role role = new Role();
-                role.setName("ROLE_USER");
-                roleRepository.save(role);
-                admin.setRole(role);
+                admin.setRole(ERole.ROLE_ADMIN);
                 // Добавьте другие необходимые поля пользователя
                 userRepository.save(admin);
             }

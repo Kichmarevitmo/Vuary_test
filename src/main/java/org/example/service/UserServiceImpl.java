@@ -7,13 +7,10 @@ import org.example.Images_Module.FileDataRepository;
 import org.example.dto.LoginDto;
 import org.example.dto.UserDto;
 import org.example.exception.ApiException;
-import org.example.exception.ResourceNotFoundException;
 import org.example.exception.UserServiceException;
-import org.example.model.Role;
+import org.example.model.ERole;
 import org.example.model.User;
 import org.example.model.WorkerRole;
-import org.example.model.enums.ERole;
-import org.example.repos.RoleRepository;
 import org.example.repos.UserRepository;
 import org.example.security.JwtAuthResponse;
 import org.example.security.JwtTokenProvider;
@@ -39,16 +36,24 @@ import java.util.Set;
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
+    //
+    private final MailSender mailSender;
     private AuthenticationManager authenticationManager;
     private JwtTokenProvider jwtTokenProvider;
     private UserRepository userRepository;
-    private RoleRepository roleRepository;
     private TokenRepository tokenRepository;
     private PasswordEncoder passwordEncoder;
     private ModelMapper modelMapper;
     private FileDataRepository fileDataRepository;
-    //
-    private final MailSender mailSender;
+
+    private static Token savedUserToken(User user, String jwtToken) {
+        return Token.builder()
+                .user(user)
+                .token(jwtToken)
+                .tokenType(TokenType.BEARER)
+                .build();
+    }
+
     private String generateActivationCode() {
         int length = 4;
         String digits = "0123456789";
@@ -61,21 +66,15 @@ public class UserServiceImpl implements UserService {
 
         return code.toString();
     }
+
     //
     @Override
     public UserDto register(UserDto userDto, FileData fileData) throws ParseException {
         if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "User already exists. Try different Email");
         }
-        Set<Role> roles = new HashSet<>();
-        if (roleRepository.findByName(ERole.ROLE_USER.toString()).isEmpty()) {
-            Role role = new Role();
-            role.setName(ERole.ROLE_USER.toString());
-            roleRepository.save(role);
-        }
-        Role userRole = roleRepository.findByName(ERole.ROLE_USER.toString()).orElseThrow(() -> new ResourceNotFoundException("Role not exists"));
         User user = modelMapper.map(userDto, User.class);
-        user.setRole(userRole);
+        user.setRole(ERole.ROLE_USER);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         //
         user.setFileData(fileData);
@@ -102,22 +101,15 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(user);
         return modelMapper.map(savedUser, UserDto.class);
     }
+
     @Override
     public UserDto register(UserDto userDto) throws ParseException {
         if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "User already exists. Try different Email");
         }
-        Set<Role> roles = new HashSet<>();
-        if (roleRepository.findByName(ERole.ROLE_USER.toString()).isEmpty()) {
-            Role role = new Role();
-            role.setName(ERole.ROLE_USER.toString());
-            roleRepository.save(role);
-        }
-        Role userRole = roleRepository.findByName(ERole.ROLE_USER.toString()).orElseThrow(() -> new ResourceNotFoundException("Role not exists"));
         User user = modelMapper.map(userDto, User.class);
-        user.setRole(userRole);
+        user.setRole(ERole.ROLE_USER);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        //
         user.setFileData(fileDataRepository.findByName("defaultAvatar.png").orElse(null));
         user.setLastname(userDto.getLastname());
         user.setPhoneNumber(user.getPhoneNumber());
@@ -155,6 +147,7 @@ public class UserServiceImpl implements UserService {
         jwtAuthResponse.setAccessToken(jwtToken);
         return jwtAuthResponse;
     }
+
     @Override
     public User getUser(String bearerToken) {
         String jwtToken = bearerToken.substring(7);
@@ -162,20 +155,23 @@ public class UserServiceImpl implements UserService {
         var user = userRepository.findByEmail(username).orElse(null);
         return user;
     }
+
     @Override
     public void updateUser(User user) {
         userRepository.save(user);
     }
+
     @Override
     public void logout(String bearerToken) {
         String jwtToken = bearerToken.substring(7);
         var username = jwtTokenProvider.getUsername(jwtToken);
         var user = userRepository.findByEmail(username).orElse(null);
-        if(tokenRepository.findByToken(jwtToken).orElse(null) == null){
+        if (tokenRepository.findByToken(jwtToken).orElse(null) == null) {
             var token = savedUserToken(user, jwtToken);
             tokenRepository.save(token);
         }
     }
+
     @Override
     public boolean activateUser(String code) {
         User userEntity = userRepository.findByActivationCode(code);
@@ -190,12 +186,5 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new UserServiceException("Введенный код не совпадает с истинным");
         }
-    }
-    private static Token savedUserToken(User user, String jwtToken) {
-        return Token.builder()
-                .user(user)
-                .token(jwtToken)
-                .tokenType(TokenType.BEARER)
-                .build();
     }
 }

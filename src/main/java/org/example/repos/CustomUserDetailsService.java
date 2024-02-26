@@ -28,7 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
         Set<GrantedAuthority> authorities = new HashSet<>();
         if (user.getRole() != null) {
-            authorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
+            authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
         }
         return new org.springframework.security.core.userdetails.User(
                 email,

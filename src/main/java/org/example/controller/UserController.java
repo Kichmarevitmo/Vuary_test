@@ -9,7 +9,7 @@ import org.example.dto.EditProfileDto;
 import org.example.dto.GetUsersDto;
 import org.example.dto.LoginDto;
 import org.example.dto.UserDto;
-import org.example.model.Role;
+import org.example.model.ERole;
 import org.example.model.User;
 import org.example.model.WorkerRole;
 import org.example.repos.UserRepository;
@@ -239,7 +239,7 @@ public class UserController {
 
         for (User user : users) {
             WorkerRole workerRole = user.getWorkerRoles().stream().findFirst().orElse(null);
-            Role role = user.getRole();
+            ERole role = user.getRole();
             GetUsersDto userDto = new GetUsersDto(user.getUsername() != null ? user.getUsername() : null,
                     user.getEmail() != null ? user.getEmail() : null,
                     user.getLastname() != null ? user.getLastname() : null,
@@ -248,7 +248,7 @@ public class UserController {
                     user.getDateOfBirth() != null ? user.getDateOfBirth().toString() : null,
                     user.getFileData() != null && user.getFileData().getName() != null ? user.getFileData().getName() : null,
                     user.getActivationCode() != null ? false : true,
-                    role != null ? role.getName() : null,
+                    role != null ? role.name() : null,
                     user.getId() != null ? user.getId().toString() : null);
             BeanUtils.copyProperties(user, userDto);
             userDtos.add(userDto);
@@ -259,7 +259,7 @@ public class UserController {
         List<GetUsersDto> paginatedUserDtos = userDtos.subList(startIndex, endIndex);
 
         response.put("users", paginatedUserDtos);
-        response.put("offset", page+1);
+        response.put("offset", page + 1);
         response.put("pageNumber", page);
         response.put("totalElements", userDtos.size());
         response.put("totalPages", (int) Math.ceil((double) userDtos.size() / size));
@@ -293,7 +293,7 @@ public class UserController {
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> answer = new HashMap<>();
         response.put("status", "success");
-        answer.put("role", userService.getUser(token).getRole().getName().toString());
+        answer.put("role", userService.getUser(token).getRole().name().toString());
         answer.put("type_of_worker", userService.getUser(token).getWorkerRoles().stream().findFirst().get().toString());
         answer.put("first_name", userService.getUser(token).getUsername());
         answer.put("last_name", userService.getUser(token).getLastname());
@@ -363,6 +363,7 @@ public class UserController {
         response.put("errors", errors);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     @PostMapping("/fileSystemAvatarDefault")
     public ResponseEntity<?> uploadImageToFIleSystemAvatarDefault() throws IOException {
         String uploadImage = storageService.uploadImageToFileSystemDefaultAvatar().toString();
@@ -372,7 +373,7 @@ public class UserController {
 
     @GetMapping("/fileSystem/{fileName}")
     public ResponseEntity<?> downloadImageFromFileSystem(@PathVariable String fileName) throws IOException {
-        byte[] imageData=storageService.downloadImageFromFileSystem(fileName);
+        byte[] imageData = storageService.downloadImageFromFileSystem(fileName);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imageData);
