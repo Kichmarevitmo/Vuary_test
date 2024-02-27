@@ -1,8 +1,8 @@
 package org.example;
 
-import org.example.model.ERole;
-import org.example.model.User;
-import org.example.repos.UserRepository;
+import org.example.models.enums.ERole;
+import org.example.entities.User;
+import org.example.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

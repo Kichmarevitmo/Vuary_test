@@ -1,16 +1,11 @@
 package org.example.dto;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.model.WorkerRole;
-
-import java.util.Date;
-import java.util.Set;
 
 @Getter
 @Setter
