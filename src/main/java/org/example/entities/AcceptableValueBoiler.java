@@ -6,18 +6,19 @@ import lombok.Setter;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="characteristic_series")
+@Table(name="acceptable_value_boiler")
 @Setter
 @Getter
-public class Characteristic_Series {
+public class AcceptableValueBoiler {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    private Characteristic characteristic;
+    private AcceptableValue acceptableValue;
 
     @ManyToOne
-    private Series series;
+    private Boiler boiler;
+
 }
