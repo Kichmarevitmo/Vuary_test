@@ -18,4 +18,14 @@ public class Attribute {
 
     @ManyToOne
     private Series series;
+
+    public Attribute() {
+        this("null", new Series());
+    }
+
+    public Attribute(String title, Series series) {
+        this.id = null;
+        this.title = title;
+        this.series = series;
+    }
 }

@@ -38,11 +38,13 @@
       <artifactId>mysql-connector-j</artifactId>
       <scope>runtime</scope>
     </dependency>
+
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <optional>true</optional>
     </dependency>
+
     <dependency>
       <groupId>org.modelmapper</groupId>
       <artifactId>modelmapper</artifactId>
@@ -129,9 +131,3 @@
   </build>
 
 </project>
-
-
-
-
-
-

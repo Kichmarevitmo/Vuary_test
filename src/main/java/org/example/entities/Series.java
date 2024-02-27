@@ -18,4 +18,14 @@ public class Series {
 
     @ManyToOne
     private Kind kind;
+
+    public Series() {
+        this("null", new Kind());
+    }
+
+    public Series(String description, Kind kind) {
+        this.id = null;
+        this.description = description;
+        this.kind = kind;
+    }
 }

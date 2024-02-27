@@ -21,4 +21,13 @@ public class AcceptableValueBoiler {
     @ManyToOne
     private Boiler boiler;
 
+    public AcceptableValueBoiler() {
+        this(new AcceptableValue(), new Boiler());
+    }
+
+    public AcceptableValueBoiler(AcceptableValue acceptableValue, Boiler boiler) {
+        this.id = null;
+        this.acceptableValue = acceptableValue;
+        this.boiler = boiler;
+    }
 }

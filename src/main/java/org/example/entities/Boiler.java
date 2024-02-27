@@ -19,4 +19,13 @@ public class Boiler {
     @ManyToOne
     private Series series;
 
+    public Boiler() {
+        this("null", new Series());
+    }
+
+    public Boiler(String title, Series series) {
+        this.id = null;
+        this.title = title;
+        this.series = series;
+    }
 }

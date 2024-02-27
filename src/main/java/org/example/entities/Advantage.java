@@ -25,4 +25,16 @@ public class Advantage {
 
     @ManyToOne
     private Series series;
+
+    public Advantage() {
+        this("null", "null", CategoryOfAdvantage.COMFORT, new Series());
+    }
+
+    public Advantage(String title, String iconPath, CategoryOfAdvantage category, Series series) {
+        this.id = null;
+        this.title = title;
+        this.iconPath = iconPath;
+        this.category = category;
+        this.series = series;
+    }
 }

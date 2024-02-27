@@ -15,5 +15,17 @@ public class Type {
     private Long id;
 
     private String title;
+    private String description;
+    private String path;
 
+    public Type() {
+        this("null", "null", "null");
+    }
+
+    public Type(String title, String description, String path) {
+        this.id = null;
+        this.title = title;
+        this.description = description;
+        this.path = path;
+    }
 }

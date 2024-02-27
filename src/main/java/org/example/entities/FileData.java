@@ -23,5 +23,14 @@ public class FileData {
     private String type;
     private String filePath;
 
+    public FileData() {
+        this("null", "null", "null");
+    }
 
+    public FileData(String name, String type, String filePath) {
+        this.id = null;
+        this.name = name;
+        this.type = type;
+        this.filePath = filePath;
+    }
 }

@@ -22,4 +22,15 @@ public class ImageForSeries {
     @ManyToOne
     private Series series;
 
+    public ImageForSeries() {
+        this("null", "null", "null", new Series());
+    }
+
+    public ImageForSeries(String name, String type, String filePath, Series series) {
+        this.id = null;
+        this.name = name;
+        this.type = type;
+        this.filePath = filePath;
+        this.series = series;
+    }
 }

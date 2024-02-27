@@ -15,7 +15,19 @@ public class Kind {
     private Long id;
 
     private String title;
+    private String description;
 
     @ManyToOne
     private Type type;
+
+    public Kind() {
+        this("null", "null", new Type());
+    }
+
+    public Kind(String title, String description, Type type) {
+        this.id = null;
+        this.title = title;
+        this.description = description;
+        this.type = type;
+    }
 }

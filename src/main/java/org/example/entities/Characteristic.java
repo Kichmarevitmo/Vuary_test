@@ -19,4 +19,13 @@ public class Characteristic {
     @ManyToOne
     private Unit unit;
 
+    public Characteristic() {
+        this("null", new Unit());
+    }
+
+    public Characteristic(String title, Unit unit) {
+        this.id = null;
+        this.title = title;
+        this.unit = unit;
+    }
 }

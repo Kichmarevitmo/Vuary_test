@@ -23,4 +23,16 @@ public class AcceptableValue {
     private Double minValue;
     private Double maxValue;
 
+    public AcceptableValue() {
+        this(new Characteristic(), "null", 0.0, 0.0, 0.0);
+    }
+
+    public AcceptableValue(Characteristic characteristic, String sValue, Double dValue, Double minValue, Double maxValue) {
+        this.id = null;
+        this.characteristic = characteristic;
+        this.sValue = sValue;
+        this.dValue = dValue;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+    }
 }
