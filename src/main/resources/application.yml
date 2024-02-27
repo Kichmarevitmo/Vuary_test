@@ -1,26 +1,47 @@
 spring:
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/db_security
-    username: postgres
-    password: ${POSTGRES_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/test?serverTimezone=UTC
+    username: root
+    password: sasha
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-    database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
 server:
   port: 8086
 application:
   security:
     jwt:
       secret-key: 586B633834416E396D7436753879382F423F4428482B4C6250655367566B5970
-      expiration: 900000 #  15 min in ms
+      expiration: 900000 # 15 min in ms
       cookie-name: jwt-cookie
       refresh-token:
         expiration: 1296000000 # 15 days in ms
         cookie-name: refresh-jwt-cookie
+
+spring.mail:
+  host: smtp.gmail.com
+  username: ksenia.trofymiuk@gmail.com
+  password: rcil syop qawu xfbz
+  port: 465
+  protocol: smtps
+  debug: true
+
+spring.freemarker:
+  suffix: .ftl
+  cache: false
+  expose-request-attributes: true
+  check-template-location: false
+
+spring.servlet.multipart:
+  max-file-size: 10MB
+  max-request-size: 10MB
+
+spring.thymeleaf.check-template-location: false
+spring.mustache.check-template-location: false
