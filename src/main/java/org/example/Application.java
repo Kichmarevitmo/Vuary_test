@@ -31,7 +31,7 @@ public class Application {
     @Bean
     public CommandLineRunner createAdminUser(UserRepository userRepository) {
         return args -> {
-            if (SchemaIsEmpty) {
+           if (SchemaIsEmpty) {
                 User admin = new User();
                 admin.setUsername("admin");
                 admin.setPassword("hFaeQssuyNkoNEe9rtcM");
@@ -40,7 +40,7 @@ public class Application {
                 admin.setRole(ERole.ROLE_ADMIN);
                 // Добавьте другие необходимые поля пользователя
                 userRepository.save(admin);
-            }
+           }
         };
     }
 
@@ -59,10 +59,10 @@ public class Application {
 
                 // Типы котлов
                 //------------------------------------------------------------------------------------------------------
-                Type t1 = new Type("TOIVO", "Котлы настенные газовые", "null");
-                Type t2 = new Type("SUARI", "Водонагреватели проточные газовые", "null");
-                Type t3 = new Type("AINOVA", "Котлы настенные электрические", "null");
-                Type t4 = new Type("SALMI", "Водонагреватели электрические накопительные", "null");
+                Type t1 = new Type("TOIVO", "Котлы настенные газовые", "image_toivo");
+                Type t2 = new Type("SUARI", "Водонагреватели проточные газовые", "image_suari");
+                Type t3 = new Type("AINOVA", "Котлы настенные электрические", "image_ainova");
+                Type t4 = new Type("SALMI", "Водонагреватели электрические накопительные", "image_salmi");
 
                 // добавили в бд
                 typeService.addAll(List.of(t1, t2, t3, t4));
@@ -118,7 +118,7 @@ public class Application {
 
                 //TODO добавили в бд
                 attributeService.addAll(List.of(a1));
-            }
+           }
         };
     }
 }

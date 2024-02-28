@@ -1,30 +1,31 @@
 package org.example.controllers;
 
-import org.example.entities.Type;
+import lombok.RequiredArgsConstructor;
+import org.example.mapper.TypeListMapper;
+import org.example.mapper.TypeMapper;
 import org.example.services.TypeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
+@RequiredArgsConstructor
 @RequestMapping("/types")
 public class TypeController {
 
-    @Autowired private TypeService typeService;
+  private final TypeService typeService;
+  private  TypeMapper typeMapper;
+  private TypeListMapper typeListMapper;
 
     @GetMapping(value = "/all")
     public ResponseEntity<Object> getAll(){
+      Map<String, Object> response = new HashMap<>();
 
-        Map<String, Object> response = new HashMap<>();
-
-        List<Type> types = typeService.getAll();
-
-        return ResponseEntity.ok(response);
+      response.put("data", typeListMapper.toDTOList(typeService.getAll()));
+      return ResponseEntity.ok(response);
     }
 }

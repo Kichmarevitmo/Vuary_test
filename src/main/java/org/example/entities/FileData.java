@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "FILE_DATA")
+@Table(name = "file_data")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,6 +23,7 @@ public class FileData {
     private String type;
     private String filePath;
 
+    /*
     public FileData() {
         this("null", "null", "null");
     }
@@ -32,5 +33,5 @@ public class FileData {
         this.name = name;
         this.type = type;
         this.filePath = filePath;
-    }
+    } */
 }

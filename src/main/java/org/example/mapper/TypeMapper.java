@@ -2,19 +2,14 @@ package org.example.mapper;
 
 import org.example.dto.TypeDto;
 import org.example.entities.Type;
-//import org.mapstruct.Mapper;
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
 
-//@Mapper
+@Mapper(componentModel = "spring")
 public interface TypeMapper {
 
     TypeDto map(Type type);
 
+    @InheritInverseConfiguration
     Type map(TypeDto dto);
 }
-
-/*
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <optional>true</optional>
-    </dependency> */
