@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.entities.*;
+import org.example.models.enums.CategoryOfAdvantage;
 import org.example.models.enums.ERole;
 import org.example.repositories.UserRepository;
 import org.example.services.*;
@@ -52,7 +53,9 @@ public class Application {
             SeriesService seriesService,
             CharacteristicService characteristicService,
             AttributeService attributeService,
-            ImageForSeriesService imageForSeriesService
+            ImageForSeriesService imageForSeriesService,
+            BoilerService boilerService,
+            AdvantageService advantageService
             ) {
         return args -> {
             if (SchemaIsEmpty) {
@@ -140,21 +143,21 @@ public class Application {
 
                 // Изображения котлов
                 //------------------------------------------------------------------------------------------------------
-                ImageForSeries i1 = new ImageForSeries("T18O_01.jpg", "image/*", "/var/www/vuary/GB Toivo/Toivo T18O/T18O_01.jpg", s1);
-                ImageForSeries i2 = new ImageForSeries("T24OK_01.jpg", "image/*", "/var/www/vuary/GB Toivo/Toivo T24OK/T24OK_01.jpg", s2);
-                ImageForSeries i3 = new ImageForSeries("T24DK_01.jpg", "image/*", "/var/www/vuary/GB Toivo/Toivo T24DK/T24DK_01.jpg", s3);
-                ImageForSeries i4 = new ImageForSeries("S12_01.jpg", "image/*", "/var/www/vuary/GIWH Suari/Suari S12/S12_01.jpg", s4);
-                ImageForSeries i5 = new ImageForSeries("S10EM_01.jpg", "image/*", "/var/www/vuary/GIWH Suari/Suari S10EM/S10EM_01.jpg", s5);
-                ImageForSeries i6 = new ImageForSeries("S13ST_01.jpg", "image/*", "/var/www/vuary/GIWH Suari/Suari S13ST/S13ST_01.jpg", s6);
-                ImageForSeries i7 = new ImageForSeries("S12FT_01.jpg", "image/*", "/var/www/vuary/GIWH Suari/Suari S12FT/S12FT_01.jpg", s7);
-                ImageForSeries i8 = new ImageForSeries("kotitonttu-57.jpg", "image/*", "/var/www/vuary/EB Ainova/LT-4D/kotitonttu-57.jpg", s8);
-                ImageForSeries i9 = new ImageForSeries("QM-4_06.jpg", "image/*", "/var/www/vuary/EB Ainova/QM-(12-24)/QM-4_06.jpg", s9);
-                ImageForSeries i10 = new ImageForSeries("KMU-10_1.jpg", "image/*", "/var/www/vuary/EWH Salmi/Salmi KMU-10-30 L/KMU-10_1.jpg", s10);
-                ImageForSeries i11 = new ImageForSeries("VRM-50_1.jpg", "image/*", "/var/www/vuary/EWH Salmi/Salmi VRM-50/VRM-50_1.jpg", s11);
-                ImageForSeries i12 = new ImageForSeries("VRM-50D_01.jpg", "image/*", "/var/www/vuary/EWH Salmi/Salmi VRM-50D/VRM-50D_01.jpg", s12);
-                ImageForSeries i13 = new ImageForSeries("VFM-50D_01.jpg", "image/*", "/var/www/vuary/EWH Salmi/Salmi VFM-50D/VFM-50D_01.jpg", s13);
-                ImageForSeries i14 = new ImageForSeries("VFE-50WE_01.jpg", "image/*", "/var/www/vuary/EWH Salmi/Salmi VFE-50VE/VFE-50WE_01.jpg", s14);
-                ImageForSeries i15 = new ImageForSeries("kotitonttu-26.jpg", "image/*", "/var/www/vuary/EWH Salmi/FRM-300/kotitonttu-26.jpg", s15);
+                ImageForSeries i1 = new ImageForSeries("T18O_01.jpg", "image/*", "T18O_01.jpg", s1);
+                ImageForSeries i2 = new ImageForSeries("T24OK_01.jpg", "image/*", "T24OK_01.jpg", s2);
+                ImageForSeries i3 = new ImageForSeries("T24DK_01.jpg", "image/*", "T24DK_01.jpg", s3);
+                ImageForSeries i4 = new ImageForSeries("S12_01.jpg", "image/*", "S12_01.jpg", s4);
+                ImageForSeries i5 = new ImageForSeries("S10EM_01.jpg", "image/*", "S10EM_01.jpg", s5);
+                ImageForSeries i6 = new ImageForSeries("S13ST_01.jpg", "image/*", "S13ST_01.jpg", s6);
+                ImageForSeries i7 = new ImageForSeries("S12FT_01.jpg", "image/*", "S12FT_01.jpg", s7);
+                ImageForSeries i8 = new ImageForSeries("kotitonttu-57.jpg", "image/*", "kotitonttu-57.jpg", s8);
+                ImageForSeries i9 = new ImageForSeries("QM-4_06.jpg", "image/*", "QM-4_06.jpg", s9);
+                ImageForSeries i10 = new ImageForSeries("KMU-10_1.jpg", "image/*", "KMU-10_1.jpg", s10);
+                ImageForSeries i11 = new ImageForSeries("VRM-50_1.jpg", "image/*", "VRM-50_1.jpg", s11);
+                ImageForSeries i12 = new ImageForSeries("VRM-50D_01.jpg", "image/*", "VRM-50D_01.jpg", s12);
+                ImageForSeries i13 = new ImageForSeries("VFM-50D_01.jpg", "image/*", "VFM-50D_01.jpg", s13);
+                ImageForSeries i14 = new ImageForSeries("VFE-50WE_01.jpg", "image/*", "VFE-50WE_01.jpg", s14);
+                ImageForSeries i15 = new ImageForSeries("kotitonttu-26.jpg", "image/*", "kotitonttu-26.jpg", s15);
 
                 imageForSeriesService.addAll(List.of(i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15));
 
@@ -354,6 +357,69 @@ public class Application {
                         u19); // TODO ждем ответа по пункту Время нагрева * (∆45°C) документа Passport_FRM_A5+3mm_new.pdf
 
                 c1.setSeries(List.of(s1));
+                c2.setSeries(List.of(s1, s2, s3));
+                c3.setSeries(List.of(s1, s2, s3, s4, s5, s7));
+                c4.setSeries(List.of(s1, s2, s3));
+                c5.setSeries(List.of(s1, s2, s3));
+                c6.setSeries(List.of(s1, s2, s3, s9));
+                c7.setSeries(List.of(s1, s2, s3));
+                c8.setSeries(List.of(s1, s2, s3));
+                c9.setSeries(List.of(s1, s2));
+                c10.setSeries(List.of(s1, s2));
+                c11.setSeries(List.of(s1, s2));
+                c12.setSeries(List.of(s1, s2, s3));
+                c13.setSeries(List.of(s1, s2));
+                c14.setSeries(List.of(s1, s2, s3));
+                c15.setSeries(List.of(s1, s2, s3));
+                c16.setSeries(List.of(s1, s2, s3));
+                c17.setSeries(List.of(s1, s2, s3));
+                c18.setSeries(List.of(s1, s2, s3));
+                c19.setSeries(List.of(s1, s2, s3, s4, s5, s10, s11, s12, s13, s14, s15));
+                c20.setSeries(List.of(s4, s5, s7));
+                c21.setSeries(List.of(s4, s5));
+                c22.setSeries(List.of(s4, s5, s7));
+                c23.setSeries(List.of(s4, s5));
+                c24.setSeries(List.of(s4, s5, s7));
+                c25.setSeries(List.of(s4, s5, s7));
+                c26.setSeries(List.of(s4, s5));
+                c27.setSeries(List.of(s4, s5, s7, s9));
+                c28.setSeries(List.of(s9));
+                c30.setSeries(List.of(s4, s5));
+                c31.setSeries(List.of(s7));
+                c32.setSeries(List.of(s1, s2, s3, s7));
+                c33.setSeries(List.of(s7));
+                c34.setSeries(List.of(s7));
+                c35.setSeries(List.of(s7));
+                c36.setSeries(List.of(s7));
+                c37.setSeries(List.of(s7));
+                c39.setSeries(List.of(s9));
+                c40.setSeries(List.of(s9));
+                c41.setSeries(List.of(s9));
+                c43.setSeries(List.of(s9));
+                c44.setSeries(List.of(s9));
+                c45.setSeries(List.of(s9));
+                c46.setSeries(List.of(s9));
+                c47.setSeries(List.of(s9));
+                c48.setSeries(List.of(s9));
+                c49.setSeries(List.of(s9));
+                c50.setSeries(List.of(s9));
+                c51.setSeries(List.of(s9));
+                c52.setSeries(List.of(s9));
+                c56.setSeries(List.of(s3));
+                c57.setSeries(List.of(s3));
+                c58.setSeries(List.of(s3));
+                c59.setSeries(List.of(s3));
+                c60.setSeries(List.of(s3));
+                c61.setSeries(List.of(s3));
+                c62.setSeries(List.of(s3));
+                c63.setSeries(List.of(s3));
+                c64.setSeries(List.of(s10, s11, s12, s13, s14, s15));
+                c65.setSeries(List.of(s10, s11, s12, s13, s14, s15));
+                c66.setSeries(List.of(s10, s11, s12, s13, s14, s15));
+                c67.setSeries(List.of(s9, s10, s11, s12, s13, s14, s15));
+                c68.setSeries(List.of(s10, s11, s12, s13, s14, s15));
+                c69.setSeries(List.of(s10, s11, s12, s13, s14, s15));
+                c70.setSeries(List.of(s10, s11, s12, s13, s14, s15));
 
                 characteristicService.addAll(List.of(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19,
                         c20, c21, c22, c23, c24, c25, c26, c27, c28, c30, c31, c32, c33, c34, c35, c36, c37, c39, c40, c41,
@@ -397,6 +463,92 @@ public class Application {
 
                 attributeService.addAll(List.of(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16,
                         a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30, a31, a32, a33));
+
+                // Котлы
+                //------------------------------------------------------------------------------------------------------
+                Boiler b1 = new Boiler("T10O", s1);
+                Boiler b2 = new Boiler("T24O", s1);
+                Boiler b3 = new Boiler("T10OK", s2);
+                Boiler b4 = new Boiler("T24OK", s2);
+                Boiler b5 = new Boiler("T10DK", s3);
+                Boiler b6 = new Boiler("T24DK", s3);
+                Boiler b7 = new Boiler("S10", s4);
+                Boiler b8 = new Boiler("S12", s4);
+                Boiler b9 = new Boiler("S10EM", s5);
+                Boiler b10 = new Boiler("S12EM", s5);
+
+                Boiler b11 = new Boiler("S13ST", s6);
+                Boiler b12 = new Boiler("S16ST", s6);
+                Boiler b13 = new Boiler("S12FT", s7);
+                Boiler b14 = new Boiler("LT4", s8);
+                Boiler b15 = new Boiler("24D", s8);
+                Boiler b16 = new Boiler("QM4", s9);
+                Boiler b17 = new Boiler("QM24", s9);
+                Boiler b18 = new Boiler("KMU10I", s10);
+                Boiler b19 = new Boiler("KMU15I", s10);
+
+                Boiler b20 = new Boiler("VRM30", s11);
+                Boiler b21 = new Boiler("VRM100", s11);
+                Boiler b22 = new Boiler("VRM30D", s12);
+                Boiler b23 = new Boiler("VRM100D", s12);
+                Boiler b24 = new Boiler("VFM30D", s13);
+                Boiler b25 = new Boiler("VFM80D", s13);
+                Boiler b26 = new Boiler("VFE30WE", s14);
+                Boiler b27 = new Boiler("VFE80WE", s14);
+                Boiler b28 = new Boiler("FRM200", s15);
+                Boiler b29 = new Boiler("FRM300", s15);
+
+                boilerService.addAll(List.of(b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17,
+                        b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28, b29));
+
+                // Преимущества
+                //------------------------------------------------------------------------------------------------------
+                Advantage ad1 = new Advantage("Режим работы с теплыми полами", "Operating_mode_with_heated_floors.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad2 = new Advantage("Возможность работы на сжиженном газе", "The_ability_to_work_on_liquefied_gas.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad3 = new Advantage("Низкий уровень шума", "Low_noise_level.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad4 = new Advantage("Цифровое управление", "Digital_control.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad5 = new Advantage("Высокая экономичность", "High_efficiency.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad6 = new Advantage("Автоматическое электронное зажигание", "Automatic_electronic_ignition.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad7 = new Advantage("Регулировка температуры нагрева", "Adjustment_heating_temperature.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad8 = new Advantage("Работа при низком давлении воды", "Job_at_low_water_pressure.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad9 = new Advantage("Точное поддержание температуры", "Accurate_maintaining_temperature.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad10 = new Advantage("Сенсорная панель управления", "Sensory_control_Panel.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad11 = new Advantage("Различные режимы работы", "Various_modes_work.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad12 = new Advantage("Управление по Wi-Fi", "Wi_Fi_control.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad13 = new Advantage("Индикатор нагрева", "Heating_indicator.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad14 = new Advantage("Оптимальная мощность", "Optimal_power.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad15 = new Advantage("Низкие теплопотери", "Low_heat_loss.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad16 = new Advantage("Повышенная мощность", "Increased_power_2.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad17 = new Advantage("Повышенная мощность", "Increased_power_3.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad18 = new Advantage("Гарантия на бак", "Guarantee_five_years.png", CategoryOfAdvantage.CONSTRUCTION);
+                Advantage ad19 = new Advantage("Магниевый анод", "Magnesium_anode.png", CategoryOfAdvantage.CONSTRUCTION);
+                Advantage ad20 = new Advantage("Рабочее давление", "Working_pressure.png", CategoryOfAdvantage.CONSTRUCTION);
+                Advantage ad21 = new Advantage("Высокое качество сварных швов", "High_quality_welds.png", CategoryOfAdvantage.CONSTRUCTION);
+                Advantage ad22 = new Advantage("Нагревательный элемент из нержавеющей стали", "A_heating_element_stainless_steel.png", CategoryOfAdvantage.CONSTRUCTION);
+                Advantage ad23 = new Advantage("Качественные комплектующие", "Quality_components.png", CategoryOfAdvantage.CONSTRUCTION);
+                Advantage ad24 = new Advantage("Разъёмы для подключения внешних устройств", "Connectors_to_connect_external_devices.png", CategoryOfAdvantage.CONSTRUCTION);
+                Advantage ad25 = new Advantage("Сухой нагревательный элемент", "Dry_heating_element.png", CategoryOfAdvantage.CONSTRUCTION);
+                Advantage ad26 = new Advantage("Нижнее подключение", "Lower_connection.png", CategoryOfAdvantage.CONSTRUCTION);
+                Advantage ad27 = new Advantage("Гарантия два года", "Two_year_warranty.png", CategoryOfAdvantage.CONSTRUCTION);
+                Advantage ad28 = new Advantage("Горелка из нержавеющей стали", "Burner_stainless_become.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad29 = new Advantage("Теплообменник из бескислородной меди", "Heat_exchanger_from_oxygen_free_copper.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad30 = new Advantage("Жаропрочная эмаль", "Heat_resistant_enamel.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad31 = new Advantage("Высокая ремонтопригодность", "High_maintainability.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad32 = new Advantage("Защита от перегрева", "Double_overheat_protection.png", CategoryOfAdvantage.PROTECTION);
+                Advantage ad33 = new Advantage("Защита от избыточного давления", "Pressure_safety_valve_protects_against_excess_water", CategoryOfAdvantage.PROTECTION);
+                Advantage ad34 = new Advantage("Термостат – защита от перегрева, отключает подачу газа", "Thermostat_protection_against_overheating_disconne", CategoryOfAdvantage.PROTECTION);
+                Advantage ad35 = new Advantage("Электрод ионизации – отключение подачи газа при отсутствии пламени на горелке", "Ionization_electrode_shutdown_gas_supply_when_there_is_no_flame_on_the_burner.png", CategoryOfAdvantage.PROTECTION);
+                Advantage ad36 = new Advantage("Датчик контроля тяги – защита при недостаточной или обратной тяге", "Traction_control_sensor_protection_in_case_of_insuffi", CategoryOfAdvantage.PROTECTION);
+                Advantage ad37 = new Advantage("Датчик протока – контроль напора воды", "Flow_switch.png", CategoryOfAdvantage.PROTECTION);
+                Advantage ad38 = new Advantage("Обратный клапан – защита системы от замерзания", "Check_valve_protection_anti_freeze_systems.png", CategoryOfAdvantage.PROTECTION);
+                Advantage ad39 = new Advantage("Защита от утечки тока", "Residual_current_device_included.png", CategoryOfAdvantage.PROTECTION);
+                Advantage ad40 = new Advantage("Автоматический воздухоотводчик", "Auto_air_vent.png", CategoryOfAdvantage.PROTECTION);
+                Advantage ad41 = new Advantage("Индикация ошибок", "Error_indication.png", CategoryOfAdvantage.PROTECTION);
+                Advantage ad42 = new Advantage("Двойной слой эмали на внутреннем баке – эффективная защита от коррозии", "Double_layer_of_enamel_on_the_inside_tank_effective_protection_against_corrosion.png", CategoryOfAdvantage.PROTECTION);
+
+                advantageService.addAll(List.of(ad1, ad2, ad3, ad4, ad5, ad6, ad7, ad8, ad9, ad10, ad11, ad12, ad13, ad14, ad15,
+                        ad16, ad17, ad18, ad19, ad20, ad21, ad22, ad23, ad24, ad25, ad26, ad27, ad28, ad29, ad30, ad31, ad32, ad33, ad34, ad35,
+                        ad36, ad37, ad38, ad39, ad40, ad41, ad42));
            }
         };
     }
