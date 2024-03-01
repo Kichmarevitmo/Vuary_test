@@ -1,8 +1,12 @@
 package org.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="boilers")
@@ -17,7 +21,11 @@ public class Boiler {
     private String title;
 
     @ManyToOne
+    @JsonIgnore
     private Series series;
+
+    @ManyToMany(mappedBy = "boilers")
+    private List<Value> values =  new ArrayList<>();
 
     public Boiler() {
         this("null", new Series());

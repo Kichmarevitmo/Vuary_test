@@ -1,8 +1,15 @@
 package org.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import javax.json.bind.annotation.JsonbTransient;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name="kinds")
@@ -18,7 +25,11 @@ public class Kind {
     private String description;
 
     @ManyToOne
+    @JsonIgnore
     private Type type;
+
+    @OneToMany(mappedBy = "kind", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Series> series = new ArrayList<>();
 
     public Kind() {
         this("null", "null", new Type());

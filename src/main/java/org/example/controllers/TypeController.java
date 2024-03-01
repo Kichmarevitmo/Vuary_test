@@ -18,9 +18,9 @@ import java.util.Map;
 public class TypeController {
 
   private final TypeService typeService;
-  private  TypeMapper typeMapper;
-  private TypeListMapper typeListMapper;
+  private final TypeListMapper typeListMapper;
 
+    // для ItemsFragment
     @GetMapping(value = "/all")
     public ResponseEntity<Object> getAll(){
       Map<String, Object> response = new HashMap<>();
@@ -28,4 +28,12 @@ public class TypeController {
       response.put("data", typeListMapper.toDTOList(typeService.getAll()));
       return ResponseEntity.ok(response);
     }
+
+  @GetMapping(value = "/all-data")
+  public ResponseEntity<Object> getAllData(){
+    Map<String, Object> response = new HashMap<>();
+
+    response.put("data", typeService.getAll());
+    return ResponseEntity.ok(response);
+  }
 }

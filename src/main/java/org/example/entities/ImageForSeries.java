@@ -1,5 +1,6 @@
 package org.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +21,7 @@ public class ImageForSeries {
     private String filePath;
 
     @ManyToOne
+    @JsonIgnore
     private Series series;
 
     public ImageForSeries() {

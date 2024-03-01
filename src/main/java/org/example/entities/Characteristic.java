@@ -1,8 +1,12 @@
 package org.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="characteristics")
@@ -18,6 +22,10 @@ public class Characteristic {
 
     @ManyToOne
     private Unit unit;
+
+    @ManyToMany
+    @JsonIgnore
+    private List<Series> series =  new ArrayList<>();
 
     public Characteristic() {
         this("null", new Unit());

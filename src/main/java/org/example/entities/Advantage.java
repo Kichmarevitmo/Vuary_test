@@ -1,9 +1,13 @@
 package org.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.models.enums.CategoryOfAdvantage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="advantages")
@@ -23,18 +27,18 @@ public class Advantage {
     @Enumerated(EnumType.STRING)
     private CategoryOfAdvantage category;
 
-    @ManyToOne
-    private Series series;
+    @ManyToMany
+    @JsonIgnore
+    private List<Series> series =  new ArrayList<>();
 
     public Advantage() {
-        this("null", "null", CategoryOfAdvantage.COMFORT, new Series());
+        this("null", "null", CategoryOfAdvantage.COMFORT);
     }
 
-    public Advantage(String title, String iconPath, CategoryOfAdvantage category, Series series) {
+    public Advantage(String title, String iconPath, CategoryOfAdvantage category) {
         this.id = null;
         this.title = title;
         this.iconPath = iconPath;
         this.category = category;
-        this.series = series;
     }
 }

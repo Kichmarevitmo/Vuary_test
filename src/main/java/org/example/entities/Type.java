@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name="types")
 @Getter
@@ -21,6 +23,9 @@ public class Type {
     public Type() {
         this("null", "null", "null");
     }
+
+    @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Kind> kinds;
 
     public Type(String title, String description, String path) {
         this.id = null;

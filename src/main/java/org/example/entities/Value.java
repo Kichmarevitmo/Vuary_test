@@ -1,21 +1,26 @@
 package org.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name="acceptable_value")
 @Setter
 @Getter
-public class AcceptableValue {
+public class Value {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     private Characteristic characteristic;
 
     private String sValue;
@@ -23,11 +28,15 @@ public class AcceptableValue {
     private Double minValue;
     private Double maxValue;
 
-    public AcceptableValue() {
+    @ManyToMany
+    @JsonIgnore
+    private List<Boiler> boilers =  new ArrayList<>();
+
+    public Value() {
         this(new Characteristic(), "null", 0.0, 0.0, 0.0);
     }
 
-    public AcceptableValue(Characteristic characteristic, String sValue, Double dValue, Double minValue, Double maxValue) {
+    public Value(Characteristic characteristic, String sValue, Double dValue, Double minValue, Double maxValue) {
         this.id = null;
         this.characteristic = characteristic;
         this.sValue = sValue;

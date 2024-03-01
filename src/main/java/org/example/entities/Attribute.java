@@ -1,5 +1,6 @@
 package org.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ public class Attribute {
     private String title;
 
     @ManyToOne
+    @JsonIgnore
     private Series series;
 
     public Attribute() {
