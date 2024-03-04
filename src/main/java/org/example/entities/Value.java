@@ -32,6 +32,19 @@ public class Value {
     @JsonIgnore
     private List<Boiler> boilers =  new ArrayList<>();
 
+    // доп конструкторы
+    public Value(Characteristic characteristic, Double dValue){
+        this(characteristic, "null", dValue, 0.0, 0.0);
+    }
+
+    public Value(Characteristic characteristic, String sValue){
+        this(characteristic, sValue, 0.0, 0.0, 0.0);
+    }
+
+    public Value(Characteristic characteristic, Double minValue, Double maxValue){
+        this(characteristic, "null", 0.0, minValue, maxValue);
+    }
+
     public Value() {
         this(new Characteristic(), "null", 0.0, 0.0, 0.0);
     }

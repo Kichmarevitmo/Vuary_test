@@ -55,7 +55,8 @@ public class Application {
             AttributeService attributeService,
             ImageForSeriesService imageForSeriesService,
             BoilerService boilerService,
-            AdvantageService advantageService
+            AdvantageService advantageService,
+            AcceptableValueService acceptableValueService
             ) {
         return args -> {
             if (SchemaIsEmpty) {
@@ -67,8 +68,8 @@ public class Application {
                 Type t3 = new Type("AINOVA", "Котлы настенные электрические", "image_ainova.png");
                 Type t4 = new Type("SALMI", "Водонагреватели электрические накопительные", "image_salmi.png");
 
-                // добавили в бд
-                typeService.addAll(List.of(t1, t2, t3, t4));
+
+
 
                 // Виды котлов
                 //------------------------------------------------------------------------------------------------------
@@ -117,7 +118,7 @@ public class Application {
                 Unit u23 = new Unit("Гц", "Герц");
 
 
-                unitService.addAll(List.of(u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, u13, u14, u15, u16, u17, u18, u19, u20, u21, u22));
+                unitService.addAll(List.of(u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, u13, u14, u15, u16, u17, u18, u19, u20, u21, u22, u23));
 
                 // Серии котлов
                 //------------------------------------------------------------------------------------------------------
@@ -163,6 +164,9 @@ public class Application {
 
                 // Характеристики
                 //------------------------------------------------------------------------------------------------------
+                Characteristic c0 = new Characteristic(
+                        "Тип дымоудаления",
+                        u19);
                 Characteristic c1 = new Characteristic(
                         "Макс./мин. тепловая мощность в режиме отопление",
                         u1);
@@ -421,7 +425,7 @@ public class Application {
                 c69.setSeries(List.of(s10, s11, s12, s13, s14, s15));
                 c70.setSeries(List.of(s10, s11, s12, s13, s14, s15));
 
-                characteristicService.addAll(List.of(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19,
+                characteristicService.addAll(List.of(c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19,
                         c20, c21, c22, c23, c24, c25, c26, c27, c28, c30, c31, c32, c33, c34, c35, c36, c37, c39, c40, c41,
                         c43, c44, c45, c46, c47, c48, c49, c50, c51, c52, c56, c57, c58, c59, c60, c61, c62, c63, c64, c65, c66, c67, c68, c69, c70));
 
@@ -546,9 +550,211 @@ public class Application {
                 Advantage ad41 = new Advantage("Индикация ошибок", "Error_indication.png", CategoryOfAdvantage.PROTECTION);
                 Advantage ad42 = new Advantage("Двойной слой эмали на внутреннем баке – эффективная защита от коррозии", "Double_layer_of_enamel_on_the_inside_tank_effective_protection_against_corrosion.png", CategoryOfAdvantage.PROTECTION);
 
+                Advantage ad43 = new Advantage("Встроенный суточный программатор", "Built-in_daily_programmer.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad44 = new Advantage("Hot Restart память параметров", "Hot_Restart_param_memory.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad45 = new Advantage("Защита от замерзания", "Freeze_protection.png", CategoryOfAdvantage.PROTECTION);
+                Advantage ad46 = new Advantage("Защита от срыва пламени", "Flame_failure_protection.png", CategoryOfAdvantage.PROTECTION);
+                Advantage ad47 = new Advantage("Защита от перепадов напряжения", "Voltage_fluctuation_protection.png", CategoryOfAdvantage.PROTECTION);
+                Advantage ad48 = new Advantage("Защита от сухого хода", "Dry_operation_protection.png", CategoryOfAdvantage.PROTECTION);
+                Advantage ad49 = new Advantage("Гарантия 3 года", "3_years_warranty.png", CategoryOfAdvantage.CONSTRUCTION);
+                Advantage ad50 = new Advantage("Стойкость к накипи и коррозии", "Scale_and_corrosion_resistance.png", CategoryOfAdvantage.CONSTRUCTION);
+                Advantage ad51 = new Advantage("Высокая производительность горячей воды", "High_hot_water_production_capacity.png", CategoryOfAdvantage.COMFORT);
+                Advantage ad52 = new Advantage("Предохранительный клапан давления – защита от избыточного давления воды", "Pressure_safety_valve_protection_against_excessive_water_pressure.png", CategoryOfAdvantage.PROTECTION);
+                Advantage ad53 = new Advantage("Реле протока", "Flow_switch.png", CategoryOfAdvantage.PROTECTION);
+                Advantage ad54 = new Advantage("ТЭН и колба из нержавеющей стали", "Stainless_steel_heating_element_and_tank.png", CategoryOfAdvantage.CONSTRUCTION);
+
+                //TODO соед с сериями
+                ad1.setSeries(List.of(s1, s2, s3, s8, s9));
+                ad2.setSeries(List.of(s1, s2, s3, s4,s5, s6, s7));
+                ad3.setSeries(List.of(s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15));
+                ad4.setSeries(List.of(s1, s3, s4, s5, s6, s7, s8, s9, s11, s13));
+                ad5.setSeries(List.of(s1, s2, s3));
+                ad6.setSeries(List.of(s4, s5, s6, s7));
+                ad7.setSeries(List.of(s4, s5, s6, s7, s10, s11, s12, s13, s14, s15));
+                ad8.setSeries(List.of(s4, s5, s6, s7));
+                ad9.setSeries(List.of(s5, s6, s7));
+                ad10.setSeries(List.of(s6, s7, s14));
+                ad11.setSeries(List.of(s9));
+                ad12.setSeries(List.of(s9));
+                ad13.setSeries(List.of(s10, s11, s12, s13, s15));
+                ad14.setSeries(List.of(s10, s11, s12));
+                ad15.setSeries(List.of(s10, s11, s12, s13, s14, s15));
+                ad16.setSeries(List.of(s13, s14));
+                ad17.setSeries(List.of(s15));
+                ad18.setSeries(List.of(s11, s12, s13, s14, s15));
+                ad19.setSeries(List.of(s10, s11, s12, s13, s14, s15));
+                ad20.setSeries(List.of(s10, s11, s12, s13, s14, s15));
+                ad21.setSeries(List.of(s10, s11, s12, s13, s14, s15));
+                ad22.setSeries(List.of(s10, s11, s12, s13, s14, s15));
+                ad23.setSeries(List.of(s1, s2, s3, s8, s9));
+                ad24.setSeries(List.of(s9));
+                ad25.setSeries(List.of(s9));
+                ad26.setSeries(List.of(s8, s9));
+                ad27.setSeries(List.of(s4, s5, s6, s7, s8));
+                ad28.setSeries(List.of(s4, s5, s6, s7));
+                ad29.setSeries(List.of(s1, s2, s3, s4, s5, s6, s7));
+                ad30.setSeries(List.of(s4, s5, s6, s7));
+                ad31.setSeries(List.of(s1, s2, s3, s4, s5, s6, s7));
+                ad32.setSeries(List.of(s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15));
+                ad33.setSeries(List.of(s1, s2, s3, s4, s5, s6, s7));
+                ad34.setSeries(List.of(s4, s5, s6, s7));
+                ad35.setSeries(List.of(s4, s5, s6, s7));
+                ad36.setSeries(List.of(s4, s5, s6, s7));
+                ad37.setSeries(List.of(s5, s6, s7));
+                ad38.setSeries(List.of(s7));
+                ad39.setSeries(List.of(s8, s9));
+                ad40.setSeries(List.of(s8, s9));
+                ad41.setSeries(List.of(s8, s9));
+                ad42.setSeries(List.of(s10, s11, s12, s13, s14, s15));
+
+                ad43.setSeries(List.of(s1, s2, s3));
+                ad44.setSeries(List.of(s1, s2, s3));
+                ad45.setSeries(List.of(s1, s2, s3));
+                ad46.setSeries(List.of(s1, s2, s3));
+                ad47.setSeries(List.of(s1, s2, s3));
+                ad48.setSeries(List.of(s1, s2, s3));
+                ad49.setSeries(List.of(s1, s2, s3, s10));
+                ad50.setSeries(List.of(s1, s2, s3));
+                ad51.setSeries(List.of(s2, s3));
+                ad52.setSeries(List.of(s4, s5, s6, s7));
+                ad53.setSeries(List.of(s8, s9));
+                ad54.setSeries(List.of(s8));
+
+
                 advantageService.addAll(List.of(ad1, ad2, ad3, ad4, ad5, ad6, ad7, ad8, ad9, ad10, ad11, ad12, ad13, ad14, ad15,
                         ad16, ad17, ad18, ad19, ad20, ad21, ad22, ad23, ad24, ad25, ad26, ad27, ad28, ad29, ad30, ad31, ad32, ad33, ad34, ad35,
                         ad36, ad37, ad38, ad39, ad40, ad41, ad42));
+
+                // Допустимые значения b1-b2
+                //------------------------------------------------------------------------------------------------------
+                Value v1 = new Value(c1,4.0, 10.0);
+                v1.setBoilers(List.of(b1));
+
+                Value v40 = new Value(c1,9.6, 24.0);
+                v40.setBoilers(List.of(b2));
+
+                Value v2 = new Value(c0, "Принудительный вентилятором (закрытая камера сгорания)");
+                v2.setBoilers(List.of(b1));
+
+                Value v3 = new Value(c2, 3.3, 9.2);
+                v3.setBoilers(List.of(b1));
+
+                Value v4 = new Value(c3, 93.0);
+                v4.setBoilers(List.of(b1));
+
+                Value v5 = new Value(c4, 1.6);
+                v5.setBoilers(List.of(b1));
+
+                Value v6 = new Value(c5, 1.0);
+                v6.setBoilers(List.of(b1));
+
+                Value v7 = new Value(c6, 6.0);
+                v7.setBoilers(List.of(b1));
+
+                Value v8 = new Value(c7, 0.5, 3.0);
+                v8.setBoilers(List.of(b1));
+
+                Value v9 = new Value(c8, 30.0, 80.0);
+                v9.setBoilers(List.of(b1));
+
+                Value v10 = new Value(c9, 35.0, 60.0);
+                v10.setBoilers(List.of(b1));
+
+                Value v11 = new Value(c10, 8.0);
+                v11.setBoilers(List.of(b1));
+
+                Value v12 = new Value(c11, 3.0,4.0);
+                v12.setBoilers(List.of(b1));
+
+                Value v13 = new Value(c12, 3.0,4.0);
+                v13.setBoilers(List.of(b1));
+
+                Value v14 = new Value(c13, 3.0,4.0);
+                v14.setBoilers(List.of(b1));
+
+                Value v15 = new Value(c14, 220.0, 50.0);
+                v15.setBoilers(List.of(b1));
+
+                Value v16 = new Value(c15, 120.0);
+                v16.setBoilers(List.of(b1));
+
+                Value v17 = new Value(c16, 60.0, 100.0);
+                v17.setBoilers(List.of(b1));
+
+                Value v18 = new Value(c17, "I класс/IPX4D");
+                v18.setBoilers(List.of(b1));
+
+                Value v19 = new Value(c18, 28.9);
+                v19.setBoilers(List.of(b1));
+
+                Value v39 = new Value(c19, "700х400х299");
+                v39.setBoilers(List.of(b1));
+
+                Value v20 = new Value(c0, "Принудительный вентилятором (закрытая камера сгорания)");
+                v20.setBoilers(List.of(b2));
+
+                Value v21 = new Value(c2, 8.1, 23.5);
+                v21.setBoilers(List.of(b2));
+
+                Value v22 = new Value(c3, 93.0);
+                v22.setBoilers(List.of(b2));
+
+                Value v23 = new Value(c4, 2.61);
+                v23.setBoilers(List.of(b2));
+
+                Value v24 = new Value(c5, 1.0);
+                v24.setBoilers(List.of(b2));
+
+                Value v25 = new Value(c6, 6.0);
+                v25.setBoilers(List.of(b2));
+
+                Value v26 = new Value(c7, 0.5, 3.0);
+                v26.setBoilers(List.of(b2));
+
+                Value v27 = new Value(c8, 30.0, 80.0);
+                v27.setBoilers(List.of(b2));
+
+                Value v28 = new Value(c9, 35.0, 60.0);
+                v28.setBoilers(List.of(b2));
+
+                Value v29 = new Value(c10, 8.0);
+                v29.setBoilers(List.of(b2));
+
+                Value v30 = new Value(c11, 3.0, 4.0);
+                v30.setBoilers(List.of(b2));
+
+                Value v31 = new Value(c12, 3.0, 4.0);
+                v31.setBoilers(List.of(b2));
+
+                Value v32 = new Value(c13, 1.0, 2.0);
+                v32.setBoilers(List.of(b2));
+
+                Value v33 = new Value(c14, 220.0, 50.0);
+                v33.setBoilers(List.of(b2));
+
+                Value v34 = new Value(c15, 120.0);
+                v34.setBoilers(List.of(b2));
+
+                Value v35 = new Value(c16, 60.0, 100.0);
+                v35.setBoilers(List.of(b2));
+
+                Value v36 = new Value(c17, "I класс/IPX4D");
+                v36.setBoilers(List.of(b2));
+
+                Value v37 = new Value(c18, 30.4);
+                v37.setBoilers(List.of(b2));
+
+                Value v38 = new Value(c19, "700х400х299");
+                v38.setBoilers(List.of(b2));
+
+                acceptableValueService.addAll(List.of(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,
+                        v19,v20,v21,v22,v23,v24,v25,v26,v27,v28,v29,v30,v31,v32,v33,v34,v35,v36,v37,v38,v39,v40));
+
+                // Допустимые значения b3-b4
+                //------------------------------------------------------------------------------------------------------
+//Eq13034513!
+                //kotitonttu
+
            }
         };
     }

@@ -37,8 +37,8 @@ public class Series {
     @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Attribute> attributes = new ArrayList<>();
 
-   @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-   private List<Boiler> boilers = new ArrayList<>();
+    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Boiler> boilers = new ArrayList<>();
 
     public Series() {
         this("null", new Kind());
